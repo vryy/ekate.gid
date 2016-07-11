@@ -226,6 +226,66 @@ VALUE: 0.0
 HELP: Value of fixed rotation (dirichlet-condition)
 END CONDITION
 
+BOOK: Elastic_Bedding
+CONDITION: Nodal_Bedding
+CONDTYPE: over points
+CONDMESHTYPE: over nodes
+QUESTION: Elastic_Constraint_X#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Bedding_Stiffness_X,#CURRENT#)(1,RESTORE,Bedding_Stiffness_X,#CURRENT#)
+QUESTION: Bedding_Stiffness_X#UNITS#
+VALUE: 0.0N/m
+QUESTION: Elastic_Constraint_Y#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Bedding_Stiffness_Y,#CURRENT#)(1,RESTORE,Bedding_Stiffness_Y,#CURRENT#)
+QUESTION: Bedding_Stiffness_Y#UNITS#
+VALUE: 0.0N/m
+QUESTION: Elastic_Constraint_Z#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Bedding_Stiffness_Z,#CURRENT#)(1,RESTORE,Bedding_Stiffness_Z,#CURRENT#)
+QUESTION: Bedding_Stiffness_Z#UNITS#
+VALUE: 0.0N/m
+END CONDITION
+CONDITION: Line_Bedding
+CONDTYPE: over lines
+CONDMESHTYPE: over face elements
+QUESTION: Elastic_Constraint_X#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Bedding_Stiffness_X,#CURRENT#)(1,RESTORE,Bedding_Stiffness_X,#CURRENT#)
+QUESTION: Bedding_Stiffness_X#UNITS#
+VALUE: 0.0N/m^2
+QUESTION: Elastic_Constraint_Y#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Bedding_Stiffness_Y,#CURRENT#)(1,RESTORE,Bedding_Stiffness_Y,#CURRENT#)
+QUESTION: Bedding_Stiffness_Y#UNITS#
+VALUE: 0.0N/m^2
+QUESTION: Elastic_Constraint_Z#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Bedding_Stiffness_Z,#CURRENT#)(1,RESTORE,Bedding_Stiffness_Z,#CURRENT#)
+QUESTION: Bedding_Stiffness_Z#UNITS#
+VALUE: 0.0N/m^2
+END CONDITION
+CONDITION: Surface_Bedding
+CONDTYPE: over surfaces
+CONDMESHTYPE: over face elements
+QUESTION: Elastic_Constraint_X#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Bedding_Stiffness_X,#CURRENT#)(1,RESTORE,Bedding_Stiffness_X,#CURRENT#)
+QUESTION: Bedding_Stiffness_X#UNITS#
+VALUE: 0.0N/m^3
+QUESTION: Elastic_Constraint_Y#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Bedding_Stiffness_Y,#CURRENT#)(1,RESTORE,Bedding_Stiffness_Y,#CURRENT#)
+QUESTION: Bedding_Stiffness_Y#UNITS#
+VALUE: 0.0N/m^3
+QUESTION: Elastic_Constraint_Z#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Bedding_Stiffness_Z,#CURRENT#)(1,RESTORE,Bedding_Stiffness_Z,#CURRENT#)
+QUESTION: Bedding_Stiffness_Z#UNITS#
+VALUE: 0.0N/m^3
+END CONDITION
+
+
 BOOK: Fixed_Pressures
 CONDITION: Nodal_Water_Pressure
 CONDTYPE: over points

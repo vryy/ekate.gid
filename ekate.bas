@@ -630,6 +630,117 @@ Begin Conditions TBMEndFace3D9N
 *end elems
 End Conditions
 
+Begin Conditions ElasticPointConstraint
+*set cond Nodal_Bedding *nodes *or(1,int)
+*add cond Nodal_Bedding *nodes *or(3,int)
+*add cond Nodal_Bedding *nodes *or(5,int)
+*loop nodes *OnlyInCond
+*if(cond(1,int)!=0 || cond(3,int)!=0 || cond(5,int)!=0)
+*condID 1 *NodesNum
+*set var condID= condID+1
+*endif
+*end nodes
+End Conditions
+
+Begin Conditions ElasticLineConstraint2N
+*set cond Line_Bedding *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0 || cond(3,int)!=0 || cond(5,int)!=0)
+*if(ElemsNnodeFace==2)
+*condID      *ElemsMat    *\
+*Globalnodes(1) *Globalnodes(2)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions ElasticLineConstraint3N
+*set cond Line_Bedding *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0 || cond(3,int)!=0 || cond(5,int)!=0)
+*if(ElemsNnodeFace==3)
+*condID      *ElemsMat    *\
+*Globalnodes(1) *Globalnodes(3)  *Globalnodes(2)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions ElasticFaceConstraint3N
+*set cond Surface_Bedding *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0 || cond(3,int)!=0 || cond(5,int)!=0)
+*if(ElemsNnodeFace==3)
+*condID      *ElemsMat    *\
+*Globalnodes(2) *Globalnodes(1)  *Globalnodes(3)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions ElasticFaceConstraint6N
+*set cond Surface_Bedding *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0 || cond(3,int)!=0 || cond(5,int)!=0)
+*if(ElemsNnodeFace==6)
+*condID      *ElemsMat    *\
+*Globalnodes(2) *Globalnodes(1) *Globalnodes(3) *Globalnodes(4) *Globalnodes(6) *Globalnodes(5)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions ElasticFaceConstraint4N
+*set cond Surface_Bedding *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0 || cond(3,int)!=0 || cond(5,int)!=0)
+*if(ElemsNnodeFace==4)
+*condID      *ElemsMat    *\
+*Globalnodes(4) *Globalnodes(3) *Globalnodes(2) *Globalnodes(1)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions ElasticFaceConstraint8N
+*set cond Surface_Bedding *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0 || cond(3,int)!=0 || cond(5,int)!=0)
+*if(ElemsNnodeFace==8)
+*condID      *ElemsMat    *\
+*Globalnodes(4) *Globalnodes(3) *Globalnodes(2) *Globalnodes(1) *Globalnodes(7) *Globalnodes(6) *Globalnodes(5) *Globalnodes(8)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions ElasticFaceConstraint9N
+*set cond Surface_Bedding *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0 || cond(3,int)!=0 || cond(5,int)!=0)
+*if(ElemsNnodeFace==9)
+*condID      *ElemsMat    *\
+*Globalnodes(4) *Globalnodes(3) *Globalnodes(2) *Globalnodes(1) *Globalnodes(7) *Globalnodes(6) *Globalnodes(5) *Globalnodes(8) *Globalnodes(9)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+
 Begin NodalData DISPLACEMENT_X
 *set cond Nodal_Displacement *nodes *or(1,int)
 *add cond Line_Displacement *nodes *or(1,int)
@@ -731,6 +842,40 @@ Begin NodalData AIR_PRESSURE
 *NodesNum 1 0.0
 *end nodes
 End NodalData
+
+Begin NodalData ELASTIC_BEDDING_STIFFNESS_X
+*set cond Nodal_Bedding *nodes
+*add cond Line_Bedding *nodes
+*add cond Surface_Bedding *nodes
+*loop nodes *OnlyInCond
+*if(cond(1,int)!=0)
+*NodesNum 1 *cond(2,real)
+*endif
+*end nodes
+End NodalData
+
+Begin NodalData ELASTIC_BEDDING_STIFFNESS_Y
+*set cond Nodal_Bedding *nodes
+*add cond Line_Bedding *nodes
+*add cond Surface_Bedding *nodes
+*loop nodes *OnlyInCond
+*if(cond(3,int)!=0)
+*NodesNum 1 *cond(4,real)
+*endif
+*end nodes
+End NodalData
+
+Begin NodalData ELASTIC_BEDDING_STIFFNESS_Z
+*set cond Nodal_Bedding *nodes
+*add cond Line_Bedding *nodes
+*add cond Surface_Bedding *nodes
+*loop nodes *OnlyInCond
+*if(cond(5,int)!=0)
+*NodesNum 1 *cond(6,real)
+*endif
+*end nodes
+End NodalData
+
 
 Begin NodalData FACE_LOAD
 *set cond Distributed_Surface_Load *nodes
