@@ -155,7 +155,11 @@ class Model:
 
 *set var abstol(real)=GenData(Absolute_Tolerance,real)
         self.abs_tol = *abstol
+*if(strcmp(GenData(Relative_Tolerance),"custom")==0)
+*set var reltol(real)=GenData(Custom_Relative_Tolerance,real)
+*else
 *set var reltol(real)=GenData(Relative_Tolerance,real)
+*endif
         self.rel_tol = *reltol
         #self.rel_tol = 1e-10
 
@@ -181,7 +185,7 @@ class Model:
         #self.gid_io = StructuralGidIO( self.path+self.problem_name, post_mode, multi_file_flag, write_deformed_flag, write_elements )
         #self.gid_io = GidIO( self.path+self.problem_name, post_mode, multi_file_flag, write_deformed_flag, write_elements )
         #### Reading and partitioning 
-        number_of_partitions = mpi.size #we set it equal to the number of processors       
+        number_of_partitions = mpi.size #we set it equal to the number of processors
         if( mpi.rank == 0 ):
             self.mergefile = open( self.path+self.problem_name+"_merge_results.bch", 'w' )
             self.mergefile.write("Postprocess\n")
@@ -325,7 +329,7 @@ class Model:
 
         ##################################################################
         ## ADD DOFS ######################################################
-        ##################################################################        
+        ##################################################################
 *if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
         for node in self.model_part.Nodes:
             node.AddDof( WATER_PRESSURE )
@@ -466,33 +470,33 @@ class Model:
 #            if i in self.model_part.Nodes:
 #                i_node = self.model_part.Nodes[i]
 #                if i_node.HasDofFor(WATER_PRESSURE):
-#                    if (i_node.IsFixed(WATER_PRESSURE)==0):        
+#                    if (i_node.IsFixed(WATER_PRESSURE)==0):
 #                        i_node.Fix(WATER_PRESSURE)
 #                        free_node_list_water.append(i)
 #                if i_node.HasDofFor(AIR_PRESSURE):
 #                    if (i_node.IsFixed(AIR_PRESSURE)==0):
 #                        i_node.Fix(AIR_PRESSURE)
-#                        free_node_list_air.append(i)                
+#                        free_node_list_air.append(i)
 
     def FixPressureNodes( self, free_node_list_water, free_node_list_air):
         for node in self.model_part.Nodes:
-            if (node.IsFixed(WATER_PRESSURE)==0):                
+            if (node.IsFixed(WATER_PRESSURE)==0):
                 node.Fix(WATER_PRESSURE)
                 free_node_list_water.append(node)
             if (node.IsFixed(AIR_PRESSURE)==0):
                 node.Fix(AIR_PRESSURE)
-                free_node_list_air.append(node)                                
+                free_node_list_air.append(node)
 
     def ApplyInsituWaterPressure( self, free_node_list_water, free_node_list_air, z_zero, gravity_z):
         water_density=1000.0;
-        for node in self.model_part.Nodes:                              
+        for node in self.model_part.Nodes:
             water_pressure= water_density**gravity_z**(z_zero-(node.Z-node.GetSolutionStepValue(DISPLACEMENT_Z,0)))
             if( water_pressure < 1.0 ):
                 water_pressure = 1.0
             node.SetSolutionStepValue(WATER_PRESSURE, water_pressure)
             node.SetSolutionStepValue(WATER_PRESSURE_EINS, water_pressure)
             node.SetSolutionStepValue(WATER_PRESSURE_NULL, water_pressure)
-        for node in self.model_part.Nodes:              
+        for node in self.model_part.Nodes:
             node.SetSolutionStepValue(AIR_PRESSURE, 0.0)
             node.SetSolutionStepValue(AIR_PRESSURE_EINS, 0.0)
             node.SetSolutionStepValue(AIR_PRESSURE_NULL, 0.0)
@@ -681,6 +685,11 @@ class Model:
         self.top_surface_nodes = model_layers.ReadTopSurfaceNodes()
         print "nodes on ground surface stored"
         ##################################################################
+        ## STORE NODES ON SIDE ###########################################
+        ##################################################################
+        self.boundary_nodes = model_layers.ReadBoundaryNodes()
+        print "nodes on side surface stored"
+        ##################################################################
         ## STORE NODES CORRECTLY FOR CONDITIONS ##########################
         ##################################################################
         self.node_groups = model_layers.ReadNodeGroups()
@@ -692,23 +701,23 @@ class Model:
         append_manual_data = False
 *loop materials
 *if(strcmp(MatProp(ConstitutiveLaw),"Isotropic3D")==0)
-        self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )        
-        self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )        
+        self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )
+        self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
         self.model_part.Properties[*MatNum].SetValue(THICKNESS, 1.0 )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, Isotropic3D() )
         print "Linear elastic model selected for *MatProp(0), description: *MatProp(Description)"
 *elseif(strcmp(MatProp(ConstitutiveLaw),"TutorialDamageModel")==0)
-        self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )        
-        self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )        
+        self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )
+        self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
         self.model_part.Properties[*MatNum].SetValue(DAMAGE_E0, *MatProp(E0,real) )
         self.model_part.Properties[*MatNum].SetValue(DAMAGE_EF, *MatProp(Ef,real) )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, TutorialDamageModel() )
         print "Tutorial damage model selected for *MatProp(0), description: *MatProp(Description)"
 *elseif(strcmp(MatProp(ConstitutiveLaw),"GroutingMortar")==0)
-        self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )        
-        self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )        
+        self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )
+        self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
         self.model_part.Properties[*MatNum].SetValue(PRIMARY_HYDRATION_TIME, *MatProp(prim_hyd_time,real) )
         self.model_part.Properties[*MatNum].SetValue(PRIMARY_HYDRATION_TIME_GRADIENT, *MatProp(gradient_prim_hyd_time,real) )
@@ -716,11 +725,11 @@ class Model:
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, GroutingMortar() )
         print "Grouting Mortar material selected for *MatProp(0), description: *MatProp(Description)"
 *elseif(strcmp(MatProp(ConstitutiveLaw),"DruckerPrager")==0)
-        self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )        
+        self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
-        self.model_part.Properties[*MatNum].SetValue(COHESION, *MatProp(Cohesion,real) )        
+        self.model_part.Properties[*MatNum].SetValue(COHESION, *MatProp(Cohesion,real) )
         self.model_part.Properties[*MatNum].SetValue(INTERNAL_FRICTION_ANGLE, *MatProp(Friction_angle,real) )
-        self.model_part.Properties[*MatNum].SetValue(ISOTROPIC_HARDENING_MODULUS, *MatProp(Isotropic_hardening_modulus,real) )        
+        self.model_part.Properties[*MatNum].SetValue(ISOTROPIC_HARDENING_MODULUS, *MatProp(Isotropic_hardening_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, DruckerPrager() )
         print "Drucker Prager material selected for *MatProp(0), description: *MatProp(Description)"
 *elseif(strcmp(MatProp(ConstitutiveLaw),"IsotropicDamage3D")==0)

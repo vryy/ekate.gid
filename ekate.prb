@@ -31,6 +31,8 @@ DEPENDENCIES:(0,HIDE,Water_Level,#CURRENT#)(1,RESTORE,Water_Level,#CURRENT#)
 QUESTION: Water_Level#UNITS#
 VALUE: 0m
 HELP: z-Coordinate of Ground water level
+QUESTION: Reverse_Node_Numbering_For_Surface#CB#(0,1)
+VALUE: 1
 TITLE: Time_Integration
 QUESTION: time_step_length
 VALUE: 1
@@ -88,10 +90,10 @@ Value: 1.0e-8
 QUESTION: Max_Solver_Iterations
 Value: 15000
 QUESTION: Relative_Tolerance#CB#(0.1,0.01,0.001,0.0001,custom)
-VALUE: 0.0001
+VALUE: custom
 DEPENDENCIES: (0.1,HIDE,Custom_Relative_Tolerance,#CURRENT#)(0.01,HIDE,Custom_Relative_Tolerance,#CURRENT#)(0.001,HIDE,Custom_Relative_Tolerance,#CURRENT#)(0.0001,HIDE,Custom_Relative_Tolerance,#CURRENT#)(custom,RESTORE,Custom_Relative_Tolerance,#CURRENT#)
 QUESTION: Custom_Relative_Tolerance
-VALUE: 1e-5
+VALUE: 1e-10
 HELP: tolerance of relative residual
 QUESTION: Absolute_Tolerance#CB#(0.001,0.0001,1.0e-5,1.0e-6,custom)
 VALUE: 1.0e-6
