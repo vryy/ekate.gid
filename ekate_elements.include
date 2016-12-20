@@ -1,20 +1,3 @@
-
-*set cond LineElementType *elems
-Begin Elements CrisfieldTrussElement3D3N
-
-*loop elems *onlyInCond
-*if(strcmp(cond(1),"truss")==0)
-*set var i=0
-*set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
-*for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
-
-*end
-*endif
-*end elems
-End Elements
-
 *set cond LineElementType *elems
 Begin Elements BeamElement3D2N
 *loop elems *onlyInCond
@@ -28,11 +11,22 @@ Begin Elements BeamElement3D2N
 *end
 
 *endif
+*endif
+*end elems
+End Elements
+
+*set cond LineElementType *elems
+Begin Elements BeamElement3D3N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Beam")==0)
+*set var i=0
+*set var j= ElemsNnode
 *if(ElemsNNode==3)
 *ElemsNum      *ElemsMat    *\
-*ElemsConec(1) *ElemsConec(3)
-*ElemsNum      *ElemsMat    *\
-*ElemsConec(3) *ElemsConec(2)
+*for(i=1;i<=j;i=i+1)*\
+*ElemsConec(*i)    *\
+*end
+
 *endif
 *endif
 *end elems
@@ -210,6 +204,101 @@ Begin Elements AnisoShellElement
 *ElemsNum      *ElemsMat    *\
 *for(i=1;i<=j;i=i+1)*\
 *ElemsConec(*i)    *\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SurfaceElementType *elems
+Begin Elements KinematicLinear2D3N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Kinematic_Linear")==0)
+*if(ElemsType==2)
+*if(ElemsNnode==3)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SurfaceElementType *elems
+Begin Elements KinematicLinear2D4N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Kinematic_Linear")==0)
+*if(ElemsType==3)
+*if(ElemsNnode==4)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SurfaceElementType *elems
+Begin Elements KinematicLinear2D6N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Kinematic_Linear")==0)
+*if(ElemsType==2)
+*if(ElemsNnode==6)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SurfaceElementType *elems
+Begin Elements KinematicLinear2D8N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Kinematic_Linear")==0)
+*if(ElemsType==3)
+*if(ElemsNnode==8)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SurfaceElementType *elems
+Begin Elements KinematicLinear2D9N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Kinematic_Linear")==0)
+*if(ElemsType==3)
+*if(ElemsNnode==9)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -486,7 +575,7 @@ End Elements
 
 *set cond VolumeElementType *elems
 *loop elems *onlyInCond
-*if(strcmp(cond(1),"UnsaturatedSoil_2Phase")==0 || strcmp(cond(1),"UnsaturatedSoil_3Phase")==0 || strcmp(cond(1),"Grouting_Element")==0)
+*if(strcmp(cond(1),"UnsaturatedSoil_3Phase")==0 || strcmp(cond(1),"Grouting_Element")==0)
 *if(ElemsType==4)
 *if(ElemsNnode==4)
 *MessageBox error: Linear shape functions are not permitted using multi-phase elements
@@ -506,11 +595,49 @@ End Elements
 *end elems
 
 *set cond VolumeElementType *elems
+Begin Elements UnsaturatedSoilsElement2PhaseSmallStrain3D4N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"UnsaturatedSoil_2Phase")==0)
+*if(ElemsType==4)
+*if(ElemsNnode==4)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum      *ElemsMat    *\
+*for(i=1;i<=j;i=i+1)*\
+*ElemsConec(*i)    *\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond VolumeElementType *elems
 Begin Elements UnsaturatedSoilsElement2PhaseSmallStrain3D10N
 *loop elems *onlyInCond
 *if(strcmp(cond(1),"UnsaturatedSoil_2Phase")==0)
 *if(ElemsType==4)
 *if(ElemsNnode==10)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum      *ElemsMat    *\
+*for(i=1;i<=j;i=i+1)*\
+*ElemsConec(*i)    *\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond VolumeElementType *elems
+Begin Elements UnsaturatedSoilsElement2PhaseSmallStrain3D8N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"UnsaturatedSoil_2Phase")==0)
+*if(ElemsType==5)
+*if(ElemsNnode==8)
 *set var i=0
 *set var j= ElemsNnode
 *ElemsNum      *ElemsMat    *\

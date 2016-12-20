@@ -20,7 +20,7 @@ END CONDITION
 CONDITION: SurfaceElementType
 CONDTYPE: over surfaces
 CONDMESHTYPE: over body elements
-QUESTION: Element_Type#CB#(TotalLagrangian,Membrane,IsotropicShell,AnisotropicShell)
+QUESTION: Element_Type#CB#(TotalLagrangian,Membrane,IsotropicShell,AnisotropicShell,Kinematic_Linear)
 VALUE: TotalLagrangian
 DEPENDENCIES:(TotalLagrangian,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(Membrane,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(IsotropicShell,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(AnisotropicShell,RESTORE,MatrixA,#CURRENT#,RESTORE,MatrixB,#CURRENT#,RESTORE,MatrixD,#CURRENT#)
 QUESTION: Thickness#UNITS#
@@ -248,7 +248,7 @@ VALUE: 0.0N/m
 END CONDITION
 CONDITION: Line_Bedding
 CONDTYPE: over lines
-CONDMESHTYPE: over face elements
+CONDMESHTYPE: over body elements
 QUESTION: Elastic_Constraint_X#CB#(0,1)
 VALUE: 0
 DEPENDENCIES:(0,HIDE,Bedding_Stiffness_X,#CURRENT#)(1,RESTORE,Bedding_Stiffness_X,#CURRENT#)
@@ -453,6 +453,16 @@ HELP: Value of fixed reaction (neumann-condition)
 image: images/Pressure.gif
 END CONDITION
 CONDITION: Following_Surface_Load
+CONDTYPE: over surfaces
+CONDMESHTYPE: over face elements
+QUESTION: Fix_Surface_Pressure#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Surface_Pressure,#CURRENT#)(1,RESTORE,Surface_Pressure,#CURRENT#)
+QUESTION: Surface_Pressure#UNITS#
+VALUE: 0.0N/m^2
+image: images/Pressure.gif
+END CONDITION
+CONDITION: Pressure_Load
 CONDTYPE: over surfaces
 CONDMESHTYPE: over face elements
 QUESTION: Fix_Surface_Pressure#CB#(0,1)

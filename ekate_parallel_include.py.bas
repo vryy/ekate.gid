@@ -24,6 +24,10 @@ from KratosMultiphysics.MKLSolversApplication import **
 *if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
 from KratosMultiphysics.MortarApplication import **
 *endif
+from KratosMultiphysics.mpi import **
+from KratosMultiphysics.MetisApplication import **
+from KratosMultiphysics.DistributedBuildersApplication import **
+from KratosMultiphysics.PetscSolversApplication import **
 kernel = Kernel()   #defining kernel
 
 ##################################################################
@@ -159,9 +163,9 @@ class Model:
 
         ## generating solver
 *if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
-        import mortar_gpts_contact_strategy
-        self.solver = mortar_gpts_contact_strategy.SampleSolver(self.model_part, self.abs_tol, self.rel_tol, self.analysis_parameters)
-        mortar_gpts_contact_strategy.AddVariables( self.model_part )
+        import mortar_gpts_parallel_contact_strategy
+        self.solver = mortar_gpts_parallel_contact_strategy.SampleSolver(self.model_part, self.abs_tol, self.rel_tol, self.analysis_parameters)
+        mortar_gpts_parallel_contact_strategy.AddVariables( self.model_part )
 *else
         import structural_solver_advanced
         self.solver = structural_solver_advanced.SolverAdvanced( self.model_part, self.domain_size, number_of_time_steps, self.analysis_parameters, self.abs_tol, self.rel_tol )
@@ -170,6 +174,10 @@ class Model:
         structural_solver_advanced.AddVariables( self.model_part )
         #ekate_solver_parallel.AddVariables( self.model_part )
 *endif
+        self.solver.Initialize()
+        self.solver.solver.SetEchoLevel(0x0018);
+        set_communicator_process = SetMPICommunicatorProcess(self.model_part)
+        set_communicator_process.Execute() #this is important for the model_part to read the partition correctly
         ##################################################################
         ## READ MODELPART ################################################
         ##################################################################
@@ -190,7 +198,13 @@ class Model:
 *endif
         self.gid_io = StructuralGidIO( self.path+self.problem_name, post_mode, multi_file_flag, write_deformed_flag, write_elements )
         self.model_part_io = ModelPartIO(self.path+self.problem_name)
-        self.model_part_io.ReadModelPart(self.model_part)
+        number_of_partitions = mpi.size
+        if number_of_partitions > 1:
+            self.model_part_io = ModelPartIO(self.path+self.problem_name+'_'+str(mpi.rank))
+            self.model_part_io.ReadModelPart(self.model_part)
+        else:
+            self.model_part_io.ReadModelPart(self.model_part)
+        mpi.world.barrier()
         self.meshWritten = False
 *if(strcmp(GenData(Reactions),"1")==0)
         (self.solver).CalculateReactionFlag = True
@@ -198,21 +212,39 @@ class Model:
         ## READ DEACTIVATION FILE ########################################
         self.cond_file = open(self.path+self.problem_name+".mdpa",'r' )
         self.cond_activation_flags = []
+        self.number_of_elements = len(self.model_part.Elements)
+        mpi.world.barrier
+        self.all_numbers_of_elements = mpi.allgather( mpi.world, self.number_of_elements )
+        self.number_of_all_elements = 0
+        for item in self.all_numbers_of_elements:
+            self.number_of_all_elements = self.number_of_all_elements + item
+        self.element_activation_levels = [0]**(self.number_of_all_elements+1)
+        for element in self.model_part.Elements:
+            self.element_activation_levels[element.Id] = element.GetValue(ACTIVATION_LEVEL)
+        mpi.world.barrier
+        for i in range(0,self.number_of_all_elements):
+            levels_from_all_ranks = mpi.allgather( mpi.world, self.element_activation_levels[i] )
+            for item in levels_from_all_ranks:
+                if( item != 0 ):
+                    self.element_activation_levels[i] = item
+        mpi.world.barrier
+        #print( self.element_activation_levels )
         self.element_assignments = {}
         for line in self.cond_file:
             if "//ElementAssignment" in line:
                 val_set = line.split(' ')
-                self.model_part.Conditions[int(val_set[1])].SetValue( ACTIVATION_LEVEL, self.model_part.Elements[int(val_set[2])].GetValue(ACTIVATION_LEVEL) )
-                #print( "assigning ACTIVATION_LEVEL of element: " +str(int(val_set[2])) + " to Condition: " + str(int(val_set[1])) + " as " + str(self.model_part.Elements[int(val_set[2])].GetValue(ACTIVATION_LEVEL)) )
-                self.element_assignments[int(val_set[1])] = int(val_set[2])
+                if( (int(val_set[1]) in self.model_part.Conditions) ):
+                    self.model_part.Conditions[int(val_set[1])].SetValue( ACTIVATION_LEVEL, self.element_activation_levels[int(val_set[2])] )
+                    self.element_assignments[int(val_set[1])] = int(val_set[2])
+#                    print( "assigning ACTIVATION_LEVEL of element: " +str(int(val_set[2])) + " to Condition: " + str(int(val_set[1])) + " as " + str(self.element_activation_levels[int(val_set[2])]) )
+#                    print( self.model_part.Conditions[int(val_set[1])].GetValue( ACTIVATION_LEVEL ) )
+        self.cond_file.close()
+        mpi.world.barrier()
         print "input data read OK"
-        #print "+++++++++++++++++++++++++++++++++++++++"
-        #for node in self.model_part.Nodes:
-        #    print node
-        #print "+++++++++++++++++++++++++++++++++++++++"
         
         #the buffer size should be set up here after the mesh is read for the first time
         self.model_part.SetBufferSize(2)
+        self.mpi_fn_step = 0.0001
 
         ##################################################################
         ## ADD DOFS ######################################################
@@ -225,7 +257,7 @@ class Model:
 *endif
 *endif
 *if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
-        mortar_gpts_contact_strategy.AddDofs( self.model_part )
+        mortar_gpts_parallel_contact_strategy.AddDofs( self.model_part )
 *else
         structural_solver_advanced.AddDofs( self.model_part )
         #ekate_solver_parallel.AddDofs( self.model_part )
@@ -325,8 +357,9 @@ class Model:
         outfile.close()
         
     def WriteOutput( self, time ):
+        meshname = time+self.mpi_fn_step**(mpi.rank+1)
 *if(strcmp(GenData(New_mesh_for_each_step),"1")==0)
-        self.gid_io.InitializeMesh( time )
+        self.gid_io.InitializeMesh( meshname )
         mesh = self.model_part.GetMesh()
         #self.gid_io.WriteNodeMesh( mesh )
         self.gid_io.WriteMesh( mesh )
@@ -334,7 +367,7 @@ class Model:
         self.gid_io.FinalizeMesh()
 *else
         if( self.meshWritten == False ):
-            self.gid_io.InitializeMesh( 0.0 )
+            self.gid_io.InitializeMesh( self.mpi_fn_step**(mpi.rank+1) )
             mesh = self.model_part.GetMesh()
             self.gid_io.WriteMesh( mesh )
             self.meshWritten = True
@@ -345,6 +378,7 @@ class Model:
 *else
         self.gid_io.InitializeResults( 0.0, self.model_part.GetMesh() )
 *endif
+        self.gid_io.WriteNodalResults(PARTITION_INDEX, self.model_part.Nodes, time, 0)
         #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 0)
         #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 1)
         #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 2)
@@ -415,6 +449,23 @@ class Model:
 *if(strcmp(GenData(New_mesh_for_each_step),"1")==0)
         self.gid_io.FinalizeResults()
 *endif
+        if(mpi.rank == 0):
+            mergefile = open( self.path+self.problem_name+"_"+str(time)+"_merge_results.bch", 'w' )
+            mergefile.write("Postprocess\n")
+            mergefile.write("mescape\n \n")
+            meshname = time+self.mpi_fn_step
+            mergefile.write("Files Read "+self.path+self.problem_name+"_"+str(meshname)+".post.bin\n")
+            mergefile.write("mescape\n")
+            for rank in range(2, mpi.size+1 ):
+                meshname = time+self.mpi_fn_step**(rank)
+                mergefile.write("Files Add "+self.path+self.problem_name+"_"+str(meshname)+".post.bin\n")
+                mergefile.write("mescape\n")
+            mergefile.write("Files SaveAll BinMeshesSets\n")
+            mergefile.write(self.path+"merged_"+self.problem_name+"_"+ str(time)+".bin\n")
+            mergefile.write("mescape\n")
+            mergefile.write("\n")
+            mergefile.close()
+        mpi.world.barrier()
                 
     def InitializeModel( self ):
         ##################################################################
@@ -572,7 +623,7 @@ class Model:
         print "model successfully initialized"
 
     def WriteRestartFile( self, time ):
-        fn = self.problem_name + "_" + str(time)
+        fn = self.problem_name + "_" + str(time + self.mpi_fn_step**(mpi.rank+1))
         serializer = Serializer(fn)
         serializer.Save("ModelPart", self.model_part)
         serializer = 0
@@ -580,7 +631,7 @@ class Model:
 
 
     def LoadRestartFile( self, time ):
-        fn = self.problem_name + "_" + str(time)
+        fn = self.problem_name + "_" + str(time + self.mpi_fn_step**(mpi.rank+1))
         serializer = Serializer(fn)
         serializer.Load("ModelPart", self.model_part)
         serializer = 0

@@ -639,6 +639,96 @@ Begin Conditions Face3D9N
 *end elems
 End Conditions
 
+Begin Conditions FacePressure3D3N
+*set cond Pressure_Load *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==3)
+*if(strcmp(GenData(Reverse_Node_Numbering_For_Surface),"1")==0)
+*condID      *ElemsMat    *\
+*GlobalNodes(2) *GlobalNodes(1) *GlobalNodes(3)
+*else
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+*endif
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Pressure_Load *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions FacePressure3D6N
+*set cond Pressure_Load *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==6)
+*if(strcmp(GenData(Reverse_Node_Numbering_For_Surface),"1")==0)
+*condID      *ElemsMat    *\
+*Globalnodes(2) *Globalnodes(1) *Globalnodes(3) *Globalnodes(4) *Globalnodes(6) *Globalnodes(5)
+*else
+*condID      *ElemsMat    *\
+*Globalnodes(1) *Globalnodes(2) *Globalnodes(3) *Globalnodes(4) *Globalnodes(5) *Globalnodes(6)
+*endif
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Pressure_Load *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions FacePressure3D4N
+*set cond Pressure_Load *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==4)
+*if(strcmp(GenData(Reverse_Node_Numbering_For_Surface),"1")==0)
+*condID      *ElemsMat    *\
+*Globalnodes(4) *Globalnodes(3) *Globalnodes(2) *Globalnodes(1)
+*else
+*condID      *ElemsMat    *\
+*Globalnodes(1) *Globalnodes(2) *Globalnodes(3) *Globalnodes(4)
+*endif
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Pressure_Load *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions FacePressure3D8N
+*set cond Pressure_Load *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==8)
+*if(strcmp(GenData(Reverse_Node_Numbering_For_Surface),"1")==0)
+*condID      *ElemsMat    *\
+*Globalnodes(4) *Globalnodes(3) *Globalnodes(2) *Globalnodes(1) *Globalnodes(7) *Globalnodes(6) *Globalnodes(5) *Globalnodes(8)
+*else
+*condID      *ElemsMat    *\
+*Globalnodes(1) *Globalnodes(2) *Globalnodes(3) *Globalnodes(4) *Globalnodes(5) *Globalnodes(6) *Globalnodes(7) *Globalnodes(8)
+*endif
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Pressure_Load *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions FacePressure3D9N
+*set cond Pressure_Load *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==9)
+*if(strcmp(GenData(Reverse_Node_Numbering_For_Surface),"1")==0)
+*condID      *ElemsMat    *\
+*Globalnodes(4) *Globalnodes(3) *Globalnodes(2) *Globalnodes(1) *Globalnodes(7) *Globalnodes(6) *Globalnodes(5) *Globalnodes(8) *Globalnodes(9)
+*else
+*condID      *ElemsMat    *\
+*Globalnodes(1) *Globalnodes(2) *Globalnodes(3) *Globalnodes(4) *Globalnodes(5) *Globalnodes(6) *Globalnodes(7) *Globalnodes(8) *Globalnodes(9)
+*endif
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Pressure_Load *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
 Begin Conditions LiningEndFace3D3N
 *set cond Lining_End *elems *canRepeat
 *loop elems *onlyInCond
@@ -825,9 +915,14 @@ Begin Conditions ElasticLineConstraint2N
 *set cond Line_Bedding *elems *canRepeat
 *loop elems *onlyInCond
 *if(cond(1,int)!=0 || cond(3,int)!=0 || cond(5,int)!=0)
-*if(ElemsNnodeFace==2)
+*set var i=0
+*set var j= ElemsNnode
+*if(ElemsNNode==2)
 *condID      *ElemsMat    *\
-*Globalnodes(1) *Globalnodes(2)
+*for(i=1;i<=j;i=i+1)*\
+*ElemsConec(*i)    *\
+*end
+
 //ElementAssignment *condID *ElemsNum
 *set var condID= condID+1
 *endif
@@ -839,9 +934,14 @@ Begin Conditions ElasticLineConstraint3N
 *set cond Line_Bedding *elems *canRepeat
 *loop elems *onlyInCond
 *if(cond(1,int)!=0 || cond(3,int)!=0 || cond(5,int)!=0)
-*if(ElemsNnodeFace==3)
+*set var i=0
+*set var j= ElemsNnode
+*if(ElemsNNode==3)
 *condID      *ElemsMat    *\
-*Globalnodes(1) *Globalnodes(3)  *Globalnodes(2)
+*for(i=1;i<=j;i=i+1)*\
+*ElemsConec(*i)    *\
+*end
+
 //ElementAssignment *condID *ElemsNum
 *set var condID= condID+1
 *endif
@@ -1271,15 +1371,15 @@ Begin ElementalData GRAVITY
 *end elems
 End ElementalData
 
-Begin ConditionalData PRESSURE
-*tcl(GetCond Following_Surface_Load)
-End ConditionalData
-
 Begin ConditionalData MASTER_INDEX
 *tcl(GetCond Surface_Mortar_MasterIndex)
 End ConditionalData
 
 Begin ConditionalData SLAVE_INDEX
 *tcl(GetCond Surface_Mortar_SlaveIndex)
+End ConditionalData
+
+Begin ConditionalData POSITIVE_FACE_PRESSURE
+*tcl(GetCond Pressure_Load)
 End ConditionalData
 

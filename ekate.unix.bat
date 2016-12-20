@@ -19,6 +19,7 @@ mv $2/$1-1.dat $2/${1}.inp
 mv $2/$1-2.dat $2/${1}.py
 mv $2/$1-3.dat $2/${1}_include.py
 mv $2/$1-4.dat $2/${1}_layers.py
+mv $2/$1-5.dat $2/${1}_parallel_include.py
 touch $2/$1.ess
 #touch $2/set_material_data.py
 cat $2/$1.ess >> $2/$1.py
