@@ -38,6 +38,24 @@ QUESTION: Reverse_Node_Numbering_For_Surface#CB#(0,1)
 VALUE: 1
 QUESTION: Move_Mesh_Flag#CB#(0,1)
 VALUE: 1
+QUESTION: Topology_Optimization#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Search_Radius,#CURRENT#,HIDE,Filter_Type,#CURRENT#,HIDE,Penalization_Factor,#CURRENT#,HIDE,Volume_Fraction,#CURRENT#,HIDE,Minimum_Modulus,#CURRENT#)(1,RESTORE,Search_Radius,#CURRENT#,RESTORE,Filter_Type,#CURRENT#,RESTORE,Penalization_Factor,#CURRENT#,RESTORE,Volume_Fraction,#CURRENT#,RESTORE,Volume_Fraction,#CURRENT#,RESTORE,Minimum_Modulus,#CURRENT#)
+QUESTION: Search_Radius
+VALUE: 1.5
+STATE: HIDDEN
+QUESTION: Penalization_Factor
+VALUE: 3.0
+STATE: HIDDEN
+QUESTION: Volume_Fraction
+VALUE: 0.5
+STATE: HIDDEN
+QUESTION: Minimum_Modulus
+VALUE: 1.0e-9
+STATE: HIDDEN
+QUESTION: Filter_Type#CB#(Density_Filter,Sensitivity_Filter)
+VALUE: Sensitivity_Filter
+STATE: HIDDEN
 TITLE: Time_Integration
 QUESTION: time_step_length
 VALUE: 1
@@ -117,7 +135,11 @@ VALUE: 0
 TITLE: Applications
 QUESTION: Layer_Application#CB#(0,1)
 VALUE: 0
+QUESTION: Mortar_Application#CB#(0,1)
+VALUE: 0
 QUESTION: Soil_Mechanics_Application#CB#(0,1)
+VALUE: 0
+QUESTION: Plate_And_Shell_Application#CB#(0,1)
 VALUE: 0
 QUESTION: Finite_Cell_Application#CB#(0,1)
 VALUE: 0
@@ -131,6 +153,12 @@ QUESTION: New_mesh_for_each_step#CB#(0,1)
 VALUE: 1
 HELP: Write a new mesh file for each simulation step
 IMAGE: images/Data.gif
+QUESTION: VTK_Output#CB#(0,1)
+VALUE: 0
+HELP: Write results to VTK
+QUESTION: VTK_Output_Format#CB#(ASCII,Binary)
+VALUE: ASCII
+HELP: Use ASCII or binary VTK output format
 QUESTION: Displacements#CB#(0,1)
 VALUE: 1
 HELP: Write displacement results

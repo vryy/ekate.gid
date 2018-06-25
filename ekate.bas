@@ -62,7 +62,7 @@ End Properties
 *end materials
 
 Begin Nodes
-*RealFormat "%10.5f"
+*RealFormat "%10.10f"
 *loop nodes
 *nodesnum   *NodesCoord(1)  *NodesCoord(2)  *NodesCoord(3)
 *end nodes
@@ -459,6 +459,15 @@ Begin Conditions VolumeMortarCondition3D27N
 *end elems
 End Conditions
 
+Begin Conditions PointForce2D
+*set cond Point_Force_2D *nodes
+*add cond Line_Force_2D *nodes
+*loop nodes *OnlyInCond
+*condID 1 *NodesNum
+*set var condID= condID+1
+*end nodes
+End Conditions
+
 Begin Conditions PointForce3D
 *set cond Point_Force *nodes
 *add cond Line_Force *nodes
@@ -473,13 +482,11 @@ End Conditions
 Begin Conditions LineForce2D2N
 *set cond Distributed_Line_Load_2D *elems *canRepeat
 *loop elems *onlyInCond
-*if(ElemsNnode==2)
+*if(ElemsNnodeFace==2)
 *set var i=0
-*set var j= ElemsNnode
+*set var j= ElemsNnodeFace
 *condID      *ElemsMat    *\
-*for(i=1;i<=j;i=i+1)*\
- *ElemsConec(*i)*\
-*end
+*GlobalNodes(1) *GlobalNodes(2)
 
 *set var condID= condID+1
 *endif
@@ -489,13 +496,11 @@ End Conditions
 Begin Conditions LineForce2D3N
 *set cond Distributed_Line_Load_2D *elems *canRepeat
 *loop elems *onlyInCond
-*if(ElemsNnode==3)
+*if(ElemsNnodeFace==3)
 *set var i=0
-*set var j= ElemsNnode
+*set var j= ElemsNnodeFace
 *condID      *ElemsMat    *\
-*for(i=1;i<=j;i=i+1)*\
- *ElemsConec(*i)*\
-*end
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
 
 *set var condID= condID+1
 *endif
@@ -509,9 +514,7 @@ Begin Conditions LineForce3D2N
 *set var i=0
 *set var j= ElemsNnode
 *condID      *ElemsMat    *\
-*for(i=1;i<=j;i=i+1)*\
- *ElemsConec(*i)*\
-*end
+*GlobalNodes(1) *GlobalNodes(2)
 
 *set var condID= condID+1
 *endif
@@ -525,22 +528,39 @@ Begin Conditions LineForce3D3N
 *set var i=0
 *set var j= ElemsNnode
 *condID      *ElemsMat    *\
-*for(i=1;i<=j;i=i+1)*\
- *ElemsConec(*i)*\
-*end
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
 
 *set var condID= condID+1
 *endif
 *end elems
 End Conditions
 
-Begin Conditions PointForce2D
-*set cond Point_Force_2D *nodes
-*add cond Line_Force_2D *nodes
-*loop nodes *OnlyInCond
-*condID 1 *NodesNum
+Begin Conditions LinePressure2D2N
+*set cond Line_Pressure_2D *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==2)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2)
+
 *set var condID= condID+1
-*end nodes
+*endif
+*end elems
+End Conditions
+
+Begin Conditions LinePressure2D3N
+*set cond Line_Pressure_2D *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==3)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+
+*set var condID= condID+1
+*endif
+*end elems
 End Conditions
 
 Begin Conditions FaceForce3D3N
@@ -1123,6 +1143,33 @@ Begin Conditions ElasticFaceConstraint9N
 *end elems
 End Conditions
 
+Begin Conditions NitscheIsotropicConstraint2D2N
+*set cond Line_Nitsche *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==2)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions NitscheIsotropicConstraint2D3N
+*set cond Line_Nitsche *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==3)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
 
 Begin NodalData DISPLACEMENT_X
 *set cond Nodal_Displacement *nodes *or(1,int)
@@ -1268,7 +1315,52 @@ Begin NodalData FACE_LOAD
 *end nodes
 *set cond Distributed_Line_Load_2D *nodes
 *loop nodes *OnlyInCond
-*NodesNum 0 [2] ( *cond(1), *cond(2) )
+*NodesNum 0 [3] ( *cond(1), *cond(2), 0.0 )
+*end nodes
+End NodalData
+
+Begin NodalData FORCE_X
+*set cond Point_Force *nodes *or(1,int)
+*add cond Line_Force *nodes *or(1,int)
+*add cond Surface_Force *nodes *or(1,int)
+*add cond Volume_Force *nodes *or(1,int)
+*loop nodes *OnlyInCond
+*NodesNum *cond(1) *cond(2)
+*end nodes
+*set cond Point_Force_2D *nodes *or(1,int)
+*add cond Line_Force_2D *nodes *or(1,int)
+*loop nodes *OnlyInCond
+*NodesNum *cond(1) *cond(2)
+*end nodes
+End NodalData
+
+Begin NodalData FORCE_Y
+*set cond Point_Force *nodes *or(3,int)
+*add cond Line_Force *nodes *or(3,int)
+*add cond Surface_Force *nodes *or(3,int)
+*add cond Volume_Force *nodes *or(3,int)
+*loop nodes *OnlyInCond
+*NodesNum *cond(3) *cond(4)
+*end nodes
+*set cond Point_Force_2D *nodes *or(3,int)
+*add cond Line_Force_2D *nodes *or(3,int)
+*loop nodes *OnlyInCond
+*NodesNum *cond(3) *cond(4)
+*end nodes
+End NodalData
+
+Begin NodalData FORCE_Z
+*set cond Point_Force *nodes *or(5,int)
+*add cond Line_Force *nodes *or(5,int)
+*add cond Surface_Force *nodes *or(5,int)
+*add cond Volume_Force *nodes *or(5,int)
+*loop nodes *OnlyInCond
+*NodesNum *cond(5) *cond(6)
+*end nodes
+*set cond Point_Force_2D *nodes
+*add cond Line_Force_2D *nodes
+*loop nodes *OnlyInCond
+*NodesNum 0 0.0
 *end nodes
 End NodalData
 
@@ -1292,7 +1384,8 @@ Begin ElementalData INERTIA
 *set cond LineElementType *elems
 *loop elems *OnlyInCond
 *if(strcmp(cond(1),"Beam")==0)
-*ElemsNum [3,3] (( *cond(5), 0, 0 ),(0.0, *cond(3), 0.0),(0.0, 0.0, *cond(4)))
+//*ElemsNum [3,3] (( *cond(5), 0, 0 ),(0.0, *cond(3), 0.0),(0.0, 0.0, *cond(4)))
+*ElemsNum [2,2] (( *cond(3), *cond(5) ),( *cond(5), *cond(4) ))
 *endif
 *end elems
 End ElementalData
@@ -1308,7 +1401,7 @@ Begin ElementalData ACTIVATION_LEVEL
 End ElementalData
 
 Begin ElementalData USE_DISTRIBUTED_PROPERTIES
-*loop elems *onlyInCond
+*loop elems
 *if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==0)
 *ElemsNum 1
 *endif
@@ -1538,7 +1631,7 @@ Begin ElementalData PERMEABILITY_TRANSITION
 End ElementalData
 
 Begin ElementalData GRAVITY
-*loop elems *onlyInCond
+*loop elems
 *if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==0)
 *if(strcmp(GenData(Enable_Gravity),"1")==0)
 *ElemsNum [3] (*GenData(Gravity_X,real), *GenData(Gravity_Y,real), *GenData(Gravity_Z,real))
@@ -1557,5 +1650,9 @@ End ConditionalData
 
 Begin ConditionalData POSITIVE_FACE_PRESSURE
 *tcl(GetCond Pressure_Load)
+End ConditionalData
+
+Begin ConditionalData PRESSURE
+*tcl(GetCond Line_Pressure_2D)
 End ConditionalData
 

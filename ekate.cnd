@@ -36,12 +36,10 @@ HELP: Moment of torsional inertia
 END CONDITION
 CONDITION: SurfaceElementType
 CONDTYPE: over surfaces
-CONDMESHTYPE: over face elements multiple
-QUESTION: Element_Type#CB#(Membrane,IsotropicShell,AnisotropicShell)
+CONDMESHTYPE: over body elements
+QUESTION: Element_Type#CB#(Membrane,IsotropicShell,AnisotropicShell,MITC4,MITC9)
 VALUE: IsotropicShell
-DEPENDENCIES:(Membrane,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(IsotropicShell,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(AnisotropicShell,RESTORE,MatrixA,#CURRENT#,RESTORE,MatrixB,#CURRENT#,RESTORE,MatrixD,#CURRENT#)
-QUESTION: Thickness#UNITS#
-VALUE: 1.0m
+DEPENDENCIES:(Membrane,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(IsotropicShell,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(AnisotropicShell,RESTORE,MatrixA,#CURRENT#,RESTORE,MatrixB,#CURRENT#,RESTORE,MatrixD,#CURRENT#)(MITC4,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(MITC9,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)
 QUESTION: MatrixA:(MatrixA_col1,MatrixA_col2,MatrixA_col3)
 VALUE: #N# 9 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
 QUESTION: MatrixB:(MatrixB_col1,MatrixB_col2,MatrixB_col3)
@@ -185,6 +183,14 @@ QUESTION: Rotation_Z
 VALUE: 0.0
 HELP: Value of fixed rotation (dirichlet-condition)
 END CONDITION
+CONDITION: Line_Nitsche
+CONDTYPE: over lines
+CONDMESHTYPE: over face elements multiple
+QUESTION: MatrixH:(MatrixH_col1,MatrixH_col2)
+VALUE: #N# 4 0.0 0.0 0.0 0.0
+QUESTION: VectorG:(VectorG_col)
+VALUE: #N# 2 0.0 0.0
+END CONDITION
 CONDITION: Surface_Displacement
 CONDTYPE: over surfaces
 CONDMESHTYPE: over nodes
@@ -225,6 +231,14 @@ DEPENDENCIES:(0,HIDE,Rotation_Z,#CURRENT#)(1,RESTORE,Rotation_Z,#CURRENT#)
 QUESTION: Rotation_Z
 VALUE: 0.0
 HELP: Value of fixed rotation (dirichlet-condition)
+END CONDITION
+CONDITION: Surface_Nitsche
+CONDTYPE: over surfaces
+CONDMESHTYPE: over face elements multiple
+QUESTION: MatrixH:(MatrixH_col1,MatrixH_col2,MatrixH_col3)
+VALUE: #N# 9 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+QUESTION: VectorG:(VectorG_col)
+VALUE: #N# 3 0.0 0.0 0.0
 END CONDITION
 CONDITION: Volume_Displacement
 CONDTYPE: over volumes
@@ -309,7 +323,7 @@ VALUE: 0.0N/m^2
 END CONDITION
 CONDITION: Surface_Bedding
 CONDTYPE: over surfaces
-CONDMESHTYPE: over face elements
+CONDMESHTYPE: over face elements multiple
 QUESTION: Elastic_Constraint_X#CB#(0,1)
 VALUE: 0
 DEPENDENCIES:(0,HIDE,Bedding_Stiffness_X,#CURRENT#)(1,RESTORE,Bedding_Stiffness_X,#CURRENT#)
@@ -507,12 +521,23 @@ image: images/Pressure.gif
 END CONDITION
 CONDITION: Distributed_Line_Load_2D
 CONDTYPE: over lines
-CONDMESHTYPE: over body elements multiple
+CONDMESHTYPE: over face elements multiple
 QUESTION: Face_Load_X#UNITS#
 VALUE: 0.0N/m^2
 QUESTION: Face_Load_Y#UNITS#
 VALUE: 0.0N/m^2
 HELP: Value of line loads (neumann-condition)
+image: images/Pressure.gif
+END CONDITION
+CONDITION: Line_Pressure_2D
+CONDTYPE: over lines
+CONDMESHTYPE: over face elements multiple
+QUESTION: Fix_Line_Pressure#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Line_Pressure,#CURRENT#)(1,RESTORE,Line_Pressure,#CURRENT#)
+QUESTION: Line_Pressure#UNITS#
+VALUE: 0.0N/m
+HELP: Value of line pressure (neumann-condition)
 image: images/Pressure.gif
 END CONDITION
 CONDITION: Distributed_Surface_Load
@@ -560,7 +585,7 @@ image: images/Pressure.gif
 END CONDITION
 CONDITION: Pressure_Load
 CONDTYPE: over surfaces
-CONDMESHTYPE: over face elements
+CONDMESHTYPE: over face elements multiple
 QUESTION: Fix_Surface_Pressure#CB#(0,1)
 VALUE: 0
 DEPENDENCIES:(0,HIDE,Surface_Pressure,#CURRENT#)(1,RESTORE,Surface_Pressure,#CURRENT#)

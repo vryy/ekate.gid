@@ -25,7 +25,9 @@ VALUE: 210000N/mm^2
 HELP: elastic stiffness modulus
 QUESTION: Poisson_ratio
 VALUE: 0.3
-HELP: poisson ratio (Querdehnzahl) 
+HELP: poisson ratio (Querdehnzahl)
+QUESTION: Thickness#UNITS#
+VALUE: 1.0m
 END MATERIAL
 NUMBER: 3 MATERIAL: DruckerPrager
 QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)

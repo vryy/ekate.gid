@@ -21,10 +21,10 @@ from KratosMultiphysics.EkateAuxiliaryApplication import **
 from KratosMultiphysics.ExternalSolversApplication import **
 # from KratosMultiphysics.ExternalConstitutiveLawsApplication import **
 from KratosMultiphysics.MKLSolversApplication import **
-*if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
+*if(strcmp(GenData(Enable_Mortar_Contact),"1")==0||strcmp(GenData(Mortar_Application),"1")==0)
 from KratosMultiphysics.MortarApplication import **
 *endif
-*if(strcmp(GenData(Layer_Application),"1")==0)
+*if(strcmp(GenData(Layer_Application),"1")==0||strcmp(GenData(VTK_Output),"1")==0)
 from KratosMultiphysics.LayerApplication import **
 *endif
 *if(strcmp(GenData(Finite_Cell_Application),"1")==0)
@@ -35,6 +35,9 @@ from KratosMultiphysics.FiniteCellStructuralApplication import **
 *endif
 *if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
 from KratosMultiphysics.SoilMechanicsApplication import **
+*endif
+*if(strcmp(GenData(Plate_And_Shell_Application),"1")==0)
+from KratosMultiphysics.PlateAndShellApplication import **
 *endif
 kernel = Kernel()   #defining kernel
 
@@ -205,7 +208,19 @@ class Model:
         post_mode = GiDPostMode.GiD_PostBinary
         multi_file_flag = MultiFileFlag.MultipleFiles
 *endif
+*if(strcmp(GenData(Layer_Application),"1")==0)
+        self.gid_io = SDGidPostIO( self.results_path+self.problem_name, post_mode, multi_file_flag, write_deformed_flag, write_elements )
+*else
         self.gid_io = StructuralGidIO( self.results_path+self.problem_name, post_mode, multi_file_flag, write_deformed_flag, write_elements )
+*endif
+*if(strcmp(GenData(VTK_Output),"1")==0)
+*if(strcmp(GenData(VTK_Output_Format),"ASCII")==0)
+        vtk_post_mode = VTKPostMode.VTK_PostAscii
+*else
+        vtk_post_mode = VTKPostMode.VTK_PostBinary
+*endif
+        self.vtk_io = VtkIO( self.path+self.problem_name, vtk_post_mode )
+*endif
         self.model_part_io = ModelPartIO(self.path+self.problem_name)
         self.model_part_io.ReadModelPart(self.model_part)
         self.meshWritten = False
@@ -295,7 +310,27 @@ class Model:
         ## INITIALISE RESTART UTILITY ####################################
         ##################################################################
         #restart_utility= RestartUtility( self.problem_name )
-        
+
+*if(strcmp(GenData(Topology_Optimization),"1")==0)
+        ##################################################################
+        ## TOPOLOGY OPTIMIZATION SETUP ####################################
+        ##################################################################
+*set var mvolfrac(real)=GenData(Volume_Fraction,real)
+*set var mrmin(real)=GenData(Search_Radius,real)
+        volfrac = *mvolfrac
+        rmin = *mrmin
+*if(strcmp(GenData(Filter_Type),"Sensitivity_Filter")==0)
+        ft = 1
+*elseif(strcmp(GenData(Filter_Type),"Density_Filter")==0)
+        ft = 2
+*else
+        ft = 0
+*endif
+        self.topopt_proc = TopologyUpdateProcess(self.model_part, volfrac, rmin, ft)
+        self.topopt_proc.SetBinSize(100)
+        self.solver.solver.attached_processes.append(self.topopt_proc)
+*endif
+
     def FixPressureNodes( self, free_node_list_water, free_node_list_air):
         for node in self.model_part.Nodes:
             if (node.IsFixed(WATER_PRESSURE)==0):
@@ -353,6 +388,7 @@ class Model:
 *if(strcmp(GenData(New_mesh_for_each_step),"1")==0)
         self.gid_io.InitializeMesh( time )
         mesh = self.model_part.GetMesh()
+        print("mesh at time " + str(time) + " is ready for printing")
         #self.gid_io.WriteNodeMesh( mesh )
         self.gid_io.WriteMesh( mesh )
         print("mesh written...")
@@ -378,11 +414,12 @@ class Model:
         #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 5)
         #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 6)
 *if(strcmp(GenData(Displacements),"1")==0)
-        print("write nodal displacements")
         self.gid_io.WriteNodalResults(DISPLACEMENT, self.model_part.Nodes, time, 0)
+        print("nodal DISPLACEMENT written")
 *endif
 *if(strcmp(GenData(Reactions),"1")==0)
         self.gid_io.WriteNodalResults(REACTION, self.model_part.Nodes, time, 0)
+        print("nodal REACTION written")
 *endif
 *if(strcmp(GenData(PK2_Stresses),"1")==0)
         self.gid_io.PrintOnGaussPoints(PK2_STRESS_TENSOR, self.model_part, time)
@@ -393,12 +430,14 @@ class Model:
 *endif
 *if(strcmp(GenData(Stresses),"1")==0)
         self.gid_io.PrintOnGaussPoints(STRESSES, self.model_part, time)
+        print("gauss point STRESSES written")
 *endif
 *if(strcmp(GenData(Jack_Forces),"1")==0)
         self.gid_io.PrintOnGaussPoints(JACK_FORCE, self.model_part, time)
 *endif
 *if(strcmp(GenData(Insitu_Stress),"1")==0)
         self.gid_io.PrintOnGaussPoints(PRESTRESS, self.model_part, time)
+        print("gauss point PRESTRESS written")
 *endif
 *if(strcmp(GenData(Plastic_Strains),"1")==0)
         self.gid_io.PrintOnGaussPoints(PLASTIC_STRAIN_VECTOR, self.model_part, time)
@@ -425,8 +464,10 @@ class Model:
 *endif
 *if(strcmp(GenData(Water_Pressure),"1")==0)
         self.gid_io.PrintOnGaussPoints(WATER_PRESSURE, self.model_part, time)
+        print("gauss point WATER_PRESSURE written")
         #self.gid_io.WriteNodalResults(WATER_PRESSURE, self.model_part.Nodes, time, 0)
         self.gid_io.PrintOnGaussPoints(EXCESS_PORE_WATER_PRESSURE, self.model_part, time)
+        print("gauss point EXCESS_PORE_WATER_PRESSURE written")
 *endif
 *if(strcmp(GenData(Saturation),"1")==0)
         self.gid_io.PrintOnGaussPoints(SATURATION, self.model_part, time)
@@ -437,10 +478,31 @@ class Model:
         self.gid_io.PrintOnGaussPoints(CONTACT_PENETRATION,self.model_part, time, 0)
         self.gid_io.PrintOnGaussPoints(NORMAL_CONTACT_STRESS,self.model_part, time, 0)
 *endif
+*if(strcmp(GenData(Topology_Optimization),"1")==0)
+        self.gid_io.PrintOnGaussPoints(MATERIAL_DENSITY, self.model_part, time)
+*endif
 *if(strcmp(GenData(New_mesh_for_each_step),"1")==0)
         self.gid_io.FinalizeResults()
 *endif
-                
+*if(strcmp(GenData(VTK_Output),"1")==0)
+        print("write results to vtu")
+        self.vtk_io.Initialize(time, mesh)
+*if(strcmp(GenData(Displacements),"1")==0)
+        print("write nodal displacements to vtu")
+        self.vtk_io.RegisterNodalResults(DISPLACEMENT, 0)
+*endif
+*if(strcmp(GenData(Reactions),"1")==0)
+        self.vtk_io.RegisterNodalResults(REACTION, 0)
+*endif
+*if(strcmp(GenData(Water_Pressure),"1")==0)
+        self.vtk_io.RegisterNodalResults(WATER_PRESSURE, 0)
+*endif
+*if(strcmp(GenData(Air_Pressure),"1")==0)
+        self.vtk_io.RegisterNodalResults(AIR_PRESSURE, 0)
+*endif
+        self.vtk_io.Finalize()
+*endif
+
     def InitializeModel( self ):
         ##################################################################
         ## STORE LAYER SETS ##############################################
@@ -504,14 +566,14 @@ class Model:
         self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )
         self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
-        self.model_part.Properties[*MatNum].SetValue(THICKNESS, 1.0 )
+        self.model_part.Properties[*MatNum].SetValue(THICKNESS, *MatProp(Thickness,real) )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, PlaneStrain() )
         print "Linear elastic model selected for *MatProp(0), description: *MatProp(Description)"
 *elseif(strcmp(MatProp(ConstitutiveLaw),"PlaneStress")==0)
         self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )
         self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
-        self.model_part.Properties[*MatNum].SetValue(THICKNESS, 1.0 )
+        self.model_part.Properties[*MatNum].SetValue(THICKNESS, *MatProp(Thickness,real) )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, PlaneStress() )
         print "Linear elastic model selected for *MatProp(0), description: *MatProp(Description)"
 *elseif(strcmp(MatProp(ConstitutiveLaw),"TutorialDamageModel")==0)
@@ -583,11 +645,21 @@ class Model:
         print "User-defined material selected for *MatProp(0), description: *MatProp(Description)"
 *elseif(strcmp(MatProp(ConstitutiveLaw),"TrussMaterial")==0)
         print "Truss material selected for *MatProp(0), description: *MatProp(Description)"
+*elseif(strcmp(MatProp(ConstitutiveLaw),"BeamMaterial")==0)
+        self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
+        self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
+        print "Beam material selected for *MatProp(0), description: *MatProp(Description)"
 *else
         print "Material *MatProp(0) *MatProp(ConstitutiveLaw) *MatProp(Description)"
 *endif
+*if(strcmp(GenData(Topology_Optimization),"1")==0)
+*set var penalizationfactor(real)=GenData(Penalization_Factor,real)
+*set var minimummodulus(real)=GenData(Minimum_Modulus,real)
+        self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS_MIN, *minimummodulus )
+        self.model_part.Properties[*MatNum].SetValue(PENALIZATION_FACTOR, *penalizationfactor )
+*endif
 *end materials
-*if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
+*if(strcmp(GenData(Enable_Mortar_Contact),"1")==0||strcmp(GenData(Mortar_Application),"1")==0)
         ##################################################################
         ## MORTAR TYING/CONTACT ##########################################
         ##################################################################

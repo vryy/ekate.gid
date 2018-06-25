@@ -157,11 +157,9 @@ End Elements
 Begin Elements MembraneElement
 *loop elems *onlyInCond
 *if(strcmp(cond(1),"Membrane")==0)
-*if(ElemsNnodeFace==3)
-*set var i=0
-*set var j= ElemsNnode
+*if(ElemsNnode==3)
 *ElemsNum      *ElemsMat    *\
-*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *endif
 *endif
 *end elems
@@ -190,11 +188,9 @@ End Elements
 Begin Elements IsoShellElement
 *loop elems *onlyInCond
 *if(strcmp(cond(1),"IsotropicShell")==0)
-*if(ElemsNnodeFace==3)
-*set var i=0
-*set var j= ElemsNnode
+*if(ElemsNnode==3)
 *ElemsNum      *ElemsMat    *\
-*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *endif
 *endif
 *end elems
@@ -223,11 +219,37 @@ End Elements
 Begin Elements AnisoShellElement
 *loop elems *onlyInCond
 *if(strcmp(cond(1),"AnisotropicShell")==0)
-*if(ElemsNnodeFace==3)
-*set var i=0
-*set var j= ElemsNnode
+*if(ElemsNnode==3)
 *ElemsNum      *ElemsMat    *\
-*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SurfaceElementType *elems *canRepeat
+Begin Elements MITC4ShellElement
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"MITC4")==0)
+*if(ElemsNnode==4)
+*ElemsNum      *ElemsMat    *\
+*ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4)
+*endif
+*if(ElemsNnode==9)
+*ElemsNum      *ElemsMat    *\
+*ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4)
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SurfaceElementType *elems *canRepeat
+Begin Elements MITC9ShellElement
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"MITC9")==0)
+*if(ElemsNnode==9)
+*ElemsNum      *ElemsMat    *\
+*ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4) *ElemsConec(5) *ElemsConec(6) *ElemsConec(7) *ElemsConec(8) *ElemsConec(9)
 *endif
 *endif
 *end elems
