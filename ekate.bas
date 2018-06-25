@@ -1401,7 +1401,7 @@ Begin ElementalData ACTIVATION_LEVEL
 End ElementalData
 
 Begin ElementalData USE_DISTRIBUTED_PROPERTIES
-*loop elems
+*loop elems *OnlyInCond
 *if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==0)
 *ElemsNum 1
 *endif
@@ -1631,7 +1631,7 @@ Begin ElementalData PERMEABILITY_TRANSITION
 End ElementalData
 
 Begin ElementalData GRAVITY
-*loop elems
+*loop elems *OnlyInCond
 *if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==0)
 *if(strcmp(GenData(Enable_Gravity),"1")==0)
 *ElemsNum [3] (*GenData(Gravity_X,real), *GenData(Gravity_Y,real), *GenData(Gravity_Z,real))
