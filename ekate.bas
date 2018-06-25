@@ -491,6 +491,19 @@ Begin Conditions LineForce2D2N
 *set var condID= condID+1
 *endif
 *end elems
+*set cond Distributed_Line_Load_2D_With_Property *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnode==2)
+*set var i=0
+*set var j= ElemsNnode
+*condID      *ElemsMat    *\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*set var condID= condID+1
+*endif
+*end elems
 End Conditions
 
 Begin Conditions LineForce2D3N
@@ -505,6 +518,19 @@ Begin Conditions LineForce2D3N
 *set var condID= condID+1
 *endif
 *end elems
+*set cond Distributed_Line_Load_2D_With_Property *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnode==3)
+*set var i=0
+*set var j= ElemsNnode
+*condID      *ElemsMat    *\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*set var condID= condID+1
+*endif
+*end elems
 End Conditions
 
 Begin Conditions LineForce3D2N
@@ -514,7 +540,9 @@ Begin Conditions LineForce3D2N
 *set var i=0
 *set var j= ElemsNnode
 *condID      *ElemsMat    *\
-*GlobalNodes(1) *GlobalNodes(2)
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
 
 *set var condID= condID+1
 *endif
@@ -528,7 +556,9 @@ Begin Conditions LineForce3D3N
 *set var i=0
 *set var j= ElemsNnode
 *condID      *ElemsMat    *\
-*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
 
 *set var condID= condID+1
 *endif

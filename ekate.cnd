@@ -516,7 +516,17 @@ QUESTION: Face_Load_Y#UNITS#
 VALUE: 0.0N/m^2
 QUESTION: Face_Load_Z#UNITS#
 VALUE: 0.0N/m^2
-HELP: Value of line loads (neumann-condition)
+HELP: Line load in 3D (need a separate mesh on the line)
+image: images/Pressure.gif
+END CONDITION
+CONDITION: Distributed_Line_Load_2D_With_Property
+CONDTYPE: over lines
+CONDMESHTYPE: over body elements multiple
+QUESTION: Face_Load_X#UNITS#
+VALUE: 0.0N/m^2
+QUESTION: Face_Load_Y#UNITS#
+VALUE: 0.0N/m^2
+HELP: Line load in 2D (need a separate mesh on the line)
 image: images/Pressure.gif
 END CONDITION
 CONDITION: Distributed_Line_Load_2D
@@ -526,7 +536,7 @@ QUESTION: Face_Load_X#UNITS#
 VALUE: 0.0N/m^2
 QUESTION: Face_Load_Y#UNITS#
 VALUE: 0.0N/m^2
-HELP: Value of line loads (neumann-condition)
+HELP: Line load in 2D
 image: images/Pressure.gif
 END CONDITION
 CONDITION: Line_Pressure_2D
