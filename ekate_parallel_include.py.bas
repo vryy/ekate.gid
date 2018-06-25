@@ -150,6 +150,8 @@ class Model:
         self.analysis_parameters['decouple_build_and_solve'] = False
         self.analysis_parameters['solving_scheme'] = 'monolithic'
         self.analysis_parameters['stop_Newton_Raphson_if_not_converge'] = False
+        self.analysis_parameters['list_dof'] = False
+        self.analysis_parameters['list_dof_parallel'] = True
 
 *set var abstol(real)=GenData(Absolute_Tolerance,real)
         self.abs_tol = *abstol
@@ -374,7 +376,7 @@ class Model:
             self.gid_io.FinalizeMesh()
 *endif
 *if(strcmp(GenData(New_mesh_for_each_step),"1")==0)
-        self.gid_io.InitializeResults( time, self.model_part.GetMesh() )
+        self.gid_io.InitializeResults( meshname, self.model_part.GetMesh() )
 *else
         self.gid_io.InitializeResults( 0.0, self.model_part.GetMesh() )
 *endif

@@ -1,6 +1,6 @@
 **HEADING
 ekate -> Abaqus interface
-(c) 2016 Hoang-Giang Bui, Ruhr-University Bochum
+(c) 2016, 2017, 2018 Hoang-Giang Bui, Ruhr-University Bochum
 **NODE
 *RealFormat "%10.5f"
 *loop nodes

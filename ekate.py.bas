@@ -16,6 +16,7 @@ domain_size = 3
 ##################################################################
 import sys
 import os
+import math
 kratos_root_path=os.environ['KRATOS_ROOT_PATH']
 ##setting up paths
 kratos_libs_path = kratos_root_path+'libs' ##kratos_root/libs
@@ -31,7 +32,7 @@ sys.path.append('./rEpLaCeMeNtStRiNg.gid')
 import rEpLaCeMeNtStRiNg_include
 from rEpLaCeMeNtStRiNg_include import **
 # calculate insitu-stress for geology_virgin.gid
-model = rEpLaCeMeNtStRiNg_include.Model('rEpLaCeMeNtStRiNg',os.getcwd()+"/")
+model = rEpLaCeMeNtStRiNg_include.Model('rEpLaCeMeNtStRiNg',os.getcwd()+"/",os.getcwd()+"/")
 model.InitializeModel()
 
 ##################################################################
@@ -53,6 +54,6 @@ sys.exit(0)
 *else
 *# user-defined script is used (will be appended automatically)
 # =====================
-# | USER SCRIPT FOR CALCULATION OF AUSBLAS.GID |
+# | USER SCRIPT FOR CALCULATION OF EKATE.GID |
 # vvvvvvvvvvvvvvvvvvvvv
 *endif

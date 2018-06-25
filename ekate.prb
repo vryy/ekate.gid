@@ -12,6 +12,9 @@ VALUE: 0.0
 HELP: Gravity direction
 image: images/Data.gif
 VALUE: -9.81
+QUESTION: g_constant
+VALUE: 9.81
+HELP: Gravity constant
 TITLE: Simulation
 QUESTION: Parallel_Execution#CB#(serial,shared,mpi)
 VALUE: serial
@@ -32,6 +35,8 @@ QUESTION: Water_Level#UNITS#
 VALUE: 0m
 HELP: z-Coordinate of Ground water level
 QUESTION: Reverse_Node_Numbering_For_Surface#CB#(0,1)
+VALUE: 1
+QUESTION: Move_Mesh_Flag#CB#(0,1)
 VALUE: 1
 TITLE: Time_Integration
 QUESTION: time_step_length
@@ -93,18 +98,14 @@ QUESTION: Relative_Tolerance#CB#(0.1,0.01,0.001,0.0001,custom)
 VALUE: custom
 DEPENDENCIES: (0.1,HIDE,Custom_Relative_Tolerance,#CURRENT#)(0.01,HIDE,Custom_Relative_Tolerance,#CURRENT#)(0.001,HIDE,Custom_Relative_Tolerance,#CURRENT#)(0.0001,HIDE,Custom_Relative_Tolerance,#CURRENT#)(custom,RESTORE,Custom_Relative_Tolerance,#CURRENT#)
 QUESTION: Custom_Relative_Tolerance
-VALUE: 1e-10
+VALUE: 1e-6
 HELP: tolerance of relative residual
 QUESTION: Absolute_Tolerance#CB#(0.001,0.0001,1.0e-5,1.0e-6,custom)
-VALUE: 1.0e-6
+VALUE: custom
 DEPENDENCIES: (0.001,HIDE,Custom_Absolute_Tolerance,#CURRENT#)(0.0001,HIDE,Custom_Absolute_Tolerance,#CURRENT#)(1.0e-5,HIDE,Custom_Absolute_Tolerance,#CURRENT#)(1.0e-6,HIDE,Custom_Absolute_Tolerance,#CURRENT#)(custom,RESTORE,Custom_Absolute_Tolerance,#CURRENT#)
 QUESTION: Custom_Absolute_Tolerance
-VALUE: 1e-8
+VALUE: 1e-10
 HELP: tolerance of absolute residual
-image: images/Data.gif
-QUESTION: Element_Type#CB#(KinematicLinear,TotalLagrangian)
-VALUE: KinematicLinear
-HELP: use TotalLagrangian for dynamics and large strains
 TITLE: MultiFlowAnalysis
 QUESTION: Perform_MultiFlow_Analysis#CB#(0,1)
 VALUE: 0
@@ -112,6 +113,15 @@ DEPENDENCIES:(0,HIDE,Scale_Factor,#CURRENT#,HIDE,Perform_ThreePhase_Analysis,#CU
 QUESTION: Scale_Factor
 VALUE: 1.0
 QUESTION: Perform_ThreePhase_Analysis#CB#(0,1)
+VALUE: 0
+TITLE: Applications
+QUESTION: Layer_Application#CB#(0,1)
+VALUE: 0
+QUESTION: Soil_Mechanics_Application#CB#(0,1)
+VALUE: 0
+QUESTION: Finite_Cell_Application#CB#(0,1)
+VALUE: 0
+QUESTION: Finite_Cell_Structural_Application#CB#(0,1)
 VALUE: 0
 TITLE: Output
 QUESTION: Output_Format#CB#(ASCII,Binary)

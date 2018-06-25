@@ -24,12 +24,24 @@ from KratosMultiphysics.MKLSolversApplication import **
 *if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
 from KratosMultiphysics.MortarApplication import **
 *endif
+*if(strcmp(GenData(Layer_Application),"1")==0)
+from KratosMultiphysics.LayerApplication import **
+*endif
+*if(strcmp(GenData(Finite_Cell_Application),"1")==0)
+from KratosMultiphysics.FiniteCellApplication import **
+*endif
+*if(strcmp(GenData(Finite_Cell_Structural_Application),"1")==0)
+from KratosMultiphysics.FiniteCellStructuralApplication import **
+*endif
+*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
+from KratosMultiphysics.SoilMechanicsApplication import **
+*endif
 kernel = Kernel()   #defining kernel
 
 ##################################################################
 ##################################################################
 class Model:
-    def __init__( self, problem_name, path ):
+    def __init__( self, problem_name, path, results_path ):
         #setting the domain size for the problem to be solved
         self.domain_size = 3
         ##################################################################
@@ -37,6 +49,7 @@ class Model:
         ##################################################################
         self.model_part = ModelPart("ekate_simulation")
         self.path = path
+        self.results_path = results_path
         self.problem_name = problem_name
         ##################################################################
         ## DEFINE SOLVER #################################################
@@ -146,8 +159,13 @@ class Model:
         self.analysis_parameters['decouple_build_and_solve'] = False
         self.analysis_parameters['solving_scheme'] = 'monolithic'
         self.analysis_parameters['stop_Newton_Raphson_if_not_converge'] = False
+        self.analysis_parameters['list_dof'] = True
 
+*if(strcmp(GenData(Absolute_Tolerance),"custom")==0)
+*set var abstol(real)=GenData(Custom_Absolute_Tolerance,real)
+*else
 *set var abstol(real)=GenData(Absolute_Tolerance,real)
+*endif
         self.abs_tol = *abstol
 *if(strcmp(GenData(Relative_Tolerance),"custom")==0)
 *set var reltol(real)=GenData(Custom_Relative_Tolerance,real)
@@ -155,7 +173,6 @@ class Model:
 *set var reltol(real)=GenData(Relative_Tolerance,real)
 *endif
         self.rel_tol = *reltol
-        #self.rel_tol = 1e-10
 
         ## generating solver
 *if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
@@ -188,12 +205,14 @@ class Model:
         post_mode = GiDPostMode.GiD_PostBinary
         multi_file_flag = MultiFileFlag.MultipleFiles
 *endif
-        self.gid_io = StructuralGidIO( self.path+self.problem_name, post_mode, multi_file_flag, write_deformed_flag, write_elements )
+        self.gid_io = StructuralGidIO( self.results_path+self.problem_name, post_mode, multi_file_flag, write_deformed_flag, write_elements )
         self.model_part_io = ModelPartIO(self.path+self.problem_name)
         self.model_part_io.ReadModelPart(self.model_part)
         self.meshWritten = False
 *if(strcmp(GenData(Reactions),"1")==0)
         (self.solver).CalculateReactionFlag = True
+*else
+        (self.solver).CalculateReactionFlag = False
 *endif
         ## READ DEACTIVATION FILE ########################################
         self.cond_file = open(self.path+self.problem_name+".mdpa",'r' )
@@ -262,9 +281,15 @@ class Model:
 *if(strcmp(GenData(Solver),"Pardiso")==0)
         plinear_solver = MKLPardisoSolver()
 *endif
+        self.solver.structure_linear_solver = plinear_solver
         self.solver.Initialize()
         (self.solver.solver).SetEchoLevel(2)
         (self.solver.solver).max_iter = 10 #control the maximum iterations of Newton Raphson loop
+*if(strcmp(GenData(Move_Mesh_Flag),"1")==0)
+        (self.solver.solver).MoveMeshFlag = True
+*else
+        (self.solver.solver).MoveMeshFlag = False
+*endif
 
         ##################################################################
         ## INITIALISE RESTART UTILITY ####################################
@@ -311,9 +336,9 @@ class Model:
             item.Free(AIR_PRESSURE)
             
     def WriteMaterialParameters( self, time, indices ):
-        self.gid_io.OpenResultFile( self.path+self.problem_name, GiDPostMode.GiD_PostBinary)
+        self.gid_io.OpenResultFile( self.results_path+self.problem_name, GiDPostMode.GiD_PostBinary)
 *if(strcmp(GenData(New_mesh_for_each_step),"1")==0)
-        #self.gid_io.ChangeOutputName( self.path+self.problem_name +str(time), GiDPostMode.GiD_PostBinary )
+        #self.gid_io.ChangeOutputName( self.results_path+self.problem_name +str(time), GiDPostMode.GiD_PostBinary )
 *endif
         for index in indices:
             self.gid_io.SuperPrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, index)
@@ -474,6 +499,20 @@ class Model:
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
         self.model_part.Properties[*MatNum].SetValue(THICKNESS, 1.0 )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, Isotropic3D() )
+        print "Linear elastic model selected for *MatProp(0), description: *MatProp(Description)"
+*elseif(strcmp(MatProp(ConstitutiveLaw),"PlaneStrain")==0)
+        self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )
+        self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
+        self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
+        self.model_part.Properties[*MatNum].SetValue(THICKNESS, 1.0 )
+        self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, PlaneStrain() )
+        print "Linear elastic model selected for *MatProp(0), description: *MatProp(Description)"
+*elseif(strcmp(MatProp(ConstitutiveLaw),"PlaneStress")==0)
+        self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )
+        self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
+        self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
+        self.model_part.Properties[*MatNum].SetValue(THICKNESS, 1.0 )
+        self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, PlaneStress() )
         print "Linear elastic model selected for *MatProp(0), description: *MatProp(Description)"
 *elseif(strcmp(MatProp(ConstitutiveLaw),"TutorialDamageModel")==0)
         self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )

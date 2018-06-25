@@ -1,3 +1,20 @@
+BOOK: ElementType2D
+CONDITION: FaceElementType
+CONDTYPE: over surfaces
+CONDMESHTYPE: over body elements
+QUESTION: Element_Type#CB#(TotalLagrangian,Membrane,IsotropicShell,AnisotropicShell,Kinematic_Linear)
+VALUE: TotalLagrangian
+DEPENDENCIES:(TotalLagrangian,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(Membrane,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(IsotropicShell,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(AnisotropicShell,RESTORE,MatrixA,#CURRENT#,RESTORE,MatrixB,#CURRENT#,RESTORE,MatrixD,#CURRENT#)
+QUESTION: Thickness#UNITS#
+VALUE: 1.0m
+QUESTION: MatrixA:(MatrixA_col1,MatrixA_col2,MatrixA_col3)
+VALUE: #N# 9 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+QUESTION: MatrixB:(MatrixB_col1,MatrixB_col2,MatrixB_col3)
+VALUE: #N# 9 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+QUESTION: MatrixD:(MatrixD_col1,MatrixD_col2,MatrixD_col3)
+VALUE: #N# 9 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+END CONDITION
+
 BOOK: ElementType
 CONDITION: LineElementType
 CONDTYPE: over lines
@@ -19,10 +36,10 @@ HELP: Moment of torsional inertia
 END CONDITION
 CONDITION: SurfaceElementType
 CONDTYPE: over surfaces
-CONDMESHTYPE: over body elements
-QUESTION: Element_Type#CB#(TotalLagrangian,Membrane,IsotropicShell,AnisotropicShell,Kinematic_Linear)
-VALUE: TotalLagrangian
-DEPENDENCIES:(TotalLagrangian,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(Membrane,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(IsotropicShell,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(AnisotropicShell,RESTORE,MatrixA,#CURRENT#,RESTORE,MatrixB,#CURRENT#,RESTORE,MatrixD,#CURRENT#)
+CONDMESHTYPE: over face elements multiple
+QUESTION: Element_Type#CB#(Membrane,IsotropicShell,AnisotropicShell)
+VALUE: IsotropicShell
+DEPENDENCIES:(Membrane,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(IsotropicShell,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(AnisotropicShell,RESTORE,MatrixA,#CURRENT#,RESTORE,MatrixB,#CURRENT#,RESTORE,MatrixD,#CURRENT#)
 QUESTION: Thickness#UNITS#
 VALUE: 1.0m
 QUESTION: MatrixA:(MatrixA_col1,MatrixA_col2,MatrixA_col3)
@@ -57,6 +74,31 @@ HELP: Permeability after 1d
 QUESTION: beta_grout
 VALUE:0.0535
 HELP: control parameter for shape of hydration curve
+END CONDITION
+CONDITION: SoilVolumeElementType
+CONDTYPE: over volumes
+CONDMESHTYPE: over body elements
+QUESTION: Element_Type#CB#(Saturated_Soil,Partially_Saturated_Soil)
+VALUE: Saturated_Soil
+DEPENDENCIES:(Saturated_Soil,HIDE,Density_Air,#CURRENT#,HIDE,Bulk_Air,#CURRENT#,HIDE,Permeability_Air,#CURRENT#,HIDE,First_Saturation_Param,#CURRENT#,HIDE,Second_Saturation_Param,#CURRENT#,HIDE,Air_Entry_Value,#CURRENT#)(Partially_Saturated_Soil,RESTORE,Density_Air,#CURRENT#,RESTORE,Bulk_Air,#CURRENT#,RESTORE,Permeability_Air,#CURRENT#,RESTORE,First_Saturation_Param,#CURRENT#,RESTORE,Second_Saturation_Param,#CURRENT#,RESTORE,Air_Entry_Value,#CURRENT#)
+QUESTION: Density_Water#UNITS#
+VALUE: 1000.0kg/m^3
+QUESTION: Density_Air#UNITS#
+VALUE: 1.295kg/m^3
+QUESTION: Bulk_Air#UNITS#
+VALUE: 1.01e5N/m^2
+QUESTION: Initial_Porosity
+VALUE: 0.2
+QUESTION: Permeability_Water#UNITS#
+VALUE: 0.0000044m/s
+QUESTION: Permeability_Air#UNITS#
+VALUE: 0.00000032m/s
+QUESTION: First_Saturation_Param
+VALUE:2.5
+QUESTION: Second_Saturation_Param
+VALUE:0.4
+QUESTION: Air_Entry_Value
+VALUE:3000.0
 END CONDITION
 
 BOOK: Fixed_Displacement
@@ -398,6 +440,22 @@ VALUE: 0.0N
 HELP: Value of fixed reaction (neumann-condition)
 image: images/Pressure.gif
 END CONDITION
+CONDITION: Point_Force_2D
+CONDTYPE: over points
+CONDMESHTYPE: over nodes
+QUESTION: Fix_Reaction_X#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Reaction_X,#CURRENT#)(1,RESTORE,Reaction_X,#CURRENT#)
+QUESTION: Reaction_X#UNITS#
+VALUE: 0.0N
+QUESTION: Fix_Reaction_Y#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Reaction_Y,#CURRENT#)(1,RESTORE,Reaction_Y,#CURRENT#)
+QUESTION: Reaction_Y#UNITS#
+VALUE: 0.0N
+HELP: Value of fixed reaction (neumann-condition)
+image: images/Pressure.gif
+END CONDITION
 CONDITION: Line_Force
 CONDTYPE: over lines
 CONDMESHTYPE: over nodes
@@ -417,6 +475,44 @@ DEPENDENCIES:(0,HIDE,Reaction_Z,#CURRENT#)(1,RESTORE,Reaction_Z,#CURRENT#)
 QUESTION: Reaction_Z#UNITS#
 VALUE: 0.0N
 HELP: Value of fixed reaction (neumann-condition)
+image: images/Pressure.gif
+END CONDITION
+CONDITION: Line_Force_2D
+CONDTYPE: over lines
+CONDMESHTYPE: over nodes
+QUESTION: Fix_Reaction_X#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Reaction_X,#CURRENT#)(1,RESTORE,Reaction_X,#CURRENT#)
+QUESTION: Reaction_X#UNITS#
+VALUE: 0.0N
+QUESTION: Fix_Reaction_Y#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Reaction_Y,#CURRENT#)(1,RESTORE,Reaction_Y,#CURRENT#)
+QUESTION: Reaction_Y#UNITS#
+VALUE: 0.0N
+HELP: Value of fixed reaction (neumann-condition)
+image: images/Pressure.gif
+END CONDITION
+CONDITION: Distributed_Line_Load
+CONDTYPE: over lines
+CONDMESHTYPE: over body elements multiple
+QUESTION: Face_Load_X#UNITS#
+VALUE: 0.0N/m^2
+QUESTION: Face_Load_Y#UNITS#
+VALUE: 0.0N/m^2
+QUESTION: Face_Load_Z#UNITS#
+VALUE: 0.0N/m^2
+HELP: Value of line loads (neumann-condition)
+image: images/Pressure.gif
+END CONDITION
+CONDITION: Distributed_Line_Load_2D
+CONDTYPE: over lines
+CONDMESHTYPE: over body elements multiple
+QUESTION: Face_Load_X#UNITS#
+VALUE: 0.0N/m^2
+QUESTION: Face_Load_Y#UNITS#
+VALUE: 0.0N/m^2
+HELP: Value of line loads (neumann-condition)
 image: images/Pressure.gif
 END CONDITION
 CONDITION: Distributed_Surface_Load

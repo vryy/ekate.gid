@@ -15,6 +15,9 @@ GRAVITY [3] ( *GenData(Gravity_X,real), *GenData(Gravity_Y,real), *GenData(Gravi
 *else
 GRAVITY [3] ( 0.0, 0.0, 0.0 )
 *endif
+*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
+G_CONSTANT *GenData(g_constant,real)
+*endif
 End Properties
 *else
 Begin Properties *MatNum
@@ -29,6 +32,9 @@ GRAVITY [3] ( *GenData(Gravity_X,real), *GenData(Gravity_Y,real), *GenData(Gravi
 *else
 BODY_FORCE [3] (0.0, 0.0, 0.0)
 GRAVITY [3] ( 0.0, 0.0, 0.0 )
+*endif
+*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
+G_CONSTANT *GenData(g_constant,real)
 *endif
 *if(strcmp(MatProp(ConstitutiveLaw),"Isotropic3D")==0)
 YOUNG_MODULUS *MatProp(Young_modulus,real)
@@ -458,6 +464,79 @@ Begin Conditions PointForce3D
 *add cond Line_Force *nodes
 *add cond Surface_Force *nodes
 *add cond Volume_Force *nodes
+*loop nodes *OnlyInCond
+*condID 1 *NodesNum
+*set var condID= condID+1
+*end nodes
+End Conditions
+
+Begin Conditions LineForce2D2N
+*set cond Distributed_Line_Load_2D *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnode==2)
+*set var i=0
+*set var j= ElemsNnode
+*condID      *ElemsMat    *\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions LineForce2D3N
+*set cond Distributed_Line_Load_2D *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnode==3)
+*set var i=0
+*set var j= ElemsNnode
+*condID      *ElemsMat    *\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions LineForce3D2N
+*set cond Distributed_Line_Load *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnode==2)
+*set var i=0
+*set var j= ElemsNnode
+*condID      *ElemsMat    *\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions LineForce3D3N
+*set cond Distributed_Line_Load *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnode==3)
+*set var i=0
+*set var j= ElemsNnode
+*condID      *ElemsMat    *\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions PointForce2D
+*set cond Point_Force_2D *nodes
+*add cond Line_Force_2D *nodes
 *loop nodes *OnlyInCond
 *condID 1 *NodesNum
 *set var condID= condID+1
@@ -1183,8 +1262,13 @@ End NodalData
 
 Begin NodalData FACE_LOAD
 *set cond Distributed_Surface_Load *nodes
+*add cond Distributed_Line_Load *nodes
 *loop nodes *OnlyInCond
 *NodesNum 0 [3] ( *cond(1), *cond(2), *cond(3) )
+*end nodes
+*set cond Distributed_Line_Load_2D *nodes
+*loop nodes *OnlyInCond
+*NodesNum 0 [2] ( *cond(1), *cond(2) )
 *end nodes
 End NodalData
 
@@ -1224,7 +1308,7 @@ Begin ElementalData ACTIVATION_LEVEL
 End ElementalData
 
 Begin ElementalData USE_DISTRIBUTED_PROPERTIES
-*loop elems
+*loop elems *onlyInCond
 *if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==0)
 *ElemsNum 1
 *endif
@@ -1244,6 +1328,18 @@ Begin ElementalData DENSITY_WATER
 *ElemsNum *cond(2)
 *endif
 *end elems
+
+*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(cond(1),"Saturated_Soil")==0)
+*ElemsNum *cond(2)
+*endif
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(2)
+*endif
+*end elems
+*endif
 End ElementalData
 
 Begin ElementalData DENSITY_AIR
@@ -1256,6 +1352,26 @@ Begin ElementalData DENSITY_AIR
 *ElemsNum *cond(3)
 *endif
 *end elems
+
+*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(3)
+*endif
+*end elems
+*endif
+End ElementalData
+
+Begin ElementalData BULK_AIR
+*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(4)
+*endif
+*end elems
+*endif
 End ElementalData
 
 Begin ElementalData POROSITY
@@ -1268,6 +1384,18 @@ Begin ElementalData POROSITY
 *ElemsNum *cond(4)
 *endif
 *end elems
+
+*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(cond(1),"Saturated_Soil")==0)
+*ElemsNum *cond(5)
+*endif
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(5)
+*endif
+*end elems
+*endif
 End ElementalData
 
 Begin ElementalData PERMEABILITY_WATER
@@ -1282,6 +1410,18 @@ Begin ElementalData PERMEABILITY_WATER
 *ElemsNum *cond(5)
 *endif
 *end elems
+
+*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(cond(1),"Saturated_Soil")==0)
+*ElemsNum *cond(6)
+*endif
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(6)
+*endif
+*end elems
+*endif
 End ElementalData
 
 Begin ElementalData PERMEABILITY_AIR
@@ -1296,6 +1436,15 @@ Begin ElementalData PERMEABILITY_AIR
 *ElemsNum *cond(6)
 *endif
 *end elems
+
+*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(7)
+*endif
+*end elems
+*endif
 End ElementalData
 
 Begin ElementalData FIRST_SATURATION_PARAM
@@ -1308,6 +1457,15 @@ Begin ElementalData FIRST_SATURATION_PARAM
 *ElemsNum 2.5
 *endif
 *end elems
+
+*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(8)
+*endif
+*end elems
+*endif
 End ElementalData
 
 Begin ElementalData SECOND_SATURATION_PARAM
@@ -1320,6 +1478,15 @@ Begin ElementalData SECOND_SATURATION_PARAM
 *ElemsNum 0.4
 *endif
 *end elems
+
+*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(9)
+*endif
+*end elems
+*endif
 End ElementalData
 
 Begin ElementalData AIR_ENTRY_VALUE
@@ -1332,6 +1499,15 @@ Begin ElementalData AIR_ENTRY_VALUE
 *ElemsNum 3000.0
 *endif
 *end elems
+
+*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(10)
+*endif
+*end elems
+*endif
 End ElementalData
 
 Begin ElementalData PERMEABILITY_28_DAYS
@@ -1362,7 +1538,7 @@ Begin ElementalData PERMEABILITY_TRANSITION
 End ElementalData
 
 Begin ElementalData GRAVITY
-*loop elems
+*loop elems *onlyInCond
 *if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==0)
 *if(strcmp(GenData(Enable_Gravity),"1")==0)
 *ElemsNum [3] (*GenData(Gravity_X,real), *GenData(Gravity_Y,real), *GenData(Gravity_Z,real))
