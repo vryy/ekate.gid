@@ -254,6 +254,40 @@ Begin Conditions SlaveContactFace3D9
 *end elems
 End Conditions
 
+Begin Conditions LineMortarCondition2D2N
+*set cond Line_Mortar *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsNnodeFace==2)
+*condID   *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2)
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Line_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Line_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions LineMortarCondition2D3N
+*set cond Line_Mortar *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsNnodeFace==3)
+*condID   *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Line_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Line_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
 Begin Conditions SurfaceMortarCondition3D3N
 *set cond Surface_Mortar *elems *canRepeat
 *loop elems *OnlyInCond

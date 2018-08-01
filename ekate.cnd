@@ -647,6 +647,17 @@ END CONDITION
 
 BOOK: Mortar
 
+CONDITION: Line_Mortar
+CONDTYPE: over lines
+CONDMESHTYPE: over face elements
+QUESTION: Tying_Index
+VALUE: 10
+QUESTION: Tying_Direction#CB#(Master,Slave)
+VALUE: Master
+QUESTION: Local_Axes#LA#(Option_global_axes#G#,Option_automatic_axes#A#)
+VALUE: Option_automatic_axes
+END CONDITION
+
 CONDITION: Surface_Mortar
 CONDTYPE: over surfaces
 CONDMESHTYPE: over face elements
