@@ -1706,10 +1706,12 @@ End ElementalData
 
 Begin ConditionalData MASTER_INDEX
 *tcl(GetCond Surface_Mortar_MasterIndex)
+*tcl(GetCond Line_Mortar_MasterIndex)
 End ConditionalData
 
 Begin ConditionalData SLAVE_INDEX
 *tcl(GetCond Surface_Mortar_SlaveIndex)
+*tcl(GetCond Line_Mortar_SlaveIndex)
 End ConditionalData
 
 Begin ConditionalData POSITIVE_FACE_PRESSURE
