@@ -50,7 +50,7 @@ class Model:
         ##################################################################
         ## DEFINE MODELPART ##############################################
         ##################################################################
-        self.model_part = ModelPart("ekate_simulation")
+        self.model_part = ModelPart(problem_name)
         self.path = path
         self.results_path = results_path
         self.problem_name = problem_name
@@ -159,9 +159,9 @@ class Model:
 *endif
         self.analysis_parameters['analysis_type'] = *analysistype
         self.analysis_parameters['dissipation_radius'] = 0.1
-        self.analysis_parameters['decouple_build_and_solve'] = False
+        self.analysis_parameters['decouple_build_and_solve'] = True
         self.analysis_parameters['solving_scheme'] = 'monolithic'
-        self.analysis_parameters['stop_Newton_Raphson_if_not_converge'] = False
+        self.analysis_parameters['stop_Newton_Raphson_if_not_converge'] = True
         self.analysis_parameters['list_dof'] = True
 
 *if(strcmp(GenData(Absolute_Tolerance),"custom")==0)
@@ -180,7 +180,11 @@ class Model:
         ## generating solver
 *if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
         import mortar_gpts_contact_strategy
+*if(strcmp(GenData(analysis_type),"static")==0)
         self.solver = mortar_gpts_contact_strategy.SampleSolver(self.model_part, self.abs_tol, self.rel_tol, self.analysis_parameters)
+*else
+        self.solver = mortar_gpts_contact_strategy.SampleSolverEkateQuasiStatic(self.model_part, self.abs_tol, self.rel_tol, self.analysis_parameters)
+*endif
         mortar_gpts_contact_strategy.AddVariables( self.model_part )
 *else
         import structural_solver_advanced
