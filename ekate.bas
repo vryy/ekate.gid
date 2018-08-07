@@ -1465,7 +1465,7 @@ Begin ElementalData ACTIVATION_LEVEL
 End ElementalData
 
 Begin ElementalData USE_DISTRIBUTED_PROPERTIES
-*loop elems *OnlyInCond
+*loop elems
 *if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==0)
 *ElemsNum 1
 *endif
