@@ -46,7 +46,8 @@ kernel = Kernel()   #defining kernel
 class Model:
     def __init__( self, problem_name, path, results_path ):
         #setting the domain size for the problem to be solved
-        self.domain_size = 3
+*set var domainsize(int)=GenData(Dimension,int)
+        self.domain_size = *domainsize
         ##################################################################
         ## DEFINE MODELPART ##############################################
         ##################################################################
@@ -139,6 +140,7 @@ class Model:
         fricrampcriterion = 0.0
         fricrampfactor = 0.0
 *endif
+        self.analysis_parameters['dimension'] = self.domain_size # *domainsize
         self.analysis_parameters['perform_contact_analysis_flag'] = perform_contact_analysis_flag
         self.analysis_parameters['penalty'] = penalty
         self.analysis_parameters['maxuzawa'] = maxuzawa
@@ -161,7 +163,11 @@ class Model:
         self.analysis_parameters['dissipation_radius'] = 0.1
         self.analysis_parameters['decouple_build_and_solve'] = True
         self.analysis_parameters['solving_scheme'] = 'monolithic'
+*if(strcmp(GenData(Stop_Newton_Raphson_If_Not_Converged),"1")==0)
         self.analysis_parameters['stop_Newton_Raphson_if_not_converge'] = True
+*else
+        self.analysis_parameters['stop_Newton_Raphson_if_not_converge'] = False
+*endif
         self.analysis_parameters['list_dof'] = True
 
 *if(strcmp(GenData(Absolute_Tolerance),"custom")==0)

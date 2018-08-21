@@ -1,20 +1,22 @@
 PROBLEM DATA
-TITLE: Gravity
+TITLE: General
 QUESTION: Enable_Gravity#CB#(0,1)
 VALUE: 0
 DEPENDENCIES:(0,HIDE,Gravity_X,#CURRENT#,HIDE,Gravity_Y,#CURRENT#,HIDE,Gravity_Z,#CURRENT#)(1,RESTORE,Gravity_X,#CURRENT#,RESTORE,Gravity_Y,#CURRENT#,RESTORE,Gravity_Z,#CURRENT#)
-QUESTION: Gravity_X
-VALUE: 0.0
-QUESTION: Gravity_Y
-VALUE: 0.0
-QUESTION: Gravity_Z
-VALUE: 0.0
+QUESTION: Gravity_X#UNITS#
+VALUE: 0.0m/s^2
+QUESTION: Gravity_Y#UNITS#
+VALUE: 0.0m/s^2
+QUESTION: Gravity_Z#UNITS#
+VALUE: -9.81m/s^2
 HELP: Gravity direction
 image: images/Data.gif
-VALUE: -9.81
-QUESTION: g_constant
-VALUE: 9.81
+QUESTION: g_constant#UNITS#
+VALUE: 9.81m/s^2
 HELP: Gravity constant
+QUESTION: Dimension
+VALUE: 3
+HELP: Dimension of the simulation problem
 TITLE: Simulation
 QUESTION: Parallel_Execution#CB#(serial,shared,mpi)
 VALUE: serial
@@ -36,6 +38,7 @@ VALUE: 0m
 HELP: z-Coordinate of Ground water level
 QUESTION: Reverse_Node_Numbering_For_Surface#CB#(0,1)
 VALUE: 1
+HELP: (Compatibility option) Enable this option to generate mesh for old simulation
 QUESTION: Move_Mesh_Flag#CB#(0,1)
 VALUE: 1
 QUESTION: Topology_Optimization#CB#(0,1)
@@ -56,6 +59,8 @@ STATE: HIDDEN
 QUESTION: Filter_Type#CB#(Density_Filter,Sensitivity_Filter)
 VALUE: Sensitivity_Filter
 STATE: HIDDEN
+QUESTION: Stop_Newton_Raphson_If_Not_Converged#CB#(0,1)
+VALUE: 1
 TITLE: Time_Integration
 QUESTION: time_step_length
 VALUE: 1
@@ -67,10 +72,11 @@ QUESTION: analysis_type#CB#(static,quasi-static,dynamic)
 VALUE: static
 TITLE: Contact
 QUESTION: Enable_Mortar_Contact#CB#(0,1)
-VALUE: 1
+VALUE: 0
 HELP: Perform contact analysis using mortar method
 QUESTION: Perform_Contact_Analysis#CB#(0,1)
 VALUE: 0
+HELP: (Deprecated option - not suggest to use)
 DEPENDENCIES:(0,HIDE,Penalty_Value,#CURRENT#,HIDE,Max_Uzawa_Iterations,#CURRENT#,HIDE,Friction_Coefficient,#CURRENT#,HIDE,Friction_Penalty_Value,#CURRENT#,HIDE,Bilateral_Contact,#CURRENT#,HIDE,Ramp_Penalties,#CURRENT#)(1,RESTORE,Penalty_Value,#CURRENT#,RESTORE,Max_Uzawa_Iterations,#CURRENT#,RESTORE,Friction_Coefficient,#CURRENT#,RESTORE,Friction_Penalty_Value,#CURRENT#,RESTORE,Bilateral_Contact,#CURRENT#,RESTORE,Ramp_Penalties,#CURRENT#)
 QUESTION: Penalty_Value
 VALUE: 1.0e+10
