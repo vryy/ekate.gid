@@ -521,7 +521,8 @@ Begin Conditions LineForce2D2N
 *set var j= ElemsNnodeFace
 *condID      *ElemsMat    *\
 *GlobalNodes(1) *GlobalNodes(2)
-
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Line_Load_2D *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -534,7 +535,8 @@ Begin Conditions LineForce2D2N
 *for(i=1;i<=j;i=i+1)*\
  *ElemsConec(*i)*\
 *end
-
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Line_Load_2D_With_Property *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -548,7 +550,8 @@ Begin Conditions LineForce2D3N
 *set var j= ElemsNnodeFace
 *condID      *ElemsMat    *\
 *GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
-
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Line_Load_2D *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -561,7 +564,8 @@ Begin Conditions LineForce2D3N
 *for(i=1;i<=j;i=i+1)*\
  *ElemsConec(*i)*\
 *end
-
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Line_Load_2D_With_Property *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -577,7 +581,8 @@ Begin Conditions LineForce3D2N
 *for(i=1;i<=j;i=i+1)*\
  *ElemsConec(*i)*\
 *end
-
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Line_Load *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -593,7 +598,8 @@ Begin Conditions LineForce3D3N
 *for(i=1;i<=j;i=i+1)*\
  *ElemsConec(*i)*\
 *end
-
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Line_Load *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -607,7 +613,8 @@ Begin Conditions LinePressure2D2N
 *set var j= ElemsNnodeFace
 *condID      *ElemsMat    *\
 *GlobalNodes(1) *GlobalNodes(2)
-
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Line_Pressure_2D *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -621,7 +628,8 @@ Begin Conditions LinePressure2D3N
 *set var j= ElemsNnodeFace
 *condID      *ElemsMat    *\
 *GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
-
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Line_Pressure_2D *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -639,6 +647,7 @@ Begin Conditions FaceForce3D3N
 *GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
 *endif
 //ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Surface_Load *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -656,6 +665,7 @@ Begin Conditions FaceForce3D6N
 *Globalnodes(1) *Globalnodes(2) *Globalnodes(3) *Globalnodes(4) *Globalnodes(5) *Globalnodes(6)
 *endif
 //ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Surface_Load *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -673,6 +683,7 @@ Begin Conditions FaceForce3D4N
 *Globalnodes(1) *Globalnodes(2) *Globalnodes(3) *Globalnodes(4)
 *endif
 //ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Surface_Load *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -690,6 +701,7 @@ Begin Conditions FaceForce3D8N
 *Globalnodes(1) *Globalnodes(2) *Globalnodes(3) *Globalnodes(4) *Globalnodes(5) *Globalnodes(6) *Globalnodes(7) *Globalnodes(8)
 *endif
 //ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Surface_Load *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -707,6 +719,7 @@ Begin Conditions FaceForce3D9N
 *Globalnodes(1) *Globalnodes(2) *Globalnodes(3) *Globalnodes(4) *Globalnodes(5) *Globalnodes(6) *Globalnodes(7) *Globalnodes(8) *Globalnodes(9)
 *endif
 //ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Surface_Load *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -1388,10 +1401,7 @@ Begin NodalData FORCE_X
 *add cond Line_Force *nodes *or(1,int)
 *add cond Surface_Force *nodes *or(1,int)
 *add cond Volume_Force *nodes *or(1,int)
-*loop nodes *OnlyInCond
-*NodesNum *cond(1) *cond(2)
-*end nodes
-*set cond Point_Force_2D *nodes *or(1,int)
+*add cond Point_Force_2D *nodes *or(1,int)
 *add cond Line_Force_2D *nodes *or(1,int)
 *loop nodes *OnlyInCond
 *NodesNum *cond(1) *cond(2)
@@ -1403,10 +1413,7 @@ Begin NodalData FORCE_Y
 *add cond Line_Force *nodes *or(3,int)
 *add cond Surface_Force *nodes *or(3,int)
 *add cond Volume_Force *nodes *or(3,int)
-*loop nodes *OnlyInCond
-*NodesNum *cond(3) *cond(4)
-*end nodes
-*set cond Point_Force_2D *nodes *or(3,int)
+*add cond Point_Force_2D *nodes *or(3,int)
 *add cond Line_Force_2D *nodes *or(3,int)
 *loop nodes *OnlyInCond
 *NodesNum *cond(3) *cond(4)
@@ -1418,13 +1425,10 @@ Begin NodalData FORCE_Z
 *add cond Line_Force *nodes *or(5,int)
 *add cond Surface_Force *nodes *or(5,int)
 *add cond Volume_Force *nodes *or(5,int)
-*loop nodes *OnlyInCond
-*NodesNum *cond(5) *cond(6)
-*end nodes
-*set cond Point_Force_2D *nodes
+*add cond Point_Force_2D *nodes
 *add cond Line_Force_2D *nodes
 *loop nodes *OnlyInCond
-*NodesNum 0 0.0
+*NodesNum *cond(5) *cond(6)
 *end nodes
 End NodalData
 
