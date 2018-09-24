@@ -658,6 +658,17 @@ QUESTION: Local_Axes#LA#(Option_global_axes#G#,Option_automatic_axes#A#)
 VALUE: Option_automatic_axes
 END CONDITION
 
+CONDITION: Line_Mortar_2D
+CONDTYPE: over lines
+CONDMESHTYPE: over body elements
+QUESTION: Tying_Index
+VALUE: 10
+QUESTION: Tying_Direction#CB#(Master,Slave)
+VALUE: Master
+QUESTION: Local_Axes#LA#(Option_global_axes#G#,Option_automatic_axes#A#)
+VALUE: Option_automatic_axes
+END CONDITION
+
 CONDITION: Surface_Mortar
 CONDTYPE: over surfaces
 CONDMESHTYPE: over face elements
