@@ -10,7 +10,7 @@ rm -f $2/*.post.res
 rm -f $2/*.post.msh
 rm -f $2/*.post.bin
 # clean the empty fields in mdpa
-python $3/clean_mdpa.py $2/$1.dat $2/$1.bak
+python2 $3/clean_mdpa.py $2/$1.dat $2/$1.bak
 rm $2/$1.dat
 mv $2/$1.bak $2/$1.dat
 # renaming Kratos input files
