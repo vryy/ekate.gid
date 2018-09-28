@@ -432,6 +432,126 @@ Begin Conditions SurfaceMortarCondition3D9N
 *end elems
 End Conditions
 
+Begin Conditions SurfaceMortarCondition2D3N
+*set cond Surface_Mortar_2D *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsType==2)
+*if(ElemsNnode==3)
+*set var i=0
+*set var j= ElemsNnode
+*condID *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Surface_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions SurfaceMortarCondition2D4N
+*set cond Surface_Mortar_2D *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsType==3)
+*if(ElemsNnode==4)
+*set var i=0
+*set var j= ElemsNnode
+*condID *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Surface_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions SurfaceMortarCondition2D6N
+*set cond Surface_Mortar_2D *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsType==2)
+*if(ElemsNnode==6)
+*set var i=0
+*set var j= ElemsNnode
+*condID *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Surface_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions SurfaceMortarCondition2D8N
+*set cond Surface_Mortar_2D *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsType==3)
+*if(ElemsNnode==8)
+*set var i=0
+*set var j= ElemsNnode
+*condID *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Surface_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions SurfaceMortarCondition2D9N
+*set cond Surface_Mortar_2D *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsType==3)
+*if(ElemsNnode==9)
+*set var i=0
+*set var j= ElemsNnode
+*condID *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Surface_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
 Begin Conditions VolumeMortarCondition3D4N
 *set cond Volume_Mortar *elems *canRepeat
 *loop elems *OnlyInCond
