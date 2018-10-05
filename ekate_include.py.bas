@@ -239,6 +239,7 @@ class Model:
 *else
         (self.solver).CalculateReactionFlag = False
 *endif
+*if(strcmp(GenData(Read_Deactivation_File),"1")==0)
         ## READ DEACTIVATION FILE ########################################
         self.cond_file = open(self.path+self.problem_name+".mdpa",'r' )
         self.cond_activation_flags = []
@@ -254,7 +255,7 @@ class Model:
         #for node in self.model_part.Nodes:
         #    print node
         #print "+++++++++++++++++++++++++++++++++++++++"
-        
+*endif
         #the buffer size should be set up here after the mesh is read for the first time
         self.model_part.SetBufferSize(2)
 

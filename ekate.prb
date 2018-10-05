@@ -17,6 +17,10 @@ HELP: Gravity constant
 QUESTION: Dimension
 VALUE: 3
 HELP: Dimension of the simulation problem
+QUESTION: Read_Deactivation_File#CB#(0,1)
+VALUE: 1
+QUESTION: Enable_Activation#CB#(0,1)
+VALUE: 1
 TITLE: Simulation
 QUESTION: Parallel_Execution#CB#(serial,shared,mpi)
 VALUE: serial

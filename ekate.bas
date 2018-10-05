@@ -1612,6 +1612,7 @@ Begin ElementalData INERTIA
 *end elems
 End ElementalData
 
+*if(strcmp(GenData(Enable_Activation),"1")==0)
 Begin ElementalData ACTIVATION_LEVEL
 *set cond Line_Activation_Level *elems
 *add cond Surface_Activation_Level *elems
@@ -1621,6 +1622,7 @@ Begin ElementalData ACTIVATION_LEVEL
 *ElemsNum *cond(1)
 *end elems
 End ElementalData
+*endif
 
 Begin ElementalData USE_DISTRIBUTED_PROPERTIES
 *loop elems
