@@ -366,7 +366,10 @@ class Model:
             node.SetSolutionStepValue(AIR_PRESSURE_NULL, 0.0)
 
     def SetReferenceWaterPressure( self ):
-        for element in self.model_part.Elements:
+        self.SetReferenceWaterPressureForElements(self.model_part.Elements)
+
+    def SetReferenceWaterPressureForElements( self, elements ):
+        for element in elements:
             water_pressures = element.GetValuesOnIntegrationPoints( WATER_PRESSURE, self.model_part.ProcessInfo )
             pressure_list = []
             for item in water_pressures:
@@ -380,7 +383,7 @@ class Model:
         for item in free_node_list_air:
             #self.model_part.Nodes[item].Free(AIR_PRESSURE)
             item.Free(AIR_PRESSURE)
-            
+
     def WriteMaterialParameters( self, time, indices ):
         self.gid_io.OpenResultFile( self.results_path+self.problem_name, GiDPostMode.GiD_PostBinary)
 *if(strcmp(GenData(New_mesh_for_each_step),"1")==0)
@@ -394,7 +397,7 @@ class Model:
         outfile = open("step_"+str(time)+".dat",'w')
         outfile.write("ekate result file for step "+str(time)+"\n")
         outfile.close()
-        
+
     def WriteOutput( self, time ):
 *if(strcmp(GenData(New_mesh_for_each_step),"1")==0)
         self.gid_io.InitializeMesh( time )
@@ -712,7 +715,7 @@ class Model:
     def FinalizeModel( self ):
         self.gid_io.CloseResultFile()
 
-        
+
     def Solve( self, time, from_deac, to_deac, from_reac, to_reac ):
         self.deac.Reactivate( self.model_part, from_reac, to_reac )
         self.deac.Deactivate( self.model_part, from_deac, to_deac )
