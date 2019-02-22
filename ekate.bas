@@ -1243,6 +1243,7 @@ End Conditions
 
 Begin Conditions ElasticLineConstraint2N
 *set cond Line_Bedding *elems *canRepeat
+*add cond Line_Bedding_2D *elems *canRepeat
 *loop elems *onlyInCond
 *if(cond(1,int)!=0 || cond(3,int)!=0 || cond(5,int)!=0)
 *set var i=0

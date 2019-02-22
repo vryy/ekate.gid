@@ -321,6 +321,20 @@ DEPENDENCIES:(0,HIDE,Bedding_Stiffness_Z,#CURRENT#)(1,RESTORE,Bedding_Stiffness_
 QUESTION: Bedding_Stiffness_Z#UNITS#
 VALUE: 0.0N/m^2
 END CONDITION
+CONDITION: Line_Bedding_2D
+CONDTYPE: over lines
+CONDMESHTYPE: over face elements multiple
+QUESTION: Elastic_Constraint_X#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Bedding_Stiffness_X,#CURRENT#)(1,RESTORE,Bedding_Stiffness_X,#CURRENT#)
+QUESTION: Bedding_Stiffness_X#UNITS#
+VALUE: 0.0N/m^2
+QUESTION: Elastic_Constraint_Y#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Bedding_Stiffness_Y,#CURRENT#)(1,RESTORE,Bedding_Stiffness_Y,#CURRENT#)
+QUESTION: Bedding_Stiffness_Y#UNITS#
+VALUE: 0.0N/m^2
+END CONDITION
 CONDITION: Surface_Bedding
 CONDTYPE: over surfaces
 CONDMESHTYPE: over face elements multiple
