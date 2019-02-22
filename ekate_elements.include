@@ -176,6 +176,9 @@ Begin Elements IsoShellElement
 *ElemsNum      *ElemsMat    *\
 *for(i=1;i<=j;i=i+1)*\
 *ElemsConec(*i)    *\
+*elseif(ElemsNnode==6)
+*ElemsNum      *ElemsMat    *\
+*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *end
 
 *endif
@@ -189,6 +192,9 @@ Begin Elements IsoShellElement
 *loop elems *onlyInCond
 *if(strcmp(cond(1),"IsotropicShell")==0)
 *if(ElemsNnode==3)
+*ElemsNum      *ElemsMat    *\
+*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
+*elseif(ElemsNnode==6)
 *ElemsNum      *ElemsMat    *\
 *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *endif
@@ -207,6 +213,9 @@ Begin Elements AnisoShellElement
 *ElemsNum      *ElemsMat    *\
 *for(i=1;i<=j;i=i+1)*\
 *ElemsConec(*i)    *\
+*elseif(ElemsNnode==6)
+*ElemsNum      *ElemsMat    *\
+*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *end
 
 *endif
@@ -220,6 +229,9 @@ Begin Elements AnisoShellElement
 *loop elems *onlyInCond
 *if(strcmp(cond(1),"AnisotropicShell")==0)
 *if(ElemsNnode==3)
+*ElemsNum      *ElemsMat    *\
+*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
+*elseif(ElemsNnode==6)
 *ElemsNum      *ElemsMat    *\
 *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *endif
