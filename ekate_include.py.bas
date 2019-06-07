@@ -677,15 +677,27 @@ class Model:
         ##################################################################
         ## MORTAR TYING/CONTACT ##########################################
         ##################################################################
+        ## set the correct master and slave index set
+        ## in addition, add additional condition set
         for cond in self.model_part.Conditions:
             if cond.Has(MASTER_INDEX):
                 master_index_set = IntegerVector(1)
                 master_index_set[0] = cond.GetValue(MASTER_INDEX)
                 cond.SetValue(MASTER_INDEX_SET, master_index_set)
+                layer = "mortar_master_" + str(master_index_set[0])
+                if layer not in self.layer_cond_sets:
+                    self.layer_cond_sets[layer] = []
+                self.layer_cond_sets[layer].append(cond.Id)
             if cond.Has(SLAVE_INDEX):
                 slave_index_set = IntegerVector(1)
                 slave_index_set[0] = cond.GetValue(SLAVE_INDEX)
                 cond.SetValue(SLAVE_INDEX_SET, slave_index_set)
+                layer = "mortar_slave_" + str(slave_index_set[0])
+                if layer not in self.layer_cond_sets:
+                    self.layer_cond_sets[layer] = []
+                self.layer_cond_sets[layer].append(cond.Id)
+        print("Mortar slave/master index set are assigned")
+        print("Mortar slave/master condition set are created")
 *endif
         ##################################################################
         ## ACTIVATION ####################################################
