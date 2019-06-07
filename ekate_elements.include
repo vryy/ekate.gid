@@ -362,6 +362,196 @@ Begin Elements KinematicLinear2D9N
 *end elems
 End Elements
 
+*set cond SoilFaceElementType *elems
+Begin Elements SaturatedSoilsKinematicLinear2D3N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Saturated_Soil")==0)
+*if(ElemsType==2)
+*if(ElemsNnode==3)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SoilFaceElementType *elems
+Begin Elements SaturatedSoilsKinematicLinear2D4N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Saturated_Soil")==0)
+*if(ElemsType==3)
+*if(ElemsNnode==4)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SoilFaceElementType *elems
+Begin Elements SaturatedSoilsKinematicLinear2D6N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Saturated_Soil")==0)
+*if(ElemsType==2)
+*if(ElemsNnode==6)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SoilFaceElementType *elems
+Begin Elements SaturatedSoilsKinematicLinear2D8N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Saturated_Soil")==0)
+*if(ElemsType==3)
+*if(ElemsNnode==8)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SoilFaceElementType *elems
+Begin Elements SaturatedSoilsKinematicLinear2D9N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Saturated_Soil")==0)
+*if(ElemsType==3)
+*if(ElemsNnode==9)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SoilFaceElementType *elems
+Begin Elements PartiallySaturatedSoilsKinematicLinear2D3N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*if(ElemsType==2)
+*if(ElemsNnode==3)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SoilFaceElementType *elems
+Begin Elements PartiallySaturatedSoilsKinematicLinear2D4N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*if(ElemsType==3)
+*if(ElemsNnode==4)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SoilFaceElementType *elems
+Begin Elements PartiallySaturatedSoilsKinematicLinear2D6N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*if(ElemsType==2)
+*if(ElemsNnode==6)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SoilFaceElementType *elems
+Begin Elements PartiallySaturatedSoilsKinematicLinear2D8N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*if(ElemsType==3)
+*if(ElemsNnode==8)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SoilFaceElementType *elems
+Begin Elements PartiallySaturatedSoilsKinematicLinear2D9N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*if(ElemsType==3)
+*if(ElemsNnode==9)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
 *set cond VolumeElementType *elems
 Begin Elements KinematicLinear3D4N
 *loop elems *onlyInCond

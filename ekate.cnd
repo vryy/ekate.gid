@@ -14,6 +14,31 @@ VALUE: #N# 9 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
 QUESTION: MatrixD:(MatrixD_col1,MatrixD_col2,MatrixD_col3)
 VALUE: #N# 9 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
 END CONDITION
+CONDITION: SoilFaceElementType
+CONDTYPE: over surfaces
+CONDMESHTYPE: over body elements
+QUESTION: Element_Type#CB#(Saturated_Soil,Partially_Saturated_Soil)
+VALUE: Saturated_Soil
+DEPENDENCIES:(Saturated_Soil,HIDE,Density_Air,#CURRENT#,HIDE,Bulk_Air,#CURRENT#,HIDE,Permeability_Air,#CURRENT#,HIDE,First_Saturation_Param,#CURRENT#,HIDE,Second_Saturation_Param,#CURRENT#,HIDE,Air_Entry_Value,#CURRENT#)(Partially_Saturated_Soil,RESTORE,Density_Air,#CURRENT#,RESTORE,Bulk_Air,#CURRENT#,RESTORE,Permeability_Air,#CURRENT#,RESTORE,First_Saturation_Param,#CURRENT#,RESTORE,Second_Saturation_Param,#CURRENT#,RESTORE,Air_Entry_Value,#CURRENT#)
+QUESTION: Density_Water#UNITS#
+VALUE: 1000.0kg/m^3
+QUESTION: Density_Air#UNITS#
+VALUE: 1.295kg/m^3
+QUESTION: Bulk_Air#UNITS#
+VALUE: 1.01e5N/m^2
+QUESTION: Initial_Porosity
+VALUE: 0.2
+QUESTION: Permeability_Water#UNITS#
+VALUE: 0.0000044m/s
+QUESTION: Permeability_Air#UNITS#
+VALUE: 0.00000032m/s
+QUESTION: First_Saturation_Param
+VALUE:2.5
+QUESTION: Second_Saturation_Param
+VALUE:0.4
+QUESTION: Air_Entry_Value
+VALUE:3000.0
+END CONDITION
 
 BOOK: ElementType
 CONDITION: LineElementType
