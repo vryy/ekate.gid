@@ -5,9 +5,9 @@ Begin Elements BeamElement3D2N
 *set var i=0
 *set var j= ElemsNnode
 *if(ElemsNNode==2)
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -22,9 +22,9 @@ Begin Elements BeamElement3D3N
 *set var i=0
 *set var j= ElemsNnode
 *if(ElemsNNode==3)
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -39,9 +39,9 @@ Begin Elements CrisfieldTrussElement3D2N
 *if(ElemsNnode==2)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -56,9 +56,9 @@ Begin Elements CrisfieldTrussElement3D3N
 *if(ElemsNnode==3)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -74,9 +74,9 @@ Begin Elements TotalLagrangian2D3N
 *if(ElemsNnode==3)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -93,9 +93,9 @@ Begin Elements TotalLagrangian2D4N
 *if(ElemsNnode==4)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -112,9 +112,9 @@ Begin Elements TotalLagrangian2D8N
 *if(ElemsNnode==8)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -142,9 +142,9 @@ Begin Elements MembraneElement
 *if(ElemsNnode==3)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -158,8 +158,8 @@ Begin Elements MembraneElement
 *loop elems *onlyInCond
 *if(strcmp(cond(1),"Membrane")==0)
 *if(ElemsNnode==3)
-*ElemsNum      *ElemsMat    *\
-*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
+*ElemsNum  *ElemsMat*\
+ *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *endif
 *endif
 *end elems
@@ -173,12 +173,12 @@ Begin Elements IsoShellElement
 *if(ElemsNnode==3)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *elseif(ElemsNnode==6)
-*ElemsNum      *ElemsMat    *\
-*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
+*ElemsNum  *ElemsMat*\
+ *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *end
 
 *endif
@@ -192,10 +192,10 @@ Begin Elements IsoShellElement
 *loop elems *onlyInCond
 *if(strcmp(cond(1),"IsotropicShell")==0)
 *if(ElemsNnode==3)
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *elseif(ElemsNnode==6)
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *endif
 *endif
@@ -210,11 +210,11 @@ Begin Elements AnisoShellElement
 *if(ElemsNnode==3)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *elseif(ElemsNnode==6)
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *end
 
@@ -229,10 +229,10 @@ Begin Elements AnisoShellElement
 *loop elems *onlyInCond
 *if(strcmp(cond(1),"AnisotropicShell")==0)
 *if(ElemsNnode==3)
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *elseif(ElemsNnode==6)
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *endif
 *endif
@@ -244,11 +244,11 @@ Begin Elements MITC4ShellElement
 *loop elems *onlyInCond
 *if(strcmp(cond(1),"MITC4")==0)
 *if(ElemsNnode==4)
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4)
 *endif
 *if(ElemsNnode==9)
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4)
 *endif
 *endif
@@ -260,7 +260,7 @@ Begin Elements MITC9ShellElement
 *loop elems *onlyInCond
 *if(strcmp(cond(1),"MITC9")==0)
 *if(ElemsNnode==9)
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4) *ElemsConec(5) *ElemsConec(6) *ElemsConec(7) *ElemsConec(8) *ElemsConec(9)
 *endif
 *endif
@@ -560,9 +560,9 @@ Begin Elements KinematicLinear3D4N
 *if(ElemsNnode==4)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -579,9 +579,9 @@ Begin Elements KinematicLinear3D10N
 *if(ElemsNnode==10)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -598,9 +598,9 @@ Begin Elements KinematicLinear3D8N
 *if(ElemsNnode==8)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -636,9 +636,9 @@ Begin Elements KinematicLinear3D27N
 *if(ElemsNnode==27)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -655,9 +655,9 @@ Begin Elements KinematicLinear3D6N
 *if(ElemsNnode==6)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -674,9 +674,9 @@ Begin Elements KinematicLinear3D15N
 *if(ElemsNnode==15)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -693,9 +693,9 @@ Begin Elements TotalLagrangian3D4N
 *if(ElemsNnode==4)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -712,9 +712,9 @@ Begin Elements TotalLagrangian3D10N
 *if(ElemsNnode==10)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -731,9 +731,9 @@ Begin Elements TotalLagrangian3D8N
 *if(ElemsNnode==8)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -769,9 +769,9 @@ Begin Elements TotalLagrangian3D27N
 *if(ElemsNnode==27)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -788,9 +788,9 @@ Begin Elements TotalLagrangian3D6N
 *if(ElemsNnode==6)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -807,9 +807,9 @@ Begin Elements TotalLagrangian3D15N
 *if(ElemsNnode==15)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -847,9 +847,9 @@ Begin Elements UnsaturatedSoilsElement2PhaseSmallStrain3D4N
 *if(ElemsNnode==4)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -866,9 +866,9 @@ Begin Elements UnsaturatedSoilsElement2PhaseSmallStrain3D10N
 *if(ElemsNnode==10)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -885,9 +885,9 @@ Begin Elements UnsaturatedSoilsElement2PhaseSmallStrain3D8N
 *if(ElemsNnode==8)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -923,9 +923,9 @@ Begin Elements UnsaturatedSoilsElement2PhaseSmallStrain3D27N
 *if(ElemsNnode==27)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -942,9 +942,9 @@ Begin Elements UnsaturatedSoilsElement2PhaseSmallStrain3D15N
 *if(ElemsNnode==15)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -961,9 +961,9 @@ Begin Elements UnsaturatedSoilsElement3PhaseSmallStrain3D10N
 *if(ElemsNnode==10)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -999,9 +999,9 @@ Begin Elements UnsaturatedSoilsElement3PhaseSmallStrain3D27N
 *if(ElemsNnode==27)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -1018,9 +1018,9 @@ Begin Elements UnsaturatedSoilsElement3PhaseSmallStrain3D15N
 *if(ElemsNnode==15)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -1056,9 +1056,9 @@ Begin Elements GroutingMortarElement2Phase3D27N
 *if(ElemsNnode==27)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -1075,9 +1075,9 @@ Begin Elements GroutingMortarElement2Phase3D15N
 *if(ElemsNnode==15)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -1094,9 +1094,9 @@ Begin Elements GroutingMortarElement2Phase3D10N
 *if(ElemsNnode==10)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -1115,9 +1115,9 @@ Begin Elements SaturatedSoilsKinematicLinear3D4N
 *if(ElemsNnode==4)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -1134,9 +1134,9 @@ Begin Elements SaturatedSoilsKinematicLinear3D10N
 *if(ElemsNnode==10)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -1153,9 +1153,9 @@ Begin Elements SaturatedSoilsKinematicLinear3D8N
 *if(ElemsNnode==8)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -1191,9 +1191,9 @@ Begin Elements SaturatedSoilsKinematicLinear3D27N
 *if(ElemsNnode==27)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -1211,9 +1211,9 @@ Begin Elements PartiallySaturatedSoilsKinematicLinear3D4N
 *if(ElemsNnode==4)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -1230,9 +1230,9 @@ Begin Elements PartiallySaturatedSoilsKinematicLinear3D10N
 *if(ElemsNnode==10)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -1249,9 +1249,9 @@ Begin Elements PartiallySaturatedSoilsKinematicLinear3D8N
 *if(ElemsNnode==8)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
@@ -1287,9 +1287,9 @@ Begin Elements PartiallySaturatedSoilsKinematicLinear3D27N
 *if(ElemsNnode==27)
 *set var i=0
 *set var j= ElemsNnode
-*ElemsNum      *ElemsMat    *\
+*ElemsNum  *ElemsMat*\
 *for(i=1;i<=j;i=i+1)*\
-*ElemsConec(*i)    *\
+ *ElemsConec(*i)*\
 *end
 
 *endif
