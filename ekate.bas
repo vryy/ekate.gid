@@ -1619,7 +1619,7 @@ Begin ElementalData ACTIVATION_LEVEL
 *add cond Surface_Activation_Level *elems
 *add cond Volume_Activation_Level *elems
 *format "%i%i"
-*loop elems
+*loop elems *OnlyInCond
 *ElemsNum *cond(1)
 *end elems
 End ElementalData
