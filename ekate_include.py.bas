@@ -39,6 +39,10 @@ from KratosMultiphysics.SoilMechanicsApplication import **
 *if(strcmp(GenData(Plate_And_Shell_Application),"1")==0)
 from KratosMultiphysics.PlateAndShellApplication import **
 *endif
+*if(strcmp(GenData(P4est_Application),"1")==0)
+from KratosMultiphysics.mpi import **
+from KratosMultiphysics.P4estApplication import **
+*endif
 kernel = Kernel()   #defining kernel
 
 ##################################################################
@@ -341,6 +345,78 @@ class Model:
         self.topopt_proc.SetBinSize(100)
         self.solver.solver.attached_processes.append(self.topopt_proc)
 *endif
+
+    def SetModelPart(self, model_part):
+        self.model_part = model_part
+        number_of_time_steps = *ntimesteps
+
+        ## generating solver
+*if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
+        import mortar_gpts_contact_strategy
+*if(strcmp(GenData(analysis_type),"static")==0)
+        self.solver = mortar_gpts_contact_strategy.SampleSolver(self.model_part, self.abs_tol, self.rel_tol, self.analysis_parameters)
+*else
+        self.solver = mortar_gpts_contact_strategy.SampleSolverEkateQuasiStatic(self.model_part, self.abs_tol, self.rel_tol, self.analysis_parameters)
+*endif
+        mortar_gpts_contact_strategy.AddVariables( self.model_part )
+*else
+        import structural_solver_advanced
+        self.solver = structural_solver_advanced.SolverAdvanced( self.model_part, self.domain_size, number_of_time_steps, self.analysis_parameters, self.abs_tol, self.rel_tol )
+        #import ekate_solver_parallel
+        #self.solver = ekate_solver_parallel.EkateSolver( self.model_part, self.domain_size, number_of_time_steps, self.analysis_parameters, self.abs_tol, self.rel_tol )
+        structural_solver_advanced.AddVariables( self.model_part )
+*endif
+
+        ##################################################################
+        ## ADD DOFS ######################################################
+        ##################################################################
+*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
+        for node in self.model_part.Nodes:
+            node.AddDof( WATER_PRESSURE )
+*if(strcmp(GenData(Perform_ThreePhase_Analysis),"1")==0)
+            node.AddDof( AIR_PRESSURE )
+*endif
+*endif
+*if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
+        mortar_gpts_contact_strategy.AddDofs( self.model_part )
+*else
+        structural_solver_advanced.AddDofs( self.model_part )
+*endif
+
+        ##################################################################
+        ## INITIALISE SOLVER FOR PARTICULAR SOLUTION #####################
+        ##################################################################
+        #defining linear solver
+*if(strcmp(GenData(Solver),"BiCGStabLinearSolver")==0)
+        #preconditioner = DiagonalPreconditioner()
+        #preconditioner = ILU0Preconditioner()
+        preconditioner = Preconditioner()
+        plinear_solver = BICGSTABSolver(*GenData(Solver_Tolerance,real), *GenData(Max_Solver_Iterations,int), preconditioner)
+*endif
+*if(strcmp(GenData(Solver),"CGLinearSolver")==0)
+        #preconditioner = DiagonalPreconditioner()
+        #preconditioner = ILU0Preconditioner()
+        preconditioner = Preconditioner()
+        #plinear_solver = DeflatedCGSolver(*GenData(Solver_Tolerance,real), *GenData(Max_Solver_Iterations,int), preconditioner,1)
+        plinear_solver = CGSolver(*GenData(Solver_Tolerance,real), *GenData(Max_Solver_Iterations,int), preconditioner)
+*endif
+*if(strcmp(GenData(Solver),"SuperLU")==0)
+        plinear_solver = SuperLUSolver()
+*endif
+*if(strcmp(GenData(Solver),"SkylineLUFactorizationSolver")==0)
+        plinear_solver = SkylineLUFactorizationSolver()
+*endif
+*if(strcmp(GenData(Solver),"GMRESSolver")==0)
+        #preconditioner = Preconditioner()
+        #plinear_solver = GMRESSolver(*GenData(Solver_Tolerance,real), *GenData(Max_Solver_Iterations,int), preconditioner)
+        plinear_solver = MKLGMRESSolver()
+*endif
+*if(strcmp(GenData(Solver),"Pardiso")==0)
+        plinear_solver = MKLPardisoSolver()
+*endif
+        self.solver.structure_linear_solver = plinear_solver
+        self.solver.Initialize()
+        (self.solver.solver).SetEchoLevel(2)
 
     def FixPressureNodes( self, free_node_list_water, free_node_list_air):
         for node in self.model_part.Nodes:
