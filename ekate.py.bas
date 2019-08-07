@@ -14,9 +14,12 @@ domain_size = 3
 ## ATTENTION: the following lines have to be adapted to      #####
 ##            match your acrtual configuration               #####
 ##################################################################
+## This file is generated on __DaTe__ __TiMe__
+##################################################################
 import sys
 import os
 import math
+import time as time_module
 kratos_root_path=os.environ['KRATOS_ROOT_PATH']
 ##setting up paths
 kratos_libs_path = kratos_root_path+'libs' ##kratos_root/libs
@@ -34,10 +37,11 @@ from rEpLaCeMeNtStRiNg_include import **
 # calculate insitu-stress for geology_virgin.gid
 model = rEpLaCeMeNtStRiNg_include.Model('rEpLaCeMeNtStRiNg',os.getcwd()+"/",os.getcwd()+"/")
 model.InitializeModel()
-
 ##################################################################
 ###  SIMULATION  #################################################
+start_time = time_module.time()
 ##################################################################
+
 *if(strcmp(GenData(Simulation_Script),"standard")==0)
 time = 0.0
 delta_time = *GenData(time_step_length)
@@ -50,10 +54,18 @@ for step in range( 0, *GenData(time_steps) ):
     print("step "+str(time)+" done.")
     print("###################")
 print "Calculation done"
-sys.exit(0)
 *else
 *# user-defined script is used (will be appended automatically)
 # =====================
 # | USER SCRIPT FOR CALCULATION OF EKATE.GID |
 # vvvvvvvvvvvvvvvvvvvvv
 *endif
+
+
+##################################################################
+###  END OF SIMULATION  ##########################################
+end_time = time_module.time()
+print("Calculation time: " + str(end_time - start_time) + " s")
+timer = Timer()
+print(timer)
+##################################################################
