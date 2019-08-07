@@ -1,7 +1,7 @@
 //problemtype for KRATOS structural application
 //and ekate extension
 //(c) 2012 Janosch Stascheit, Ruhr-University Bochum
-//(c) 2016 Hoang Giang Bui, Ruhr-University Bochum
+//(c) 2016, 2017, 2018, 2019 Hoang Giang Bui, Ruhr-University Bochum
 *tcl(Initialize)
 Begin ModelPartData
 //  VARIABLE_NAME value
