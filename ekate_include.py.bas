@@ -546,6 +546,7 @@ class Model:
 *if(strcmp(GenData(Plastic_Strains),"1")==0)
         self.gid_io.PrintOnGaussPoints(PLASTIC_STRAIN_VECTOR, self.model_part, time)
         self.gid_io.PrintOnGaussPoints(PLASTICITY_INDICATOR, self.model_part, time)
+        print("gauss point PLASTICITY_INDICATOR written")
 *endif
 *if(strcmp(GenData(Internal_Variables),"1")==0)
         self.gid_io.PrintOnGaussPoints(INTERNAL_VARIABLES, self.model_part, time, 0)
@@ -567,23 +568,28 @@ class Model:
         self.gid_io.PrintOnGaussPoints(AIR_PRESSURE, self.model_part, time)
 *endif
 *if(strcmp(GenData(Water_Pressure),"1")==0)
-        self.gid_io.PrintOnGaussPoints(WATER_PRESSURE, self.model_part, time)
-        print("gauss point WATER_PRESSURE written")
-        #self.gid_io.WriteNodalResults(WATER_PRESSURE, self.model_part.Nodes, time, 0)
+        #self.gid_io.PrintOnGaussPoints(WATER_PRESSURE, self.model_part, time)
+        #print("gauss point WATER_PRESSURE written")
+        self.gid_io.WriteNodalResults(WATER_PRESSURE, self.model_part.Nodes, time, 0)
+        print("nodal WATER_PRESSURE written")
         self.gid_io.PrintOnGaussPoints(EXCESS_PORE_WATER_PRESSURE, self.model_part, time)
         print("gauss point EXCESS_PORE_WATER_PRESSURE written")
 *endif
 *if(strcmp(GenData(Saturation),"1")==0)
         self.gid_io.PrintOnGaussPoints(SATURATION, self.model_part, time)
+        print("gauss point SATURATION written")
 *endif
-        #self.gid_io.PrintOnGaussPoints(CONTACT_PENETRATION, self.model_part, time)
-        #self.gid_io.PrintOnGaussPoints(NORMAL, self.model_part, time, 0)
+*if(strcmp(GenData(Face_Load),"1")==0)
+        self.gid_io.WriteNodalResults(FACE_LOAD, self.model_part, time)
+        print("nodal FACE_LOAD written")
+*endif
 *if(strcmp(GenData(Perform_Contact_Analysis),"1")==0)
         self.gid_io.PrintOnGaussPoints(CONTACT_PENETRATION,self.model_part, time, 0)
         self.gid_io.PrintOnGaussPoints(NORMAL_CONTACT_STRESS,self.model_part, time, 0)
 *endif
 *if(strcmp(GenData(Topology_Optimization),"1")==0)
         self.gid_io.PrintOnGaussPoints(MATERIAL_DENSITY, self.model_part, time)
+        print("gauss point MATERIAL_DENSITY written")
 *endif
 *if(strcmp(GenData(New_mesh_for_each_step),"1")==0)
         self.gid_io.FinalizeResults()
@@ -657,7 +663,6 @@ class Model:
         ## INITIALISE CONSTITUTIVE LAWS ##################################
         ##################################################################
         #set material parameters
-        append_manual_data = False
 *loop materials
 *if(strcmp(MatProp(ConstitutiveLaw),"Isotropic3D")==0)
         self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )
@@ -744,7 +749,6 @@ class Model:
 *endif
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, IsotropicDamage3D( FlowRule_*MatNum , HardeningLaw_*MatNum , self.model_part.Properties[*MatNum] ) )
 *elseif(strcmp(MatProp(ConstitutiveLaw),"UserDefined")==0)
-        append_manual_data = True
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, DummyConstitutiveLaw() )
         print "User-defined material selected for *MatProp(0), description: *MatProp(Description)"
 *elseif(strcmp(MatProp(ConstitutiveLaw),"TrussMaterial")==0)
@@ -794,6 +798,7 @@ class Model:
         ##################################################################
         self.deac = DeactivationUtility()
         self.deac.Initialize( self.model_part )
+        self.solver.solver.Initialize()
         self.model_part.Check( self.model_part.ProcessInfo )
         print "activation utility initialized"
         print "model successfully initialized"
@@ -805,7 +810,6 @@ class Model:
         serializer = 0
         print("Write restart data to " + fn + ".rest completed")
 
-
     def LoadRestartFile( self, time ):
         fn = self.problem_name + "_" + str(time)
         serializer = Serializer(fn)
@@ -813,14 +817,32 @@ class Model:
         serializer = 0
         print("Load restart data from " + fn + ".rest completed")
 
-
     def FinalizeModel( self ):
         self.gid_io.CloseResultFile()
 
-
+    # solve with deactivation/reactivation
+    # element/condition with nonzero ACTIVATION_LEVEL in [from_deac, to_deac] will be deactivated
+    # element/condition with negative ACTIVATION_LEVEL will also be deactivated
+    # element/condition with ACTIVATION_LEVEL in [from_reac, to_reac] will be re-activated
     def Solve( self, time, from_deac, to_deac, from_reac, to_reac ):
         self.deac.Reactivate( self.model_part, from_reac, to_reac )
         self.deac.Deactivate( self.model_part, from_deac, to_deac )
         self.model_part.CloneTimeStep(time)
         self.solver.Solve()
+
+    # solve nothing (good for debugging) with deactivation/reactivation
+    def DrySolve( self, time, from_deac, to_deac, from_reac, to_reac ):
+        self.deac.Reactivate( self.model_part, from_reac, to_reac )
+        self.deac.Deactivate( self.model_part, from_deac, to_deac )
+        self.model_part.CloneTimeStep(time)
+
+    # solve without deactivation
+    def SolveModel(self, time):
+        self.model_part.CloneTimeStep(time)
+        self.solver.Solve()
+
+    # solve nothing without deactivation
+    def DrySolveModel(self, time):
+        self.model_part.CloneTimeStep(time)
+
 ##################################################################
