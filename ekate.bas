@@ -1646,19 +1646,6 @@ Begin ElementalData DENSITY_WATER
 *ElemsNum *cond(2)
 *endif
 *end elems
-
-*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
-*set cond SoilVolumeElementType *elems
-*add cond SoilFaceElementType *elems
-*loop elems *OnlyInCond
-*if(strcmp(cond(1),"Saturated_Soil")==0)
-*ElemsNum *cond(2)
-*endif
-*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
-*ElemsNum *cond(2)
-*endif
-*end elems
-*endif
 End ElementalData
 
 Begin ElementalData DENSITY_AIR
@@ -1671,28 +1658,9 @@ Begin ElementalData DENSITY_AIR
 *ElemsNum *cond(3)
 *endif
 *end elems
-
-*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
-*set cond SoilVolumeElementType *elems
-*add cond SoilFaceElementType *elems
-*loop elems *OnlyInCond
-*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
-*ElemsNum *cond(3)
-*endif
-*end elems
-*endif
 End ElementalData
 
 Begin ElementalData BULK_AIR
-*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
-*set cond SoilVolumeElementType *elems
-*add cond SoilFaceElementType *elems
-*loop elems *OnlyInCond
-*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
-*ElemsNum *cond(4)
-*endif
-*end elems
-*endif
 End ElementalData
 
 Begin ElementalData POROSITY
@@ -1705,19 +1673,6 @@ Begin ElementalData POROSITY
 *ElemsNum *cond(4)
 *endif
 *end elems
-
-*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
-*set cond SoilVolumeElementType *elems
-*add cond SoilFaceElementType *elems
-*loop elems *OnlyInCond
-*if(strcmp(cond(1),"Saturated_Soil")==0)
-*ElemsNum *cond(5)
-*endif
-*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
-*ElemsNum *cond(5)
-*endif
-*end elems
-*endif
 End ElementalData
 
 Begin ElementalData PERMEABILITY_WATER
@@ -1732,19 +1687,6 @@ Begin ElementalData PERMEABILITY_WATER
 *ElemsNum *cond(5)
 *endif
 *end elems
-
-*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
-*set cond SoilVolumeElementType *elems
-*add cond SoilFaceElementType *elems
-*loop elems *OnlyInCond
-*if(strcmp(cond(1),"Saturated_Soil")==0)
-*ElemsNum *cond(6)
-*endif
-*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
-*ElemsNum *cond(6)
-*endif
-*end elems
-*endif
 End ElementalData
 
 Begin ElementalData PERMEABILITY_AIR
@@ -1759,16 +1701,6 @@ Begin ElementalData PERMEABILITY_AIR
 *ElemsNum *cond(6)
 *endif
 *end elems
-
-*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
-*set cond SoilVolumeElementType *elems
-*add cond SoilFaceElementType *elems
-*loop elems *OnlyInCond
-*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
-*ElemsNum *cond(7)
-*endif
-*end elems
-*endif
 End ElementalData
 
 Begin ElementalData FIRST_SATURATION_PARAM
@@ -1781,16 +1713,6 @@ Begin ElementalData FIRST_SATURATION_PARAM
 *ElemsNum 2.5
 *endif
 *end elems
-
-*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
-*set cond SoilVolumeElementType *elems
-*add cond SoilFaceElementType *elems
-*loop elems *OnlyInCond
-*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
-*ElemsNum *cond(8)
-*endif
-*end elems
-*endif
 End ElementalData
 
 Begin ElementalData SECOND_SATURATION_PARAM
@@ -1803,16 +1725,6 @@ Begin ElementalData SECOND_SATURATION_PARAM
 *ElemsNum 0.4
 *endif
 *end elems
-
-*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
-*set cond SoilVolumeElementType *elems
-*add cond SoilFaceElementType *elems
-*loop elems *OnlyInCond
-*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
-*ElemsNum *cond(9)
-*endif
-*end elems
-*endif
 End ElementalData
 
 Begin ElementalData AIR_ENTRY_VALUE
@@ -1825,16 +1737,6 @@ Begin ElementalData AIR_ENTRY_VALUE
 *ElemsNum 3000.0
 *endif
 *end elems
-
-*if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
-*set cond SoilVolumeElementType *elems
-*add cond SoilFaceElementType *elems
-*loop elems *OnlyInCond
-*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
-*ElemsNum *cond(10)
-*endif
-*end elems
-*endif
 End ElementalData
 
 Begin ElementalData PERMEABILITY_28_DAYS
