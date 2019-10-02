@@ -157,6 +157,8 @@ QUESTION: Finite_Cell_Structural_Application#CB#(0,1)
 VALUE: 0
 QUESTION: P4est_Application#CB#(0,1)
 VALUE: 0
+QUESTION: Ekate_Auxiliary_Application#CB#(0,1)
+VALUE: 0
 TITLE: Output
 QUESTION: Output_Format#CB#(ASCII,Binary)
 VALUE: Binary

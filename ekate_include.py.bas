@@ -17,10 +17,13 @@ kratos_root_path=os.environ['KRATOS_ROOT_PATH']
 #importing Kratos modules
 from KratosMultiphysics import **
 from KratosMultiphysics.StructuralApplication import **
-from KratosMultiphysics.EkateAuxiliaryApplication import **
 from KratosMultiphysics.ExternalSolversApplication import **
-# from KratosMultiphysics.ExternalConstitutiveLawsApplication import **
 from KratosMultiphysics.MKLSolversApplication import **
+from KratosMultiphysics.BRepApplication import **
+*if(strcmp(GenData(Ekate_Auxiliary_Application),"1")==0)
+from KratosMultiphysics.EkateAuxiliaryApplication import **
+from KratosMultiphysics.ExternalConstitutiveLawsApplication import **
+*endif
 *if(strcmp(GenData(Enable_Mortar_Contact),"1")==0||strcmp(GenData(Mortar_Application),"1")==0)
 from KratosMultiphysics.MortarApplication import **
 *endif
@@ -208,24 +211,24 @@ class Model:
         ## READ MODELPART ################################################
         ##################################################################
         #reading a model
-        write_deformed_flag = WriteDeformedMeshFlag.WriteUndeformed
-        write_elements = WriteConditionsFlag.WriteConditions
+        self.write_deformed_flag = WriteDeformedMeshFlag.WriteUndeformed
+        self.write_elements = WriteConditionsFlag.WriteConditions
         #write_elements = WriteConditionsFlag.WriteElementsOnly
 *if(strcmp(GenData(Output_Format),"ASCII")==0)
-        post_mode = GiDPostMode.GiD_PostAscii
+        self.post_mode = GiDPostMode.GiD_PostAscii
 *if(strcmp(GenData(New_mesh_for_each_step),"1")==0)
-        multi_file_flag = MultiFileFlag.MultipleFiles
+        self.multi_file_flag = MultiFileFlag.MultipleFiles
 *else
-        multi_file_flag = MultiFileFlag.SingleFile
+        self.multi_file_flag = MultiFileFlag.SingleFile
 *endif
 *else
-        post_mode = GiDPostMode.GiD_PostBinary
-        multi_file_flag = MultiFileFlag.MultipleFiles
+        self.post_mode = GiDPostMode.GiD_PostBinary
+        self.multi_file_flag = MultiFileFlag.MultipleFiles
 *endif
 *if(strcmp(GenData(Layer_Application),"1")==0)
-        self.gid_io = SDGidPostIO( self.results_path+self.problem_name, post_mode, multi_file_flag, write_deformed_flag, write_elements )
+        self.gid_io = SDGidPostIO( self.results_path+self.problem_name, self.post_mode, self.multi_file_flag, self.write_deformed_flag, self.write_elements )
 *else
-        self.gid_io = StructuralGidIO( self.results_path+self.problem_name, post_mode, multi_file_flag, write_deformed_flag, write_elements )
+        self.gid_io = StructuralGidIO( self.results_path+self.problem_name, self.post_mode, self.multi_file_flag, self.write_deformed_flag, self.write_elements )
 *endif
 *if(strcmp(GenData(VTK_Output),"1")==0)
 *if(strcmp(GenData(VTK_Output_Format),"ASCII")==0)
@@ -275,9 +278,11 @@ class Model:
 *endif
 *if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
         mortar_gpts_contact_strategy.AddDofs( self.model_part )
+*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
+        mortar_gpts_contact_strategy.AddFluidDofs( self.model_part )
+*endif
 *else
         structural_solver_advanced.AddDofs( self.model_part )
-        #ekate_solver_parallel.AddDofs( self.model_part )
 *endif
 
         ##################################################################
@@ -379,6 +384,9 @@ class Model:
 *endif
 *if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
         mortar_gpts_contact_strategy.AddDofs( self.model_part )
+*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
+        mortar_gpts_contact_strategy.AddFluidDofs( self.model_part )
+*endif
 *else
         structural_solver_advanced.AddDofs( self.model_part )
 *endif
@@ -417,6 +425,14 @@ class Model:
         self.solver.structure_linear_solver = plinear_solver
         self.solver.Initialize()
         (self.solver.solver).SetEchoLevel(2)
+
+    def SetOutputPath(self, path):
+        self.results_path = path
+*if(strcmp(GenData(Layer_Application),"1")==0)
+        self.gid_io = SDGidPostIO( self.results_path+self.problem_name, self.post_mode, self.multi_file_flag, self.write_deformed_flag, self.write_elements )
+*else
+        self.gid_io = StructuralGidIO( self.results_path+self.problem_name, self.post_mode, self.multi_file_flag, self.write_deformed_flag, self.write_elements )
+*endif
 
     def FixPressureNodes( self, free_node_list_water, free_node_list_air):
         for node in self.model_part.Nodes:
@@ -580,7 +596,7 @@ class Model:
         print("gauss point SATURATION written")
 *endif
 *if(strcmp(GenData(Face_Load),"1")==0)
-        self.gid_io.WriteNodalResults(FACE_LOAD, self.model_part, time)
+        self.gid_io.WriteNodalResults(FACE_LOAD, self.model_part.Nodes, time, 0)
         print("nodal FACE_LOAD written")
 *endif
 *if(strcmp(GenData(Perform_Contact_Analysis),"1")==0)
