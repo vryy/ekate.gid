@@ -193,10 +193,10 @@ Begin Elements IsoShellElement
 *if(strcmp(cond(1),"IsotropicShell")==0)
 *if(ElemsNnode==3)
 *ElemsNum  *ElemsMat*\
-*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
+ *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *elseif(ElemsNnode==6)
 *ElemsNum  *ElemsMat*\
-*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
+ *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *endif
 *endif
 *end elems
@@ -215,7 +215,7 @@ Begin Elements AnisoShellElement
  *ElemsConec(*i)*\
 *elseif(ElemsNnode==6)
 *ElemsNum  *ElemsMat*\
-*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
+ *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *end
 
 *endif
@@ -230,10 +230,10 @@ Begin Elements AnisoShellElement
 *if(strcmp(cond(1),"AnisotropicShell")==0)
 *if(ElemsNnode==3)
 *ElemsNum  *ElemsMat*\
-*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
+ *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *elseif(ElemsNnode==6)
 *ElemsNum  *ElemsMat*\
-*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
+ *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 *endif
 *endif
 *end elems
@@ -244,12 +244,12 @@ Begin Elements MITC4ShellElement
 *loop elems *onlyInCond
 *if(strcmp(cond(1),"MITC4")==0)
 *if(ElemsNnode==4)
-*ElemsNum  *ElemsMat*\
-*ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4)
+ *ElemsNum  *ElemsMat*\
+ *ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4)
 *endif
 *if(ElemsNnode==9)
 *ElemsNum  *ElemsMat*\
-*ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4)
+ *ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4)
 *endif
 *endif
 *end elems
@@ -261,7 +261,7 @@ Begin Elements MITC9ShellElement
 *if(strcmp(cond(1),"MITC9")==0)
 *if(ElemsNnode==9)
 *ElemsNum  *ElemsMat*\
-*ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4) *ElemsConec(5) *ElemsConec(6) *ElemsConec(7) *ElemsConec(8) *ElemsConec(9)
+ *ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4) *ElemsConec(5) *ElemsConec(6) *ElemsConec(7) *ElemsConec(8) *ElemsConec(9)
 *endif
 *endif
 *end elems
