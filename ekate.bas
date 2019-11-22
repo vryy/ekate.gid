@@ -1646,6 +1646,12 @@ Begin ElementalData DENSITY_WATER
 *ElemsNum *cond(2)
 *endif
 *end elems
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==1)
+*ElemsNum *cond(2)
+*endif
+*end elems
 End ElementalData
 
 Begin ElementalData DENSITY_AIR
@@ -1658,9 +1664,25 @@ Begin ElementalData DENSITY_AIR
 *ElemsNum *cond(3)
 *endif
 *end elems
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==1)
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(3)
+*endif
+*endif
+*end elems
 End ElementalData
 
 Begin ElementalData BULK_AIR
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==1)
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(4)
+*endif
+*endif
+*end elems
 End ElementalData
 
 Begin ElementalData POROSITY
@@ -1671,6 +1693,12 @@ Begin ElementalData POROSITY
 *endif
 *if(strcmp(cond(1),"UnsaturatedSoil_3Phase")==0)
 *ElemsNum *cond(4)
+*endif
+*end elems
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==1)
+*ElemsNum *cond(5)
 *endif
 *end elems
 End ElementalData
@@ -1687,6 +1715,17 @@ Begin ElementalData PERMEABILITY_WATER
 *ElemsNum *cond(5)
 *endif
 *end elems
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==1)
+*if(strcmp(cond(1),"Saturated_Soil")==0)
+*ElemsNum *cond(6)
+*endif
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(6)
+*endif
+*endif
+*end elems
 End ElementalData
 
 Begin ElementalData PERMEABILITY_AIR
@@ -1701,6 +1740,14 @@ Begin ElementalData PERMEABILITY_AIR
 *ElemsNum *cond(6)
 *endif
 *end elems
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==1)
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(7)
+*endif
+*endif
+*end elems
 End ElementalData
 
 Begin ElementalData FIRST_SATURATION_PARAM
@@ -1711,6 +1758,14 @@ Begin ElementalData FIRST_SATURATION_PARAM
 *endif
 *if(strcmp(cond(1),"UnsaturatedSoil_3Phase")==0)
 *ElemsNum 2.5
+*endif
+*end elems
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==1)
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(8)
+*endif
 *endif
 *end elems
 End ElementalData
@@ -1725,6 +1780,14 @@ Begin ElementalData SECOND_SATURATION_PARAM
 *ElemsNum 0.4
 *endif
 *end elems
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==1)
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(9)
+*endif
+*endif
+*end elems
 End ElementalData
 
 Begin ElementalData AIR_ENTRY_VALUE
@@ -1737,6 +1800,14 @@ Begin ElementalData AIR_ENTRY_VALUE
 *ElemsNum 3000.0
 *endif
 *end elems
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==1)
+*if(strcmp(cond(1),"Partially_Saturated_Soil")==0)
+*ElemsNum *cond(10)
+*endif
+*endif
+*end elems
 End ElementalData
 
 Begin ElementalData PERMEABILITY_28_DAYS
@@ -1744,6 +1815,14 @@ Begin ElementalData PERMEABILITY_28_DAYS
 *loop elems *OnlyInCond
 *if(strcmp(cond(1),"Grouting_Element")==0)
 *ElemsNum *cond(7)
+*endif
+*end elems
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==1)
+*if(strcmp(cond(1),"Grouting_Mortar")==0)
+*ElemsNum *cond(11)
+*endif
 *endif
 *end elems
 End ElementalData
@@ -1755,6 +1834,14 @@ Begin ElementalData PERMEABILITY_1_DAY
 *ElemsNum *cond(8)
 *endif
 *end elems
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==1)
+*if(strcmp(cond(1),"Grouting_Mortar")==0)
+*ElemsNum *cond(12)
+*endif
+*endif
+*end elems
 End ElementalData
 
 Begin ElementalData PERMEABILITY_TRANSITION
@@ -1762,6 +1849,14 @@ Begin ElementalData PERMEABILITY_TRANSITION
 *loop elems *OnlyInCond
 *if(strcmp(cond(1),"Grouting_Element")==0)
 *ElemsNum *cond(9)
+*endif
+*end elems
+*set cond SoilVolumeElementType *elems
+*loop elems *OnlyInCond
+*if(strcmp(ElemsMatProp(ConstitutiveLaw),"UserDefined")==1)
+*if(strcmp(cond(1),"Grouting_Mortar")==0)
+*ElemsNum *cond(13)
+*endif
 *endif
 *end elems
 End ElementalData
