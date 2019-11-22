@@ -1298,6 +1298,101 @@ Begin Elements PartiallySaturatedSoilsKinematicLinear3D27N
 *end elems
 End Elements
 
+*set cond SoilVolumeElementType *elems
+Begin Elements GroutingMortarKinematicLinear3D4N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Grouting_Mortar")==0)
+*if(ElemsType==4)
+*if(ElemsNnode==4)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SoilVolumeElementType *elems
+Begin Elements GroutingMortarKinematicLinear3D10N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Grouting_Mortar")==0)
+*if(ElemsType==4)
+*if(ElemsNnode==10)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SoilVolumeElementType *elems
+Begin Elements GroutingMortarKinematicLinear3D8N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Grouting_Mortar")==0)
+*if(ElemsType==5)
+*if(ElemsNnode==8)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SoilVolumeElementType *elems
+Begin Elements GroutingMortarKinematicLinear3D20N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Grouting_Mortar")==0)
+*if(ElemsType==5)
+*if(ElemsNnode==20)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
+*set cond SoilVolumeElementType *elems
+Begin Elements GroutingMortarKinematicLinear3D27N
+*loop elems *onlyInCond
+*if(strcmp(cond(1),"Grouting_Mortar")==0)
+*if(ElemsType==5)
+*if(ElemsNnode==27)
+*set var i=0
+*set var j= ElemsNnode
+*ElemsNum  *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+*endif
+*endif
+*endif
+*end elems
+End Elements
+
 *endif
 
 
