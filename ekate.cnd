@@ -17,9 +17,9 @@ END CONDITION
 CONDITION: SoilFaceElementType
 CONDTYPE: over surfaces
 CONDMESHTYPE: over body elements
-QUESTION: Element_Type#CB#(Saturated_Soil,Partially_Saturated_Soil)
+QUESTION: Element_Type#CB#(Saturated_Soil,Partially_Saturated_Soil,Grouting_Mortar)
 VALUE: Saturated_Soil
-DEPENDENCIES:(Saturated_Soil,HIDE,Density_Air,#CURRENT#,HIDE,Bulk_Air,#CURRENT#,HIDE,Permeability_Air,#CURRENT#,HIDE,First_Saturation_Param,#CURRENT#,HIDE,Second_Saturation_Param,#CURRENT#,HIDE,Air_Entry_Value,#CURRENT#)(Partially_Saturated_Soil,RESTORE,Density_Air,#CURRENT#,RESTORE,Bulk_Air,#CURRENT#,RESTORE,Permeability_Air,#CURRENT#,RESTORE,First_Saturation_Param,#CURRENT#,RESTORE,Second_Saturation_Param,#CURRENT#,RESTORE,Air_Entry_Value,#CURRENT#)
+DEPENDENCIES:(Saturated_Soil,HIDE,Density_Air,#CURRENT#,HIDE,Bulk_Air,#CURRENT#,RESTORE,Permeability_Water,#CURRENT#,HIDE,Permeability_Air,#CURRENT#,HIDE,First_Saturation_Param,#CURRENT#,HIDE,Second_Saturation_Param,#CURRENT#,HIDE,Air_Entry_Value,#CURRENT#,HIDE,perm_28,#CURRENT#,HIDE,perm_1,#CURRENT#,HIDE,beta_grout,#CURRENT#) (Partially_Saturated_Soil,RESTORE,Density_Air,#CURRENT#,RESTORE,Bulk_Air,#CURRENT#,RESTORE,Permeability_Water,#CURRENT#,RESTORE,Permeability_Air,#CURRENT#,RESTORE,First_Saturation_Param,#CURRENT#,RESTORE,Second_Saturation_Param,#CURRENT#,RESTORE,Air_Entry_Value,#CURRENT#,HIDE,perm_28,#CURRENT#,HIDE,perm_1,#CURRENT#,HIDE,beta_grout,#CURRENT#) (Grouting_Mortar,HIDE,Density_Air,#CURRENT#,HIDE,Bulk_Air,#CURRENT#,HIDE,Permeability_Water,#CURRENT#,HIDE,Permeability_Air,#CURRENT#,HIDE,First_Saturation_Param,#CURRENT#,HIDE,Second_Saturation_Param,#CURRENT#,HIDE,Air_Entry_Value,#CURRENT#,RESTORE,perm_28,#CURRENT#,RESTORE,perm_1,#CURRENT#,RESTORE,beta_grout,#CURRENT#)
 QUESTION: Density_Water#UNITS#
 VALUE: 1000.0kg/m^3
 QUESTION: Density_Air#UNITS#
@@ -38,6 +38,15 @@ QUESTION: Second_Saturation_Param
 VALUE:0.4
 QUESTION: Air_Entry_Value
 VALUE:3000.0
+QUESTION: perm_28#UNITS#
+VALUE:0.00000001m/s
+HELP: Permeability after 28d
+QUESTION: perm_1#UNITS#
+VALUE:0.0001m/s
+HELP: Permeability after 1d
+QUESTION: beta_grout
+VALUE:0.0535
+HELP: control parameter for shape of hydration curve
 END CONDITION
 
 BOOK: ElementType
@@ -101,9 +110,9 @@ END CONDITION
 CONDITION: SoilVolumeElementType
 CONDTYPE: over volumes
 CONDMESHTYPE: over body elements
-QUESTION: Element_Type#CB#(Saturated_Soil,Partially_Saturated_Soil)
+QUESTION: Element_Type#CB#(Saturated_Soil,Partially_Saturated_Soil,Grouting_Mortar)
 VALUE: Saturated_Soil
-DEPENDENCIES:(Saturated_Soil,HIDE,Density_Air,#CURRENT#,HIDE,Bulk_Air,#CURRENT#,HIDE,Permeability_Air,#CURRENT#,HIDE,First_Saturation_Param,#CURRENT#,HIDE,Second_Saturation_Param,#CURRENT#,HIDE,Air_Entry_Value,#CURRENT#)(Partially_Saturated_Soil,RESTORE,Density_Air,#CURRENT#,RESTORE,Bulk_Air,#CURRENT#,RESTORE,Permeability_Air,#CURRENT#,RESTORE,First_Saturation_Param,#CURRENT#,RESTORE,Second_Saturation_Param,#CURRENT#,RESTORE,Air_Entry_Value,#CURRENT#)
+DEPENDENCIES:(Saturated_Soil,HIDE,Density_Air,#CURRENT#,HIDE,Bulk_Air,#CURRENT#,RESTORE,Permeability_Water,#CURRENT#,HIDE,Permeability_Air,#CURRENT#,HIDE,First_Saturation_Param,#CURRENT#,HIDE,Second_Saturation_Param,#CURRENT#,HIDE,Air_Entry_Value,#CURRENT#,HIDE,perm_28,#CURRENT#,HIDE,perm_1,#CURRENT#,HIDE,beta_grout,#CURRENT#) (Partially_Saturated_Soil,RESTORE,Density_Air,#CURRENT#,RESTORE,Bulk_Air,#CURRENT#,RESTORE,Permeability_Water,#CURRENT#,RESTORE,Permeability_Air,#CURRENT#,RESTORE,First_Saturation_Param,#CURRENT#,RESTORE,Second_Saturation_Param,#CURRENT#,RESTORE,Air_Entry_Value,#CURRENT#,HIDE,perm_28,#CURRENT#,HIDE,perm_1,#CURRENT#,HIDE,beta_grout,#CURRENT#) (Grouting_Mortar,HIDE,Density_Air,#CURRENT#,HIDE,Bulk_Air,#CURRENT#,HIDE,Permeability_Water,#CURRENT#,HIDE,Permeability_Air,#CURRENT#,HIDE,First_Saturation_Param,#CURRENT#,HIDE,Second_Saturation_Param,#CURRENT#,HIDE,Air_Entry_Value,#CURRENT#,RESTORE,perm_28,#CURRENT#,RESTORE,perm_1,#CURRENT#,RESTORE,beta_grout,#CURRENT#)
 QUESTION: Density_Water#UNITS#
 VALUE: 1000.0kg/m^3
 QUESTION: Density_Air#UNITS#
@@ -122,6 +131,15 @@ QUESTION: Second_Saturation_Param
 VALUE:0.4
 QUESTION: Air_Entry_Value
 VALUE:3000.0
+QUESTION: perm_28#UNITS#
+VALUE:0.00000001m/s
+HELP: Permeability after 28d
+QUESTION: perm_1#UNITS#
+VALUE:0.0001m/s
+HELP: Permeability after 1d
+QUESTION: beta_grout
+VALUE:0.0535
+HELP: control parameter for shape of hydration curve
 END CONDITION
 
 BOOK: Fixed_Displacement
