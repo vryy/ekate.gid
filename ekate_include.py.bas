@@ -269,21 +269,7 @@ class Model:
         ##################################################################
         ## ADD DOFS ######################################################
         ##################################################################
-*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
-        for node in self.model_part.Nodes:
-            node.AddDof( WATER_PRESSURE )
-*if(strcmp(GenData(Perform_ThreePhase_Analysis),"1")==0)
-            node.AddDof( AIR_PRESSURE )
-*endif
-*endif
-*if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
-        mortar_gpts_contact_strategy.AddDofs( self.model_part )
-*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
-        mortar_gpts_contact_strategy.AddFluidDofs( self.model_part )
-*endif
-*else
-        structural_solver_advanced.AddDofs( self.model_part )
-*endif
+        self.AddDofs(self.model_part)
 
         ##################################################################
         ## INITIALISE SOLVER FOR PARTICULAR SOLUTION #####################
@@ -351,6 +337,44 @@ class Model:
         self.solver.solver.attached_processes.append(self.topopt_proc)
 *endif
 
+    def AddDofsForNodes(self, nodes):
+*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
+        for node in nodes:
+            node.AddDof( WATER_PRESSURE )
+*if(strcmp(GenData(Perform_ThreePhase_Analysis),"1")==0)
+            node.AddDof( AIR_PRESSURE )
+*endif
+*endif
+*if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
+        import mortar_gpts_contact_strategy
+        mortar_gpts_contact_strategy.AddDofsForNodes( nodes )
+*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
+        mortar_gpts_contact_strategy.AddFluidDofsForNodes( nodes )
+*endif
+*else
+        import structural_solver_advanced
+        structural_solver_advanced.AddDofsForNodes( nodes )
+*endif
+
+    def AddDofs(self, model_part):
+*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
+        for node in model_part.Nodes:
+            node.AddDof( WATER_PRESSURE )
+*if(strcmp(GenData(Perform_ThreePhase_Analysis),"1")==0)
+            node.AddDof( AIR_PRESSURE )
+*endif
+*endif
+*if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
+        import mortar_gpts_contact_strategy
+        mortar_gpts_contact_strategy.AddDofs( model_part )
+*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
+        mortar_gpts_contact_strategy.AddFluidDofs( model_part )
+*endif
+*else
+        import structural_solver_advanced
+        structural_solver_advanced.AddDofs( model_part )
+*endif
+
     def SetModelPart(self, model_part):
         self.model_part = model_part
         number_of_time_steps = *ntimesteps
@@ -375,21 +399,7 @@ class Model:
         ##################################################################
         ## ADD DOFS ######################################################
         ##################################################################
-*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
-        for node in self.model_part.Nodes:
-            node.AddDof( WATER_PRESSURE )
-*if(strcmp(GenData(Perform_ThreePhase_Analysis),"1")==0)
-            node.AddDof( AIR_PRESSURE )
-*endif
-*endif
-*if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
-        mortar_gpts_contact_strategy.AddDofs( self.model_part )
-*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
-        mortar_gpts_contact_strategy.AddFluidDofs( self.model_part )
-*endif
-*else
-        structural_solver_advanced.AddDofs( self.model_part )
-*endif
+        self.AddDofs(self.model_part)
 
         ##################################################################
         ## INITIALISE SOLVER FOR PARTICULAR SOLUTION #####################
@@ -609,6 +619,7 @@ class Model:
 *endif
 *if(strcmp(GenData(New_mesh_for_each_step),"1")==0)
         self.gid_io.FinalizeResults()
+        self.gid_io.Reset()
 *endif
 *if(strcmp(GenData(VTK_Output),"1")==0)
         print("write results to vtu")
