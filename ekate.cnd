@@ -2,17 +2,8 @@ BOOK: ElementType2D
 CONDITION: FaceElementType
 CONDTYPE: over surfaces
 CONDMESHTYPE: over body elements
-QUESTION: Element_Type#CB#(TotalLagrangian,Membrane,IsotropicShell,AnisotropicShell,Kinematic_Linear)
+QUESTION: Element_Type#CB#(TotalLagrangian,Kinematic_Linear)
 VALUE: TotalLagrangian
-DEPENDENCIES:(TotalLagrangian,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(Membrane,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(IsotropicShell,HIDE,MatrixA,#CURRENT#,HIDE,MatrixB,#CURRENT#,HIDE,MatrixD,#CURRENT#)(AnisotropicShell,RESTORE,MatrixA,#CURRENT#,RESTORE,MatrixB,#CURRENT#,RESTORE,MatrixD,#CURRENT#)
-QUESTION: Thickness#UNITS#
-VALUE: 1.0m
-QUESTION: MatrixA:(MatrixA_col1,MatrixA_col2,MatrixA_col3)
-VALUE: #N# 9 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
-QUESTION: MatrixB:(MatrixB_col1,MatrixB_col2,MatrixB_col3)
-VALUE: #N# 9 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
-QUESTION: MatrixD:(MatrixD_col1,MatrixD_col2,MatrixD_col3)
-VALUE: #N# 9 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
 END CONDITION
 CONDITION: SoilFaceElementType
 CONDTYPE: over surfaces
@@ -717,7 +708,7 @@ END CONDITION
 
 CONDITION: Line_Mortar_2D
 CONDTYPE: over lines
-CONDMESHTYPE: over body elements
+CONDMESHTYPE: over face elements
 QUESTION: Tying_Index
 VALUE: 10
 QUESTION: Tying_Direction#CB#(Master,Slave)
@@ -807,6 +798,20 @@ VALUE: 0
 END CONDITION
 CONDITION: TBM_End
 CONDTYPE: over surfaces
+CONDMESHTYPE: over face elements
+QUESTION: Dummy_TWO
+STATE: HIDDEN
+VALUE: 0
+END CONDITION
+CONDITION: Lining_End_2D
+CONDTYPE: over lines
+CONDMESHTYPE: over face elements
+QUESTION: Dummy_ONE
+STATE: HIDDEN
+VALUE: 0
+END CONDITION
+CONDITION: TBM_End_2D
+CONDTYPE: over lines
 CONDMESHTYPE: over face elements
 QUESTION: Dummy_TWO
 STATE: HIDDEN

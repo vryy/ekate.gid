@@ -11,6 +11,7 @@
 ##################################################################
 import sys
 import os
+import time as time_module
 kratos_root_path=os.environ['KRATOS_ROOT_PATH']
 ##################################################################
 ##################################################################
@@ -38,6 +39,9 @@ from KratosMultiphysics.FiniteCellStructuralApplication import **
 *endif
 *if(strcmp(GenData(Soil_Mechanics_Application),"1")==0)
 from KratosMultiphysics.SoilMechanicsApplication import **
+*if(strcmp(GenData(Finite_Cell_Application),"1")==0)
+from KratosMultiphysics.FiniteCellSoilMechanicsApplication import **
+*endif
 *endif
 *if(strcmp(GenData(Plate_And_Shell_Application),"1")==0)
 from KratosMultiphysics.PlateAndShellApplication import **
@@ -211,6 +215,38 @@ class Model:
         ## READ MODELPART ################################################
         ##################################################################
         #reading a model
+        self.model_part_io = ModelPartIO(self.path+self.problem_name)
+        self.model_part_io.ReadModelPart(self.model_part)
+        self.meshWritten = False
+*if(strcmp(GenData(Calculate_Reactions),"1")==0)
+        (self.solver).CalculateReactionFlag = True
+*else
+        (self.solver).CalculateReactionFlag = False
+*endif
+*if(strcmp(GenData(Read_Deactivation_File),"1")==0)
+        ## READ DEACTIVATION FILE ########################################
+        self.cond_file = open(self.path+self.problem_name+".mdpa",'r' )
+        self.cond_activation_flags = []
+        self.element_assignments = {}
+        for line in self.cond_file:
+            if "//ElementAssignment" in line:
+                val_set = line.split(' ')
+                self.model_part.Conditions[int(val_set[1])].SetValue( ACTIVATION_LEVEL, self.model_part.Elements[int(val_set[2])].GetValue(ACTIVATION_LEVEL) )
+                #print( "assigning ACTIVATION_LEVEL of element: " +str(int(val_set[2])) + " to Condition: " + str(int(val_set[1])) + " as " + str(self.model_part.Elements[int(val_set[2])].GetValue(ACTIVATION_LEVEL)) )
+                self.element_assignments[int(val_set[1])] = int(val_set[2])
+        print("input data read OK")
+        #print "+++++++++++++++++++++++++++++++++++++++"
+        #for node in self.model_part.Nodes:
+        #    print(node)
+        #print("+++++++++++++++++++++++++++++++++++++++")
+*endif
+        #the buffer size should be set up here after the mesh is read for the first time
+        self.model_part.SetBufferSize(2)
+
+        ##################################################################
+        ## POST_PROCESSING ###############################################
+        ##################################################################
+
         self.write_deformed_flag = WriteDeformedMeshFlag.WriteUndeformed
         self.write_elements = WriteConditionsFlag.WriteConditions
         #write_elements = WriteConditionsFlag.WriteElementsOnly
@@ -233,38 +269,17 @@ class Model:
 *if(strcmp(GenData(VTK_Output),"1")==0)
 *if(strcmp(GenData(VTK_Output_Format),"ASCII")==0)
         vtk_post_mode = VTKPostMode.VTK_PostAscii
-*else
+*elseif(strcmp(GenData(VTK_Output_Format),"Binary")==0)
         vtk_post_mode = VTKPostMode.VTK_PostBinary
 *endif
-        self.vtk_io = VtkIO( self.path+self.problem_name, vtk_post_mode )
+*if(strcmp(GenData(VTK_Output_Type),"VTU")==0)
+        self.vtk_io = VtkVTUIO( self.results_path+"vtk_results/"+self.problem_name, vtk_post_mode )
+*elseif(strcmp(GenData(VTK_Output_Type),"VTM")==0)
+        self.vtk_io = VtkVTMIO( self.results_path+"vtk_results/"+self.problem_name, vtk_post_mode )
 *endif
-        self.model_part_io = ModelPartIO(self.path+self.problem_name)
-        self.model_part_io.ReadModelPart(self.model_part)
-        self.meshWritten = False
-*if(strcmp(GenData(Reactions),"1")==0)
-        (self.solver).CalculateReactionFlag = True
-*else
-        (self.solver).CalculateReactionFlag = False
+        if not os.path.isdir(self.results_path+"vtk_results"):
+            os.mkdir(self.results_path+"vtk_results")
 *endif
-*if(strcmp(GenData(Read_Deactivation_File),"1")==0)
-        ## READ DEACTIVATION FILE ########################################
-        self.cond_file = open(self.path+self.problem_name+".mdpa",'r' )
-        self.cond_activation_flags = []
-        self.element_assignments = {}
-        for line in self.cond_file:
-            if "//ElementAssignment" in line:
-                val_set = line.split(' ')
-                self.model_part.Conditions[int(val_set[1])].SetValue( ACTIVATION_LEVEL, self.model_part.Elements[int(val_set[2])].GetValue(ACTIVATION_LEVEL) )
-                #print( "assigning ACTIVATION_LEVEL of element: " +str(int(val_set[2])) + " to Condition: " + str(int(val_set[1])) + " as " + str(self.model_part.Elements[int(val_set[2])].GetValue(ACTIVATION_LEVEL)) )
-                self.element_assignments[int(val_set[1])] = int(val_set[2])
-        print "input data read OK"
-        #print "+++++++++++++++++++++++++++++++++++++++"
-        #for node in self.model_part.Nodes:
-        #    print node
-        #print "+++++++++++++++++++++++++++++++++++++++"
-*endif
-        #the buffer size should be set up here after the mesh is read for the first time
-        self.model_part.SetBufferSize(2)
 
         ##################################################################
         ## ADD DOFS ######################################################
@@ -387,15 +402,15 @@ class Model:
 *else
         self.solver = mortar_gpts_contact_strategy.SampleSolverEkateQuasiStatic(self.model_part, self.abs_tol, self.rel_tol, self.analysis_parameters)
 *endif
-        mortar_gpts_contact_strategy.AddVariables( self.model_part )
 *else
         import structural_solver_advanced
         self.solver = structural_solver_advanced.SolverAdvanced( self.model_part, self.domain_size, number_of_time_steps, self.analysis_parameters, self.abs_tol, self.rel_tol )
-        #import ekate_solver_parallel
-        #self.solver = ekate_solver_parallel.EkateSolver( self.model_part, self.domain_size, number_of_time_steps, self.analysis_parameters, self.abs_tol, self.rel_tol )
-        structural_solver_advanced.AddVariables( self.model_part )
 *endif
-
+*if(strcmp(GenData(Calculate_Reactions),"1")==0)
+        (self.solver).CalculateReactionFlag = True
+*else
+        (self.solver).CalculateReactionFlag = False
+*endif
         ##################################################################
         ## ADD DOFS ######################################################
         ##################################################################
@@ -486,11 +501,14 @@ class Model:
 
     def SetReferenceWaterPressureForElements( self, elements ):
         for element in elements:
-            water_pressures = element.GetValuesOnIntegrationPoints( WATER_PRESSURE, self.model_part.ProcessInfo )
-            pressure_list = []
-            for item in water_pressures:
-                pressure_list.append( item[0] )
-            element.SetValuesOnIntegrationPoints( REFERENCE_WATER_PRESSURE, pressure_list, self.model_part.ProcessInfo )
+            self.SetReferenceWaterPressureForElement(element)
+
+    def SetReferenceWaterPressureForElement( self, element ):
+        water_pressures = element.GetValuesOnIntegrationPoints( WATER_PRESSURE, self.model_part.ProcessInfo )
+        pressure_list = []
+        for item in water_pressures:
+            pressure_list.append( item[0] )
+        element.SetValuesOnIntegrationPoints( REFERENCE_WATER_PRESSURE, pressure_list, self.model_part.ProcessInfo )
 
     def FreePressureNodes(self,free_node_list_water, free_node_list_air):
         for item in free_node_list_water:
@@ -622,19 +640,26 @@ class Model:
         self.gid_io.Reset()
 *endif
 *if(strcmp(GenData(VTK_Output),"1")==0)
+*if(strcmp(GenData(VTK_Output_Type),"VTU")==0)
         print("write results to vtu")
+*elseif(strcmp(GenData(VTK_Output_Type),"VTM")==0)
+        print("write results to vtm")
+*endif
         self.vtk_io.Initialize(time, mesh)
 *if(strcmp(GenData(Displacements),"1")==0)
         print("write nodal displacements to vtu")
         self.vtk_io.RegisterNodalResults(DISPLACEMENT, 0)
 *endif
 *if(strcmp(GenData(Reactions),"1")==0)
+        print("write nodal reactions to vtu")
         self.vtk_io.RegisterNodalResults(REACTION, 0)
 *endif
 *if(strcmp(GenData(Water_Pressure),"1")==0)
+        print("write nodal water pressure to vtu")
         self.vtk_io.RegisterNodalResults(WATER_PRESSURE, 0)
 *endif
 *if(strcmp(GenData(Air_Pressure),"1")==0)
+        print("write nodal air pressure to vtu")
         self.vtk_io.RegisterNodalResults(AIR_PRESSURE, 0)
 *endif
         self.vtk_io.Finalize()
@@ -654,25 +679,26 @@ class Model:
         ## CONTACT SLAVE NODES ###########################################
         #self.contact_slave_nodes = model_layers.ReadContactSlaveNodes()
         ##################################################################
-        print "layer sets stored"
+        print("layer sets stored")
         ##################################################################
         ## STORE NODES ON GROUND SURFACE #################################
         ##################################################################
         self.top_surface_nodes = model_layers.ReadTopSurfaceNodes()
-        print "nodes on ground surface stored"
+        print("nodes on ground surface stored")
         ##################################################################
         ## STORE NODES ON SIDE ###########################################
         ##################################################################
         self.boundary_nodes = model_layers.ReadBoundaryNodes()
-        print "nodes on side surface stored"
+        print("nodes on side surface stored")
         ##################################################################
         ## STORE NODES CORRECTLY FOR CONDITIONS ##########################
         ##################################################################
         self.node_groups = model_layers.ReadNodeGroups()
-        print "node groups stored"
+        print("node groups stored")
         ##################################################################
         ## EXTRACT CONDITIONS FROM NODE GROUPS ###########################
         ##################################################################
+        start_time = time_module.time()
         self.layer_cond_sets = {}
         for layer, node_group in self.node_groups.iteritems():
             self.layer_cond_sets[layer] = []
@@ -685,7 +711,8 @@ class Model:
                         break
                 if in_group:
                     self.layer_cond_sets[layer].append(cond.Id)
-        print "conditions in node groups stored"
+        end_time = time_module.time()
+        print("conditions in node groups stored, time = " + str(end_time - start_time) + "s")
         ##################################################################
         ## INITIALISE CONSTITUTIVE LAWS ##################################
         ##################################################################
@@ -697,21 +724,21 @@ class Model:
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
         self.model_part.Properties[*MatNum].SetValue(THICKNESS, 1.0 )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, Isotropic3D() )
-        print "Linear elastic model selected for *MatProp(0), description: *MatProp(Description)"
+        print("Linear elastic model selected for *MatProp(0), description: *MatProp(Description)")
 *elseif(strcmp(MatProp(ConstitutiveLaw),"PlaneStrain")==0)
         self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )
         self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
         self.model_part.Properties[*MatNum].SetValue(THICKNESS, *MatProp(Thickness,real) )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, PlaneStrain() )
-        print "Linear elastic model selected for *MatProp(0), description: *MatProp(Description)"
+        print("Linear elastic model selected for *MatProp(0), description: *MatProp(Description)")
 *elseif(strcmp(MatProp(ConstitutiveLaw),"PlaneStress")==0)
         self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )
         self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
         self.model_part.Properties[*MatNum].SetValue(THICKNESS, *MatProp(Thickness,real) )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, PlaneStress() )
-        print "Linear elastic model selected for *MatProp(0), description: *MatProp(Description)"
+        print("Linear elastic model selected for *MatProp(0), description: *MatProp(Description)")
 *elseif(strcmp(MatProp(ConstitutiveLaw),"TutorialDamageModel")==0)
         self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )
         self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
@@ -719,7 +746,7 @@ class Model:
         self.model_part.Properties[*MatNum].SetValue(DAMAGE_E0, *MatProp(E0,real) )
         self.model_part.Properties[*MatNum].SetValue(DAMAGE_EF, *MatProp(Ef,real) )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, TutorialDamageModel() )
-        print "Tutorial damage model selected for *MatProp(0), description: *MatProp(Description)"
+        print("Tutorial damage model selected for *MatProp(0), description: *MatProp(Description)")
 *elseif(strcmp(MatProp(ConstitutiveLaw),"GroutingMortar")==0)
         self.model_part.Properties[*MatNum].SetValue(DENSITY, *MatProp(Density,real) )
         self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
@@ -728,7 +755,7 @@ class Model:
         self.model_part.Properties[*MatNum].SetValue(PRIMARY_HYDRATION_TIME_GRADIENT, *MatProp(gradient_prim_hyd_time,real) )
         self.model_part.Properties[*MatNum].SetValue(STIFFNESS_RATIO, *MatProp(E_ratio,real) )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, GroutingMortar() )
-        print "Grouting Mortar material selected for *MatProp(0), description: *MatProp(Description)"
+        print("Grouting Mortar material selected for *MatProp(0), description: *MatProp(Description)")
 *elseif(strcmp(MatProp(ConstitutiveLaw),"DruckerPrager")==0)
         self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
@@ -736,7 +763,7 @@ class Model:
         self.model_part.Properties[*MatNum].SetValue(INTERNAL_FRICTION_ANGLE, *MatProp(Friction_angle,real) )
         self.model_part.Properties[*MatNum].SetValue(ISOTROPIC_HARDENING_MODULUS, *MatProp(Isotropic_hardening_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, DruckerPrager() )
-        print "Drucker Prager material selected for *MatProp(0), description: *MatProp(Description)"
+        print("Drucker Prager material selected for *MatProp(0), description: *MatProp(Description)")
 *elseif(strcmp(MatProp(ConstitutiveLaw),"IsotropicDamage3D")==0)
         self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Compressive_Young_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(CONCRETE_YOUNG_MODULUS_C, *MatProp(Compressive_Young_modulus,real) )
@@ -746,7 +773,7 @@ class Model:
         self.model_part.Properties[*MatNum].SetValue(YIELD_STRESS, *MatProp(Yield_stress,real) )
         self.model_part.Properties[*MatNum].SetValue(FRACTURE_ENERGY, *MatProp(Fracture_energy,real) )
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
-        print "Isotropic Damage material selected for *MatProp(0), description: *MatProp(Description)"
+        print("Isotropic Damage material selected for *MatProp(0), description: *MatProp(Description)")
 *if(strcmp(MatProp(HardeningLaw),"Linear")==0)
         HardeningLaw_*MatNum = LinearSoftening()
 *elseif(strcmp(MatProp(HardeningLaw),"Exponential")==0)
@@ -777,15 +804,15 @@ class Model:
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, IsotropicDamage3D( FlowRule_*MatNum , HardeningLaw_*MatNum , self.model_part.Properties[*MatNum] ) )
 *elseif(strcmp(MatProp(ConstitutiveLaw),"UserDefined")==0)
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, DummyConstitutiveLaw() )
-        print "User-defined material selected for *MatProp(0), description: *MatProp(Description)"
+        print("User-defined material selected for *MatProp(0), description: *MatProp(Description)")
 *elseif(strcmp(MatProp(ConstitutiveLaw),"TrussMaterial")==0)
-        print "Truss material selected for *MatProp(0), description: *MatProp(Description)"
+        print("Truss material selected for *MatProp(0), description: *MatProp(Description)")
 *elseif(strcmp(MatProp(ConstitutiveLaw),"BeamMaterial")==0)
         self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
-        print "Beam material selected for *MatProp(0), description: *MatProp(Description)"
+        print("Beam material selected for *MatProp(0), description: *MatProp(Description)")
 *else
-        print "Material *MatProp(0) *MatProp(ConstitutiveLaw) *MatProp(Description)"
+        print("Material *MatProp(0) *MatProp(ConstitutiveLaw) *MatProp(Description)")
 *endif
 *if(strcmp(GenData(Topology_Optimization),"1")==0)
 *set var penalizationfactor(real)=GenData(Penalization_Factor,real)
@@ -827,8 +854,8 @@ class Model:
         self.deac.Initialize( self.model_part )
         self.solver.solver.Initialize()
         self.model_part.Check( self.model_part.ProcessInfo )
-        print "activation utility initialized"
-        print "model successfully initialized"
+        print("activation utility initialized")
+        print("model successfully initialized")
 
     def WriteRestartFile( self, time ):
         fn = self.problem_name + "_" + str(time)

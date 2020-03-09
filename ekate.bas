@@ -291,9 +291,9 @@ End Conditions
 Begin Conditions LineMortarCondition2D2N
 *set cond Line_Mortar_2D *elems *canRepeat
 *loop elems *OnlyInCond
-*if(ElemsNnode==2)
+*if(ElemsNnodeFace==2)
 *condID   *ElemsMat    *\
-*ElemsConec(1) *ElemsConec(2)
+*GlobalNodes(1) *GlobalNodes(2)
 //ElementAssignment *condID *ElemsNum
 *if(strcmp(cond(2),"Master")==0)
 *tcl(SaveCond Line_Mortar_MasterIndex *condID *cond(1))
@@ -308,9 +308,9 @@ End Conditions
 Begin Conditions LineMortarCondition2D3N
 *set cond Line_Mortar_2D *elems *canRepeat
 *loop elems *OnlyInCond
-*if(ElemsNnode==3)
+*if(ElemsNnodeFace==3)
 *condID   *ElemsMat    *\
-*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
 //ElementAssignment *condID *ElemsNum
 *if(strcmp(cond(2),"Master")==0)
 *tcl(SaveCond Line_Mortar_MasterIndex *condID *cond(1))
@@ -1144,6 +1144,30 @@ Begin Conditions LiningEndFace3D9N
 *end elems
 End Conditions
 
+Begin Conditions LiningEndLine2D2N
+*set cond Lining_End_2D *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==2)
+*condID      *ElemsMat    *\
+*Globalnodes(1) *Globalnodes(2)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions LiningEndLine2D3N
+*set cond Lining_End_2D *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==3)
+*condID      *ElemsMat    *\
+*Globalnodes(1) *Globalnodes(2) *Globalnodes(3)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
 Begin Conditions TBMEndFace3D3N
 *set cond TBM_End *elems *canRepeat
 *loop elems *onlyInCond
@@ -1223,6 +1247,30 @@ Begin Conditions TBMEndFace3D9N
 *condID      *ElemsMat    *\
 *Globalnodes(1) *Globalnodes(2) *Globalnodes(3) *Globalnodes(4) *Globalnodes(5) *Globalnodes(6) *Globalnodes(7) *Globalnodes(8) *Globalnodes(9)
 *endif
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions TBMEndLine2D2N
+*set cond TBM_End_2D *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==2)
+*condID      *ElemsMat    *\
+*Globalnodes(1) *Globalnodes(2)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions TBMEndLine2D3N
+*set cond TBM_End_2D *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==3)
+*condID      *ElemsMat    *\
+*Globalnodes(1) *Globalnodes(2) *Globalnodes(3)
 //ElementAssignment *condID *ElemsNum
 *set var condID= condID+1
 *endif
@@ -1580,8 +1628,6 @@ Begin NodalData FORCE_Z
 *add cond Line_Force *nodes *or(5,int)
 *add cond Surface_Force *nodes *or(5,int)
 *add cond Volume_Force *nodes *or(5,int)
-*add cond Point_Force_2D *nodes
-*add cond Line_Force_2D *nodes
 *loop nodes *OnlyInCond
 *NodesNum *cond(5) *cond(6)
 *end nodes
