@@ -724,20 +724,20 @@ proc WriteAbaqusInpMaterials {} {
     global g_matlist
     global g_matdict
 
-    # loop through each material and write the material record
-    foreach mat $g_matlist {
-#        set output "$output\n$mat"
-        set mat_info [GiD_Info materials $mat]
-#        set constitutive_law [lindex $mat_info 2]
-        set output "$output\n*MATERIAL,NAME=$mat"
+#     # loop through each material and write the material record
+#     foreach mat $g_matlist {
+# #        set output "$output\n$mat"
+#         set mat_info [GiD_Info materials $mat]
+# #        set constitutive_law [lindex $mat_info 2]
+#         set output "$output\n*MATERIAL,NAME=$mat"
 
-        # TODO extract relevant information of each material model
-    #    set output "$output\n[lindex $mat_info 0]"
-        # foreach i $mat_info {
-        #     set output "$output\n$i"
-        # }
-        # set output "$output\n"
-    }
+#         # TODO extract relevant information of each material model
+#     #    set output "$output\n[lindex $mat_info 0]"
+#         # foreach i $mat_info {
+#         #     set output "$output\n$i"
+#         # }
+#         # set output "$output\n"
+#     }
 
     # write the material set
     set output "$output\n"
