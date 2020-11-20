@@ -708,7 +708,7 @@ END CONDITION
 
 CONDITION: Line_Mortar_2D
 CONDTYPE: over lines
-CONDMESHTYPE: over face elements
+CONDMESHTYPE: over body elements
 QUESTION: Tying_Index
 VALUE: 10
 QUESTION: Tying_Direction#CB#(Master,Slave)
@@ -987,4 +987,16 @@ CONDTYPE: over volumes
 CONDMESHTYPE: over nodes
 QUESTION: Group_Name
 VALUE: 0
+END CONDITION
+
+BOOK: Lining
+CONDITION: LiningLineCondition
+CONDTYPE: over lines
+CONDMESHTYPE: over face elements
+HELP: line condition to create lining elements. The lining shall locate inside the mesh.
+END CONDITION
+CONDITION: LiningFaceCondition
+CONDTYPE: over surfaces
+CONDMESHTYPE: over face elements
+HELP: face condition to create lining elements. The lining shall locate inside the mesh.
 END CONDITION

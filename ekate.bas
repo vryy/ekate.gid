@@ -291,9 +291,9 @@ End Conditions
 Begin Conditions LineMortarCondition2D2N
 *set cond Line_Mortar_2D *elems *canRepeat
 *loop elems *OnlyInCond
-*if(ElemsNnodeFace==2)
+*if(ElemsNnode==2)
 *condID   *ElemsMat    *\
-*GlobalNodes(1) *GlobalNodes(2)
+*ElemsConec(1) *ElemsConec(2)
 //ElementAssignment *condID *ElemsNum
 *if(strcmp(cond(2),"Master")==0)
 *tcl(SaveCond Line_Mortar_MasterIndex *condID *cond(1))
@@ -308,9 +308,9 @@ End Conditions
 Begin Conditions LineMortarCondition2D3N
 *set cond Line_Mortar_2D *elems *canRepeat
 *loop elems *OnlyInCond
-*if(ElemsNnodeFace==3)
+*if(ElemsNnode==3)
 *condID   *ElemsMat    *\
-*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+*ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
 //ElementAssignment *condID *ElemsNum
 *if(strcmp(cond(2),"Master")==0)
 *tcl(SaveCond Line_Mortar_MasterIndex *condID *cond(1))
@@ -1439,6 +1439,34 @@ End Conditions
 
 Begin Conditions NitscheIsotropicConstraint2D3N
 *set cond Line_Nitsche *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==3)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions DummyConditionLine2N
+*set cond LiningLineCondition *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==2)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2)
+//ElementAssignment *condID *ElemsNum
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions DummyConditionLine3N
+*set cond LiningLineCondition *elems *canRepeat
 *loop elems *onlyInCond
 *if(ElemsNnodeFace==3)
 *set var i=0
