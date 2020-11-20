@@ -198,7 +198,7 @@ class Model:
 *if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
         import mortar_gpts_contact_strategy
 *if(strcmp(GenData(analysis_type),"static")==0)
-        self.solver = mortar_gpts_contact_strategy.SampleSolver(self.model_part, self.abs_tol, self.rel_tol, self.analysis_parameters)
+        self.solver = mortar_gpts_contact_strategy.SampleSolverEkateQuasiStatic(self.model_part, self.abs_tol, self.rel_tol, self.analysis_parameters)
 *else
         self.solver = mortar_gpts_contact_strategy.SampleSolverEkateQuasiStatic(self.model_part, self.abs_tol, self.rel_tol, self.analysis_parameters)
 *endif
@@ -390,6 +390,33 @@ class Model:
         structural_solver_advanced.AddDofs( model_part )
 *endif
 
+    def AddDofsForNode(self, node):
+*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
+        node.AddDof( WATER_PRESSURE )
+*if(strcmp(GenData(Perform_ThreePhase_Analysis),"1")==0)
+        node.AddDof( AIR_PRESSURE )
+*endif
+*endif
+*if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
+        import mortar_gpts_contact_strategy
+        mortar_gpts_contact_strategy.AddDofsForNode( node )
+*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
+        mortar_gpts_contact_strategy.AddFluidDofsForNode( node )
+*endif
+*else
+        import structural_solver_advanced
+        structural_solver_advanced.AddDofsForNode( node )
+*endif
+
+    def AddVariables(self, model_part):
+*if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
+        import mortar_gpts_contact_strategy
+        mortar_gpts_contact_strategy.AddVariables( model_part )
+*else
+        import structural_solver_advanced
+        structural_solver_advanced.AddVariables( model_part )
+*endif
+
     def SetModelPart(self, model_part):
         self.model_part = model_part
         number_of_time_steps = *ntimesteps
@@ -562,11 +589,19 @@ class Model:
         #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 5)
         #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 6)
 *if(strcmp(GenData(Displacements),"1")==0)
+*if(strcmp(GenData(Layer_Application),"1")==0)
+        self.gid_io.WriteNodalResults(DISPLACEMENT, time, 0)
+*else
         self.gid_io.WriteNodalResults(DISPLACEMENT, self.model_part.Nodes, time, 0)
+*endif
         print("nodal DISPLACEMENT written")
 *endif
 *if(strcmp(GenData(Reactions),"1")==0)
+*if(strcmp(GenData(Layer_Application),"1")==0)
+        self.gid_io.WriteNodalResults(REACTION, time, 0)
+*else
         self.gid_io.WriteNodalResults(REACTION, self.model_part.Nodes, time, 0)
+*endif
         print("nodal REACTION written")
 *endif
 *if(strcmp(GenData(PK2_Stresses),"1")==0)
@@ -614,7 +649,11 @@ class Model:
 *if(strcmp(GenData(Water_Pressure),"1")==0)
         #self.gid_io.PrintOnGaussPoints(WATER_PRESSURE, self.model_part, time)
         #print("gauss point WATER_PRESSURE written")
+*if(strcmp(GenData(Layer_Application),"1")==0)
+        self.gid_io.WriteNodalResults(WATER_PRESSURE, time, 0)
+*else
         self.gid_io.WriteNodalResults(WATER_PRESSURE, self.model_part.Nodes, time, 0)
+*endif
         print("nodal WATER_PRESSURE written")
         self.gid_io.PrintOnGaussPoints(EXCESS_PORE_WATER_PRESSURE, self.model_part, time)
         print("gauss point EXCESS_PORE_WATER_PRESSURE written")
@@ -624,7 +663,11 @@ class Model:
         print("gauss point SATURATION written")
 *endif
 *if(strcmp(GenData(Face_Load),"1")==0)
+*if(strcmp(GenData(Layer_Application),"1")==0)
+        self.gid_io.WriteNodalResults(FACE_LOAD, time, 0)
+*else
         self.gid_io.WriteNodalResults(FACE_LOAD, self.model_part.Nodes, time, 0)
+*endif
         print("nodal FACE_LOAD written")
 *endif
 *if(strcmp(GenData(Perform_Contact_Analysis),"1")==0)
