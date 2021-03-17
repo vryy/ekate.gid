@@ -704,9 +704,22 @@ QUESTION: Tying_Direction#CB#(Master,Slave)
 VALUE: Master
 QUESTION: Local_Axes#LA#(Option_global_axes#G#,Option_automatic_axes#A#)
 VALUE: Option_automatic_axes
+HELP: Mortar condition on line, line must be part of a surface
 END CONDITION
 
 CONDITION: Line_Mortar_2D
+CONDTYPE: over lines
+CONDMESHTYPE: over face elements
+QUESTION: Tying_Index
+VALUE: 10
+QUESTION: Tying_Direction#CB#(Master,Slave)
+VALUE: Master
+QUESTION: Local_Axes#LA#(Option_global_axes#G#,Option_automatic_axes#A#)
+VALUE: Option_automatic_axes
+HELP: Mortar condition on line, line must be part of a surface
+END CONDITION
+
+CONDITION: Line_Mortar_1D
 CONDTYPE: over lines
 CONDMESHTYPE: over body elements
 QUESTION: Tying_Index
@@ -715,6 +728,7 @@ QUESTION: Tying_Direction#CB#(Master,Slave)
 VALUE: Master
 QUESTION: Local_Axes#LA#(Option_global_axes#G#,Option_automatic_axes#A#)
 VALUE: Option_automatic_axes
+HELP: Mortar condition on a single line, line must not be part of any surface
 END CONDITION
 
 CONDITION: Surface_Mortar
@@ -726,6 +740,7 @@ QUESTION: Tying_Direction#CB#(Master,Slave)
 VALUE: Master
 QUESTION: Local_Axes#LA#(Option_global_axes#G#,Option_automatic_axes#A#)
 VALUE: Option_automatic_axes
+HELP: Mortar condition on surface, surface must be part of a volume
 END CONDITION
 
 CONDITION: Surface_Mortar_2D
@@ -737,6 +752,7 @@ QUESTION: Tying_Direction#CB#(Master,Slave)
 VALUE: Master
 QUESTION: Local_Axes#LA#(Option_global_axes#G#,Option_automatic_axes#A#)
 VALUE: Option_automatic_axes
+HELP: Mortar condition on surface in 2D
 END CONDITION
 
 CONDITION: Volume_Mortar

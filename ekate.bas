@@ -289,7 +289,7 @@ Begin Conditions LineMortarCondition3D3N
 End Conditions
 
 Begin Conditions LineMortarCondition2D2N
-*set cond Line_Mortar_2D *elems *canRepeat
+*set cond Line_Mortar_1D *elems *canRepeat
 *loop elems *OnlyInCond
 *if(ElemsNnode==2)
 *condID   *ElemsMat    *\
@@ -303,14 +303,42 @@ Begin Conditions LineMortarCondition2D2N
 *set var condID= condID+1
 *endif
 *end elems
+*set cond Line_Mortar_2D *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsNnodeFace==2)
+*condID   *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2)
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Line_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Line_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*end elems
 End Conditions
 
 Begin Conditions LineMortarCondition2D3N
-*set cond Line_Mortar_2D *elems *canRepeat
+*set cond Line_Mortar_1D *elems *canRepeat
 *loop elems *OnlyInCond
 *if(ElemsNnode==3)
 *condID   *ElemsMat    *\
 *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Line_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Line_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*end elems
+*set cond Line_Mortar_2D *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsNnodeFace==3)
+*condID   *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
 //ElementAssignment *condID *ElemsNum
 *if(strcmp(cond(2),"Master")==0)
 *tcl(SaveCond Line_Mortar_MasterIndex *condID *cond(1))

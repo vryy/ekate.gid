@@ -495,8 +495,7 @@ class Model:
                 node.Fix(AIR_PRESSURE)
                 free_node_list_air.append(node)
 
-    def ApplyInsituWaterPressure( self, free_node_list_water, free_node_list_air, z_zero, gravity_z):
-        water_density=1000.0;
+    def ApplyInsituWaterPressure( self, free_node_list_water, free_node_list_air, z_zero, gravity_z, water_density=1000.0 ):
         for node in self.model_part.Nodes:
             water_pressure= water_density**gravity_z**(z_zero-(node.Z-node.GetSolutionStepValue(DISPLACEMENT_Z,0)))
             if( water_pressure < 1.0 ):
@@ -509,8 +508,7 @@ class Model:
             node.SetSolutionStepValue(AIR_PRESSURE_EINS, 0.0)
             node.SetSolutionStepValue(AIR_PRESSURE_NULL, 0.0)
 
-    def ApplyInsituWaterPressure2D( self, free_node_list_water, free_node_list_air, y_zero, gravity_y):
-        water_density=1000.0;
+    def ApplyInsituWaterPressure2D( self, free_node_list_water, free_node_list_air, y_zero, gravity_y, water_density=1000.0 ):
         for node in self.model_part.Nodes:
             water_pressure= water_density**gravity_y**(y_zero-(node.Y-node.GetSolutionStepValue(DISPLACEMENT_Y,0)))
             if( water_pressure < 1.0 ):
