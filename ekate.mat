@@ -1,3 +1,27 @@
+BOOK:Shells
+NUMBER: 1 MATERIAL: ShellProperties
+QUESTION: ConstitutiveLaw#CB#(LinearElasticMembranePlate,UserDefined)
+VALUE: LinearElasticMembranePlate
+QUESTION: Description
+VALUE: ShellProperties
+QUESTION: Density#UNITS#
+VALUE: 1000.0kg/m^3
+QUESTION: Young_modulus#UNITS#
+VALUE: 210000N/mm^2
+HELP: elastic stiffness modulus
+QUESTION: Poisson_ratio
+VALUE: 0.3
+HELP: poisson ratio (Querdehnzahl)
+QUESTION: Thickness
+VALUE: 1.0
+HELP: Thickness
+END MATERIAL
+NUMBER: 2 MATERIAL: UserDefined
+QUESTION: ConstitutiveLaw#CB#(LinearElasticMembranePlate,UserDefined)
+VALUE: UserDefined
+QUESTION: Description
+VALUE: UserDefined
+END MATERIAL
 BOOK:Solids
 NUMBER: 1 MATERIAL: TrussProperties
 QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
@@ -11,7 +35,7 @@ VALUE: 210000N/mm^2
 HELP: elastic stiffness modulus
 QUESTION: Poisson_ratio
 VALUE: 0.3
-HELP: poisson ratio (Querdehnzahl) 
+HELP: poisson ratio (Querdehnzahl)
 END MATERIAL
 NUMBER: 2 MATERIAL: Isotropic3D
 QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
@@ -41,7 +65,7 @@ VALUE: 10000N/mm^2
 HELP: elastic stiffness modulus
 QUESTION: Poisson_ratio
 VALUE: 0.3
-HELP: poisson ratio (Querdehnzahl) 
+HELP: poisson ratio (Querdehnzahl)
 QUESTION: Cohesion#UNITS#
 VALUE: 10kN/m^2
 QUESTION: Friction_angle#UNITS#
@@ -125,7 +149,7 @@ VALUE: 20000N/mm^2
 HELP: elastic stiffness modulus
 QUESTION: Poisson_ratio
 VALUE: 0.3
-HELP: poisson ratio (Querdehnzahl) 
+HELP: poisson ratio (Querdehnzahl)
 QUESTION: E0
 VALUE: 1.0e-4
 HELP: strain value of initial damage

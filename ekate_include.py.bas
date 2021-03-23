@@ -852,6 +852,12 @@ class Model:
         self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
         print("Beam material selected for *MatProp(0), description: *MatProp(Description)")
+*elseif(strcmp(MatProp(ConstitutiveLaw),"LinearElasticMembranePlate")==0)
+        self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
+        self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
+        self.model_part.Properties[*MatNum].SetValue(THICKNESS, *MatProp(Thickness,real) )
+        self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, LinearElasticMembranePlate() )
+        print("Linear elastic material selected for *MatProp(0), description: *MatProp(Description)")
 *else
         print("Material *MatProp(0) *MatProp(ConstitutiveLaw) *MatProp(Description)")
 *endif
