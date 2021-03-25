@@ -16,14 +16,8 @@ QUESTION: Thickness
 VALUE: 1.0
 HELP: Thickness
 END MATERIAL
-NUMBER: 2 MATERIAL: UserDefined
-QUESTION: ConstitutiveLaw#CB#(LinearElasticMembranePlate,UserDefined)
-VALUE: UserDefined
-QUESTION: Description
-VALUE: UserDefined
-END MATERIAL
 BOOK:Solids
-NUMBER: 1 MATERIAL: TrussProperties
+NUMBER: 2 MATERIAL: TrussProperties
 QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
 VALUE: TrussMaterial
 QUESTION: Description
@@ -37,7 +31,7 @@ QUESTION: Poisson_ratio
 VALUE: 0.3
 HELP: poisson ratio (Querdehnzahl)
 END MATERIAL
-NUMBER: 2 MATERIAL: Isotropic3D
+NUMBER: 3 MATERIAL: Isotropic3D
 QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
 VALUE: Isotropic3D
 QUESTION: Description
@@ -53,7 +47,7 @@ HELP: poisson ratio (Querdehnzahl)
 QUESTION: Thickness#UNITS#
 VALUE: 1.0m
 END MATERIAL
-NUMBER: 3 MATERIAL: DruckerPrager
+NUMBER: 4 MATERIAL: DruckerPrager
 QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
 VALUE: DruckerPrager
 QUESTION: Description
@@ -73,13 +67,13 @@ VALUE: 30deg
 QUESTION: Isotropic_hardening_modulus#UNITS#
 VALUE: 100N/mm^2
 END MATERIAL
-NUMBER: 4 MATERIAL: UserDefined
+NUMBER: 5 MATERIAL: UserDefined
 QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
 VALUE: UserDefined
 QUESTION: Description
 VALUE: UserDefined
 END MATERIAL
-NUMBER: 5 MATERIAL: IsotropicDamage3D
+NUMBER: 6 MATERIAL: IsotropicDamage3D
 QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
 VALUE: IsotropicDamage3D
 QUESTION: Description
@@ -114,7 +108,7 @@ VALUE: 0.0deg
 QUESTION: HardeningLaw#CB#(Linear,Exponential)
 VALUE: LinearHardening
 END MATERIAL
-NUMBER: 6 MATERIAL: GroutingMortar
+NUMBER: 7 MATERIAL: GroutingMortar
 QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
 VALUE: Isotropic3D
 QUESTION: Description
@@ -137,7 +131,7 @@ QUESTION: E_ratio
 VALUE: 0.6
 HELP: ratio between E-modulus after 1d and 28d
 END MATERIAL
-NUMBER: 7 MATERIAL: TutorialDamageModel
+NUMBER: 8 MATERIAL: TutorialDamageModel
 QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
 VALUE: TutorialDamageModel
 QUESTION: Description
