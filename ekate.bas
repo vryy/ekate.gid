@@ -370,6 +370,27 @@ Begin Conditions SurfaceMortarCondition3D3N
 *set var condID= condID+1
 *endif
 *end elems
+*set cond Shell_Mortar *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsType==2)
+*if(ElemsNnode==3)
+*set var i=0
+*set var j= ElemsNnode
+*condID *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Surface_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*endif
+*end elems
 End Conditions
 
 Begin Conditions SurfaceMortarCondition3D4N
@@ -390,6 +411,27 @@ Begin Conditions SurfaceMortarCondition3D4N
 *tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
 *endif
 *set var condID= condID+1
+*endif
+*end elems
+*set cond Shell_Mortar *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsType==3)
+*if(ElemsNnode==4)
+*set var i=0
+*set var j= ElemsNnode
+*condID *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Surface_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
 *endif
 *end elems
 End Conditions
@@ -414,6 +456,27 @@ Begin Conditions SurfaceMortarCondition3D6N
 *set var condID= condID+1
 *endif
 *end elems
+*set cond Shell_Mortar *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsType==2)
+*if(ElemsNnode==6)
+*set var i=0
+*set var j= ElemsNnode
+*condID *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Surface_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*endif
+*end elems
 End Conditions
 
 Begin Conditions SurfaceMortarCondition3D8N
@@ -436,6 +499,27 @@ Begin Conditions SurfaceMortarCondition3D8N
 *set var condID= condID+1
 *endif
 *end elems
+*set cond Shell_Mortar *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsType==3)
+*if(ElemsNnode==8)
+*set var i=0
+*set var j= ElemsNnode
+*condID *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Surface_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*endif
+*end elems
 End Conditions
 
 Begin Conditions SurfaceMortarCondition3D9N
@@ -456,6 +540,27 @@ Begin Conditions SurfaceMortarCondition3D9N
 *tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
 *endif
 *set var condID= condID+1
+*endif
+*end elems
+*set cond Shell_Mortar *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsType==3)
+*if(ElemsNnode==9)
+*set var i=0
+*set var j= ElemsNnode
+*condID *ElemsMat*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Surface_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
 *endif
 *end elems
 End Conditions
