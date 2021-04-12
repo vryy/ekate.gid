@@ -254,6 +254,32 @@ Begin Conditions SlaveContactFace3D9
 *end elems
 End Conditions
 
+Begin Conditions PointMortarCondition3D
+*set cond Point_Mortar *nodes
+*loop nodes *OnlyInCond
+*condID *cond(3) *NodesNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Point_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Point_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*end nodes
+End Conditions
+
+Begin Conditions PointMortarCondition2D
+*set cond Point_Mortar_2D *nodes
+*loop nodes *OnlyInCond
+*condID *cond(3) *NodesNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Point_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Point_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*end nodes
+End Conditions
+
 Begin Conditions LineMortarCondition3D2N
 *set cond Line_Mortar *elems *canRepeat
 *loop elems *OnlyInCond
@@ -784,7 +810,7 @@ Begin Conditions PointForce2D
 *set cond Point_Force_2D *nodes
 *add cond Line_Force_2D *nodes
 *loop nodes *OnlyInCond
-*condID 1 *NodesNum
+*condID *cond(7) *NodesNum
 *set var condID= condID+1
 *end nodes
 End Conditions
@@ -795,7 +821,7 @@ Begin Conditions PointForce3D
 *add cond Surface_Force *nodes
 *add cond Volume_Force *nodes
 *loop nodes *OnlyInCond
-*condID 1 *NodesNum
+*condID *cond(7) *NodesNum
 *set var condID= condID+1
 *end nodes
 End Conditions
@@ -2081,11 +2107,13 @@ End ElementalData
 Begin ConditionalData MASTER_INDEX
 *tcl(GetCond Surface_Mortar_MasterIndex)
 *tcl(GetCond Line_Mortar_MasterIndex)
+*tcl(GetCond Point_Mortar_MasterIndex)
 End ConditionalData
 
 Begin ConditionalData SLAVE_INDEX
 *tcl(GetCond Surface_Mortar_SlaveIndex)
 *tcl(GetCond Line_Mortar_SlaveIndex)
+*tcl(GetCond Point_Mortar_SlaveIndex)
 End ConditionalData
 
 Begin ConditionalData POSITIVE_FACE_PRESSURE

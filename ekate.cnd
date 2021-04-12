@@ -499,6 +499,8 @@ VALUE: 0
 DEPENDENCIES:(0,HIDE,Reaction_Z,#CURRENT#)(1,RESTORE,Reaction_Z,#CURRENT#)
 QUESTION: Reaction_Z#UNITS#
 VALUE: 0.0N
+QUESTION: Properties_Id
+VALUE: 1
 HELP: Value of fixed reaction (neumann-condition)
 image: images/Pressure.gif
 END CONDITION
@@ -515,6 +517,8 @@ VALUE: 0
 DEPENDENCIES:(0,HIDE,Reaction_Y,#CURRENT#)(1,RESTORE,Reaction_Y,#CURRENT#)
 QUESTION: Reaction_Y#UNITS#
 VALUE: 0.0N
+QUESTION: Properties_Id
+VALUE: 1
 HELP: Value of fixed reaction (neumann-condition)
 image: images/Pressure.gif
 END CONDITION
@@ -694,6 +698,30 @@ VALUE: 0
 END CONDITION
 
 BOOK: Mortar
+
+CONDITION: Point_Mortar
+CONDTYPE: over points
+CONDMESHTYPE: over nodes
+QUESTION: Tying_Index
+VALUE: 10
+QUESTION: Tying_Direction#CB#(Master,Slave)
+VALUE: Master
+QUESTION: Properties_Id
+VALUE: 1
+HELP: Mortar condition on a point in 3D
+END CONDITION
+
+CONDITION: Point_Mortar_2D
+CONDTYPE: over points
+CONDMESHTYPE: over nodes
+QUESTION: Tying_Index
+VALUE: 10
+QUESTION: Tying_Direction#CB#(Master,Slave)
+VALUE: Master
+QUESTION: Properties_Id
+VALUE: 1
+HELP: Mortar condition on a point in 2D
+END CONDITION
 
 CONDITION: Line_Mortar
 CONDTYPE: over lines
