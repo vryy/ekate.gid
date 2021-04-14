@@ -397,6 +397,7 @@ Begin Conditions SurfaceMortarCondition3D3N
 *endif
 *end elems
 *set cond Shell_Mortar *elems *canRepeat
+*add cond Shell_Mortar_Linear *elems *canRepeat
 *loop elems *OnlyInCond
 *if(ElemsType==2)
 *if(ElemsNnode==3)
@@ -440,6 +441,7 @@ Begin Conditions SurfaceMortarCondition3D4N
 *endif
 *end elems
 *set cond Shell_Mortar *elems *canRepeat
+*add cond Shell_Mortar_Linear *elems *canRepeat
 *loop elems *OnlyInCond
 *if(ElemsType==3)
 *if(ElemsNnode==4)
@@ -503,6 +505,25 @@ Begin Conditions SurfaceMortarCondition3D6N
 *endif
 *endif
 *end elems
+*set cond Shell_Mortar_Linear *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsType==2)
+*if(ElemsNnode==6)
+*set var i=0
+*set var j= ElemsNnode
+*condID *ElemsMat*\
+ *ElemsConec(1) *ElemsConec(2) *ElemsConec(3)
+
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Surface_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*endif
+*end elems
 End Conditions
 
 Begin Conditions SurfaceMortarCondition3D8N
@@ -546,6 +567,23 @@ Begin Conditions SurfaceMortarCondition3D8N
 *endif
 *endif
 *end elems
+*set cond Shell_Mortar_Linear *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsType==3)
+*if(ElemsNnode==8)
+*condID *ElemsMat*\
+ *ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4)
+
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Surface_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*endif
+*end elems
 End Conditions
 
 Begin Conditions SurfaceMortarCondition3D9N
@@ -578,6 +616,23 @@ Begin Conditions SurfaceMortarCondition3D9N
 *for(i=1;i<=j;i=i+1)*\
  *ElemsConec(*i)*\
 *end
+
+//ElementAssignment *condID *ElemsNum
+*if(strcmp(cond(2),"Master")==0)
+*tcl(SaveCond Surface_Mortar_MasterIndex *condID *cond(1))
+*else
+*tcl(SaveCond Surface_Mortar_SlaveIndex *condID *cond(1))
+*endif
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+*set cond Shell_Mortar_Linear *elems *canRepeat
+*loop elems *OnlyInCond
+*if(ElemsType==3)
+*if(ElemsNnode==9)
+*condID *ElemsMat*\
+ *ElemsConec(1) *ElemsConec(2) *ElemsConec(3) *ElemsConec(4)
 
 //ElementAssignment *condID *ElemsNum
 *if(strcmp(cond(2),"Master")==0)
