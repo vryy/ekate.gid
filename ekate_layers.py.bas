@@ -134,6 +134,10 @@ def ReadNodeGroups():
 *loop nodes *OnlyInCond*\
 *tcl(AddCondGroupName *cond(Group_Name))*\
 *end nodes
+*set cond Point_Group_Membership *nodes *canRepeat
+*loop nodes *OnlyInCond*\
+*tcl(AddCondGroupName *cond(Group_Name))*\
+*end nodes
     *tcl(InitializeNodeGroups)
 
 *set cond Volume_Group_Membership *nodes *canRepeat
@@ -147,6 +151,11 @@ def ReadNodeGroups():
     node_groups['*cond(Group_Name)'].append( *NodesNum )
 *end nodes
 *set cond Line_Group_Membership *nodes *canRepeat
+*loop nodes *OnlyInCond
+    # *cond(Group_Name)
+    node_groups['*cond(Group_Name)'].append( *NodesNum )
+*end nodes
+*set cond Point_Group_Membership *nodes *canRepeat
 *loop nodes *OnlyInCond
     # *cond(Group_Name)
     node_groups['*cond(Group_Name)'].append( *NodesNum )
