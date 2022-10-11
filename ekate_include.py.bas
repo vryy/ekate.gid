@@ -202,15 +202,13 @@ class Model:
 *else
         self.solver = mortar_gpts_contact_strategy.SampleSolverEkateQuasiStatic(self.model_part, self.abs_tol, self.rel_tol, self.analysis_parameters)
 *endif
-        mortar_gpts_contact_strategy.AddVariables( self.model_part )
 *else
         import structural_solver_advanced
         self.solver = structural_solver_advanced.SolverAdvanced( self.model_part, self.domain_size, number_of_time_steps, self.analysis_parameters, self.abs_tol, self.rel_tol )
         #import ekate_solver_parallel
         #self.solver = ekate_solver_parallel.EkateSolver( self.model_part, self.domain_size, number_of_time_steps, self.analysis_parameters, self.abs_tol, self.rel_tol )
-        structural_solver_advanced.AddVariables( self.model_part )
-        #ekate_solver_parallel.AddVariables( self.model_part )
 *endif
+        self.AddVariables( self.model_part )
         ##################################################################
         ## READ MODELPART ################################################
         ##################################################################
