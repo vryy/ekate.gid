@@ -256,6 +256,8 @@ End Conditions
 
 Begin Conditions PointMortarCondition3D
 *set cond Point_Mortar *nodes
+*add cond Line_Point_Mortar *nodes
+*add cond Surface_Point_Mortar *nodes
 *loop nodes *OnlyInCond
 *condID *cond(3) *NodesNum
 *if(strcmp(cond(2),"Master")==0)
@@ -269,6 +271,7 @@ End Conditions
 
 Begin Conditions PointMortarCondition2D
 *set cond Point_Mortar_2D *nodes
+*add cond Line_Point_Mortar_2D *nodes
 *loop nodes *OnlyInCond
 *condID *cond(3) *NodesNum
 *if(strcmp(cond(2),"Master")==0)
@@ -903,6 +906,7 @@ Begin Conditions LineForce2D2N
 *for(i=1;i<=j;i=i+1)*\
  *ElemsConec(*i)*\
 *end
+
 //ElementAssignment *condID *ElemsNum
 *tcl(SaveCond Distributed_Line_Load_2D_With_Property *condID *cond(2))
 *set var condID= condID+1
@@ -932,6 +936,7 @@ Begin Conditions LineForce2D3N
 *for(i=1;i<=j;i=i+1)*\
  *ElemsConec(*i)*\
 *end
+
 //ElementAssignment *condID *ElemsNum
 *tcl(SaveCond Distributed_Line_Load_2D_With_Property *condID *cond(2))
 *set var condID= condID+1
@@ -949,6 +954,7 @@ Begin Conditions LineForce3D2N
 *for(i=1;i<=j;i=i+1)*\
  *ElemsConec(*i)*\
 *end
+
 //ElementAssignment *condID *ElemsNum
 *tcl(SaveCond Distributed_Line_Load *condID *cond(2))
 *set var condID= condID+1
@@ -966,6 +972,7 @@ Begin Conditions LineForce3D3N
 *for(i=1;i<=j;i=i+1)*\
  *ElemsConec(*i)*\
 *end
+
 //ElementAssignment *condID *ElemsNum
 *tcl(SaveCond Distributed_Line_Load *condID *cond(2))
 *set var condID= condID+1

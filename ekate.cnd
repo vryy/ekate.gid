@@ -723,6 +723,30 @@ VALUE: 1
 HELP: Mortar condition on a point in 2D
 END CONDITION
 
+CONDITION: Line_Point_Mortar
+CONDTYPE: over lines
+CONDMESHTYPE: over nodes
+QUESTION: Tying_Index
+VALUE: 10
+QUESTION: Tying_Direction#CB#(Master,Slave)
+VALUE: Master
+QUESTION: Properties_Id
+VALUE: 1
+HELP: Mortar condition at point 3D on line, used for NTS contact. Line must be part of a surface
+END CONDITION
+
+CONDITION: Line_Point_Mortar_2D
+CONDTYPE: over lines
+CONDMESHTYPE: over nodes
+QUESTION: Tying_Index
+VALUE: 10
+QUESTION: Tying_Direction#CB#(Master,Slave)
+VALUE: Master
+QUESTION: Properties_Id
+VALUE: 1
+HELP: Mortar condition at point 2D on line, used for NTS contact. Line must be part of a surface
+END CONDITION
+
 CONDITION: Line_Mortar
 CONDTYPE: over lines
 CONDMESHTYPE: over face elements
@@ -757,6 +781,18 @@ VALUE: Master
 QUESTION: Local_Axes#LA#(Option_global_axes#G#,Option_automatic_axes#A#)
 VALUE: Option_automatic_axes
 HELP: Mortar condition on a single line, line must not be part of any surface
+END CONDITION
+
+CONDITION: Surface_Point_Mortar
+CONDTYPE: over surfaces
+CONDMESHTYPE: over nodes
+QUESTION: Tying_Index
+VALUE: 10
+QUESTION: Tying_Direction#CB#(Master,Slave)
+VALUE: Master
+QUESTION: Properties_Id
+VALUE: 1
+HELP: Mortar condition at point 3D on surface, used for NTS contact. Surface must be part of a volume
 END CONDITION
 
 CONDITION: Surface_Mortar
