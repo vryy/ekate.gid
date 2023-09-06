@@ -5,10 +5,11 @@
 #####           for TUNCONSTRUCT                             #####
 #####  and (c) 2014, 2015, 2016, 2017, 2018, 2019, 2020,     #####
 #####     2021, 2022 by Hoang-Giang Bui for SFB837           #####
+#####     2023 by Hoang-Giang Bui                            #####
 ##### all rights reserved                                    #####
 ##################################################################
 ##################################################################
-## This file is generated on __DaTe__ __TiMe__
+## This file is generated on __DaTe__
 ##################################################################
 import sys
 import os
@@ -19,7 +20,6 @@ import time as time_module
 sys.path.append('./rEpLaCeMeNtStRiNg.gid')
 import rEpLaCeMeNtStRiNg_include
 from rEpLaCeMeNtStRiNg_include import **
-# calculate insitu-stress for geology_virgin.gid
 model = rEpLaCeMeNtStRiNg_include.Model('rEpLaCeMeNtStRiNg',os.getcwd()+"/",os.getcwd()+"/")
 model.InitializeModel()
 ##################################################################
@@ -41,9 +41,9 @@ for step in range( 0, *GenData(time_steps) ):
 print "Calculation done"
 *else
 *# user-defined script is used (will be appended automatically)
-# =====================
-# | USER SCRIPT FOR CALCULATION OF EKATE.GID |
-# vvvvvvvvvvvvvvvvvvvvv
+# ============================================ #
+# | USER SCRIPT FOR CALCULATION OF EKATE.GID | #
+# vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv #
 *endif
 
 

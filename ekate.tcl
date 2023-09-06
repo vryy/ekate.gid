@@ -441,7 +441,7 @@ proc Initialize {} {
     set g_matlist [GiD_Info materials]
     set g_matdict [dict create]
     set g_conddict [dict create]
-    return "//Hello from TCL. Are you OK today?"
+    return "//Greetings from ekate.tcl -> Life is wonderful."
 }
 
 ##################Subroutines handle conditions#############################
