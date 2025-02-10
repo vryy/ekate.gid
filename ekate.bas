@@ -1027,6 +1027,21 @@ Begin Conditions FaceForce3D3N
 *set var condID= condID+1
 *endif
 *end elems
+*set cond Distributed_Surface_Load_On_Face_Body *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnode==3)
+*set var i=0
+*set var j= ElemsNnode
+*condID      *ElemsMat    *\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Surface_Load_On_Face_Body *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
 End Conditions
 
 Begin Conditions FaceForce3D6N
@@ -1042,6 +1057,21 @@ Begin Conditions FaceForce3D6N
 *endif
 //ElementAssignment *condID *ElemsNum
 *tcl(SaveCond Distributed_Surface_Load *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+*set cond Distributed_Surface_Load_On_Face_Body *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnode==6)
+*set var i=0
+*set var j= ElemsNnode
+*condID      *ElemsMat    *\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Surface_Load_On_Face_Body *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -1063,6 +1093,21 @@ Begin Conditions FaceForce3D4N
 *set var condID= condID+1
 *endif
 *end elems
+*set cond Distributed_Surface_Load_On_Face_Body *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnode==4)
+*set var i=0
+*set var j= ElemsNnode
+*condID      *ElemsMat    *\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Surface_Load_On_Face_Body *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
 End Conditions
 
 Begin Conditions FaceForce3D8N
@@ -1081,6 +1126,21 @@ Begin Conditions FaceForce3D8N
 *set var condID= condID+1
 *endif
 *end elems
+*set cond Distributed_Surface_Load_On_Face_Body *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnode==8)
+*set var i=0
+*set var j= ElemsNnode
+*condID      *ElemsMat    *\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Surface_Load_On_Face_Body *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
 End Conditions
 
 Begin Conditions FaceForce3D9N
@@ -1096,6 +1156,21 @@ Begin Conditions FaceForce3D9N
 *endif
 //ElementAssignment *condID *ElemsNum
 *tcl(SaveCond Distributed_Surface_Load *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+*set cond Distributed_Surface_Load_On_Face_Body *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnode==9)
+*set var i=0
+*set var j= ElemsNnode
+*condID      *ElemsMat    *\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i)*\
+*end
+
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Distributed_Surface_Load_On_Face_Body *condID *cond(2))
 *set var condID= condID+1
 *endif
 *end elems
@@ -1839,6 +1914,7 @@ End NodalData
 
 Begin NodalData FACE_LOAD
 *set cond Distributed_Surface_Load *nodes
+*set cond Distributed_Surface_Load_On_Face_Body *nodes
 *add cond Distributed_Line_Load *nodes
 *loop nodes *OnlyInCond
 *NodesNum 0 [3] ( *cond(1), *cond(2), *cond(3) )

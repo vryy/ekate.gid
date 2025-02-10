@@ -614,6 +614,18 @@ VALUE: 0.0N/m^2
 HELP: Value of face loads (neumann-condition)
 image: images/Pressure.gif
 END CONDITION
+CONDITION: Distributed_Surface_Load_On_Face_Body
+CONDTYPE: over surfaces
+CONDMESHTYPE: over body elements multiple
+QUESTION: Face_Load_X#UNITS#
+VALUE: 0.0N/m^2
+QUESTION: Face_Load_Y#UNITS#
+VALUE: 0.0N/m^2
+QUESTION: Face_Load_Z#UNITS#
+VALUE: 0.0N/m^2
+HELP: Face load in 3D on a face body (need a separate mesh on the face)
+image: images/Pressure.gif
+END CONDITION
 CONDITION: Surface_Force
 CONDTYPE: over surfaces
 CONDMESHTYPE: over nodes
