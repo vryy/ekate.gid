@@ -44,7 +44,7 @@ QUESTION: Reverse_Node_Numbering_For_Surface#CB#(0,1)
 VALUE: 1
 HELP: (Compatibility option) Enable this option to generate mesh for old simulation
 QUESTION: Move_Mesh_Flag#CB#(0,1)
-VALUE: 1
+VALUE: 0
 QUESTION: Topology_Optimization#CB#(0,1)
 VALUE: 0
 DEPENDENCIES:(0,HIDE,Search_Radius,#CURRENT#,HIDE,Filter_Type,#CURRENT#,HIDE,Penalization_Factor,#CURRENT#,HIDE,Volume_Fraction,#CURRENT#,HIDE,Minimum_Modulus,#CURRENT#)(1,RESTORE,Search_Radius,#CURRENT#,RESTORE,Filter_Type,#CURRENT#,RESTORE,Penalization_Factor,#CURRENT#,RESTORE,Volume_Fraction,#CURRENT#,RESTORE,Volume_Fraction,#CURRENT#,RESTORE,Minimum_Modulus,#CURRENT#)

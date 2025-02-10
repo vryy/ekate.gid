@@ -24,7 +24,7 @@ mv $2/$1-5.dat $2/${1}_parallel_include.py
 #touch $2/set_material_data.py
 #cat $2/$1.ess >> $2/$1.py
 #line=48
-line=33
+line=35
 sed -i -e "${line}r $2/$1.ess" $2/$1.py
 sed -e s/rEpLaCeMeNtStRiNg/$1/g -e s/__DaTe__/"$(date)"/g -e s/__TiMe__//g < $2/$1.py > $2/$1.py_changed
 mv $2/$1.py_changed $2/$1.py

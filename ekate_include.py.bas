@@ -9,10 +9,11 @@
 ##################################################################
 ##################################################################
 ##################################################################
+from __future__ import absolute_import
 import sys
 import os
+import six # for iteritems
 import time as time_module
-kratos_root_path=os.environ['KRATOS_ROOT_PATH']
 ##################################################################
 ##################################################################
 #importing Kratos modules
@@ -51,11 +52,10 @@ from KratosMultiphysics.mpi import **
 from KratosMultiphysics.P4estApplication import **
 *endif
 kernel = Kernel()   #defining kernel
-
 ##################################################################
 ##################################################################
 class Model:
-    def __init__( self, problem_name, path, results_path ):
+    def __init__( self, problem_name, path, results_path, logging=True ):
         #setting the domain size for the problem to be solved
 *set var domainsize(int)=GenData(Dimension,int)
         self.domain_size = *domainsize
@@ -180,6 +180,7 @@ class Model:
         self.analysis_parameters['stop_Newton_Raphson_if_not_converge'] = False
 *endif
         self.analysis_parameters['list_dof'] = True
+        self.analysis_parameters['log_residuum'] = logging
 
 *if(strcmp(GenData(Absolute_Tolerance),"custom")==0)
 *set var abstol(real)=GenData(Custom_Absolute_Tolerance,real)
@@ -233,7 +234,7 @@ class Model:
                 #print( "assigning ACTIVATION_LEVEL of element: " +str(int(val_set[2])) + " to Condition: " + str(int(val_set[1])) + " as " + str(self.model_part.Elements[int(val_set[2])].GetValue(ACTIVATION_LEVEL)) )
                 self.element_assignments[int(val_set[1])] = int(val_set[2])
         print("input data read OK")
-        #print "+++++++++++++++++++++++++++++++++++++++"
+        #print("+++++++++++++++++++++++++++++++++++++++")
         #for node in self.model_part.Nodes:
         #    print(node)
         #print("+++++++++++++++++++++++++++++++++++++++")
@@ -484,6 +485,7 @@ class Model:
         self.gid_io = StructuralGidIO( self.results_path+self.problem_name, self.post_mode, self.multi_file_flag, self.write_deformed_flag, self.write_elements )
 *endif
 
+*if(strcmp(GenData(Perform_MultiFlow_Analysis),"1")==0)
     def FixPressureNodes( self, free_node_list_water, free_node_list_air):
         for node in self.model_part.Nodes:
             if (node.IsFixed(WATER_PRESSURE)==0):
@@ -554,6 +556,7 @@ class Model:
         outfile = open("step_"+str(time)+".dat",'w')
         outfile.write("ekate result file for step "+str(time)+"\n")
         outfile.close()
+*endif
 
     def WriteOutput( self, time ):
 *if(strcmp(GenData(New_mesh_for_each_step),"1")==0)
@@ -739,9 +742,9 @@ class Model:
         ##################################################################
         start_time = time_module.time()
         self.layer_cond_sets = {}
-        for layer, node_group in self.node_groups.iteritems():
+        for layer, node_group in six.iteritems(self.node_groups):
             self.layer_cond_sets[layer] = []
-        for layer, node_group in self.node_groups.iteritems():
+        for layer, node_group in six.iteritems(self.node_groups):
             for cond in self.model_part.Conditions:
                 in_group = True
                 for node in cond.GetNodes():
