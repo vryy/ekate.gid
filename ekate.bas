@@ -1748,6 +1748,363 @@ Begin Conditions NitscheIsotropicConstraint2D3N
 *end elems
 End Conditions
 
+Begin Conditions MeanDisplacementConstraintX2D2N
+*set cond Mean_Line_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0)
+*if(ElemsNnodeFace==2)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(3))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintY2D2N
+*set cond Mean_Line_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(4,int)!=0)
+*if(ElemsNnodeFace==2)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(6))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintZ2D2N
+*set cond Mean_Line_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(7,int)!=0)
+*if(ElemsNnodeFace==2)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(9))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintX2D3N
+*set cond Mean_Line_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0)
+*if(ElemsNnodeFace==3)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(3))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintY2D3N
+*set cond Mean_Line_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(4,int)!=0)
+*if(ElemsNnodeFace==3)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(6))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintZ2D3N
+*set cond Mean_Line_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(7,int)!=0)
+*if(ElemsNnodeFace==3)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(9))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintX3D3N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0)
+*if(ElemsNnodeFace==3)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(3))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintY3D3N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(4,int)!=0)
+*if(ElemsNnodeFace==3)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(6))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintZ3D3N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(7,int)!=0)
+*if(ElemsNnodeFace==3)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(9))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintX3D4N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0)
+*if(ElemsNnodeFace==4)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3) *GlobalNodes(4)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(3))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintY3D4N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(4,int)!=0)
+*if(ElemsNnodeFace==4)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3) *GlobalNodes(4)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(6))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintZ3D4N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(7,int)!=0)
+*if(ElemsNnodeFace==4)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3) *GlobalNodes(4)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(9))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintX3D6N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0)
+*if(ElemsNnodeFace==6)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3) *GlobalNodes(4) *GlobalNodes(5) *GlobalNodes(6)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(3))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintY3D6N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(4,int)!=0)
+*if(ElemsNnodeFace==6)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3) *GlobalNodes(4) *GlobalNodes(5) *GlobalNodes(6)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(6))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintZ3D6N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(7,int)!=0)
+*if(ElemsNnodeFace==6)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3) *GlobalNodes(4) *GlobalNodes(5) *GlobalNodes(6)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(9))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintX3D8N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0)
+*if(ElemsNnodeFace==8)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3) *GlobalNodes(4) *GlobalNodes(5) *GlobalNodes(6) *GlobalNodes(7) *GlobalNodes(8)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(3))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintY3D8N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(4,int)!=0)
+*if(ElemsNnodeFace==8)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3) *GlobalNodes(4) *GlobalNodes(5) *GlobalNodes(6) *GlobalNodes(7) *GlobalNodes(8)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(6))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintZ3D8N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(7,int)!=0)
+*if(ElemsNnodeFace==8)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3) *GlobalNodes(4) *GlobalNodes(5) *GlobalNodes(6) *GlobalNodes(7) *GlobalNodes(8)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(9))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintX3D9N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(1,int)!=0)
+*if(ElemsNnodeFace==9)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3) *GlobalNodes(4) *GlobalNodes(5) *GlobalNodes(6) *GlobalNodes(7) *GlobalNodes(8) *GlobalNodes(9)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(3))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintY3D9N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(4,int)!=0)
+*if(ElemsNnodeFace==9)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3) *GlobalNodes(4) *GlobalNodes(5) *GlobalNodes(6) *GlobalNodes(7) *GlobalNodes(8) *GlobalNodes(9)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(6))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
+Begin Conditions MeanDisplacementConstraintZ3D9N
+*set cond Mean_Surface_Displacement *elems *canRepeat
+*loop elems *onlyInCond
+*if(cond(7,int)!=0)
+*if(ElemsNnodeFace==9)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *ElemsMat    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3) *GlobalNodes(4) *GlobalNodes(5) *GlobalNodes(6) *GlobalNodes(7) *GlobalNodes(8) *GlobalNodes(9)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Mean_Displacement_Lagrange_Multiplier_Index *condID *cond(9))
+*set var condID= condID+1
+*endif
+*endif
+*end elems
+End Conditions
+
 Begin Conditions DummyConditionLine2N
 *set cond LiningLineCondition *elems *canRepeat
 *loop elems *onlyInCond
@@ -2263,3 +2620,6 @@ Begin ConditionalData PRESSURE
 *tcl(GetCond Line_Pressure_2D)
 End ConditionalData
 
+Begin ConditionalData LAGRANGE_MULTIPLIER_INDEX
+*tcl(GetCond Mean_Displacement_Lagrange_Multiplier_Index)
+End ConditionalData

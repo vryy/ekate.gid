@@ -316,6 +316,83 @@ VALUE: 0.0
 HELP: Value of fixed rotation (dirichlet-condition)
 END CONDITION
 
+BOOK: Mean_Displacement
+CONDITION: Mean_Line_Displacement
+CONDTYPE: over lines
+CONDMESHTYPE: over face elements multiple
+QUESTION: Mean_Displacement_X#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Displacement_X,#CURRENT#,HIDE,Lagrange_Multiplier_Index_X,#CURRENT#)(1,RESTORE,Displacement_X,#CURRENT#,RESTORE,Lagrange_Multiplier_Index_X,#CURRENT#)
+QUESTION: Displacement_X
+VALUE: 0.0
+QUESTION: Lagrange_Multiplier_Index_X
+VALUE: 0
+QUESTION: Mean_Displacement_Y#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Displacement_Y,#CURRENT#,HIDE,Lagrange_Multiplier_Index_Y,#CURRENT#)(1,RESTORE,Displacement_Y,#CURRENT#,RESTORE,Lagrange_Multiplier_Index_Y,#CURRENT#)
+QUESTION: Displacement_Y
+VALUE: 0.0
+QUESTION: Lagrange_Multiplier_Index_Y
+VALUE: 0
+QUESTION: Mean_Displacement_Z#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Displacement_Z,#CURRENT#,HIDE,Lagrange_Multiplier_Index_Z,#CURRENT#)(1,RESTORE,Displacement_Z,#CURRENT#,RESTORE,Lagrange_Multiplier_Index_Z,#CURRENT#)
+QUESTION: Displacement_Z
+VALUE: 0.0
+QUESTION: Lagrange_Multiplier_Index_Z
+VALUE: 0
+END CONDITION
+CONDITION: Mean_Surface_Displacement
+CONDTYPE: over surfaces
+CONDMESHTYPE: over face elements multiple
+QUESTION: Mean_Displacement_X#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Displacement_X,#CURRENT#,HIDE,Lagrange_Multiplier_Index_X,#CURRENT#)(1,RESTORE,Displacement_X,#CURRENT#,RESTORE,Lagrange_Multiplier_Index_X,#CURRENT#)
+QUESTION: Displacement_X
+VALUE: 0.0
+QUESTION: Lagrange_Multiplier_Index_X
+VALUE: 0
+QUESTION: Mean_Displacement_Y#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Displacement_Y,#CURRENT#,HIDE,Lagrange_Multiplier_Index_Y,#CURRENT#)(1,RESTORE,Displacement_Y,#CURRENT#,RESTORE,Lagrange_Multiplier_Index_Y,#CURRENT#)
+QUESTION: Displacement_Y
+VALUE: 0.0
+QUESTION: Lagrange_Multiplier_Index_Y
+VALUE: 0
+QUESTION: Mean_Displacement_Z#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Displacement_Z,#CURRENT#,HIDE,Lagrange_Multiplier_Index_Z,#CURRENT#)(1,RESTORE,Displacement_Z,#CURRENT#,RESTORE,Lagrange_Multiplier_Index_Z,#CURRENT#)
+QUESTION: Displacement_Z
+VALUE: 0.0
+QUESTION: Lagrange_Multiplier_Index_Z
+VALUE: 0
+END CONDITION
+CONDITION: Mean_Volume_Displacement
+CONDTYPE: over volumes
+CONDMESHTYPE: over face elements multiple
+QUESTION: Mean_Displacement_X#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Displacement_X,#CURRENT#,HIDE,Lagrange_Multiplier_Index_X,#CURRENT#)(1,RESTORE,Displacement_X,#CURRENT#,RESTORE,Lagrange_Multiplier_Index_X,#CURRENT#)
+QUESTION: Displacement_X
+VALUE: 0.0
+QUESTION: Lagrange_Multiplier_Index_X
+VALUE: 0
+QUESTION: Mean_Displacement_Y#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Displacement_Y,#CURRENT#,HIDE,Lagrange_Multiplier_Index_Y,#CURRENT#)(1,RESTORE,Displacement_Y,#CURRENT#,RESTORE,Lagrange_Multiplier_Index_Y,#CURRENT#)
+QUESTION: Displacement_Y
+VALUE: 0.0
+QUESTION: Lagrange_Multiplier_Index_Y
+VALUE: 0
+QUESTION: Mean_Displacement_Z#CB#(0,1)
+VALUE: 0
+DEPENDENCIES:(0,HIDE,Displacement_Z,#CURRENT#,HIDE,Lagrange_Multiplier_Index_Z,#CURRENT#)(1,RESTORE,Displacement_Z,#CURRENT#,RESTORE,Lagrange_Multiplier_Index_Z,#CURRENT#)
+QUESTION: Displacement_Z
+VALUE: 0.0
+QUESTION: Lagrange_Multiplier_Index_Z
+VALUE: 0
+END CONDITION
+
 BOOK: Elastic_Bedding
 CONDITION: Nodal_Bedding
 CONDTYPE: over points
