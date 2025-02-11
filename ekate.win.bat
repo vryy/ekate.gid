@@ -1,7 +1,7 @@
 REM    OutputFile: $2/$1.info
 REM    ErrorFile: $2/$1.err
-REM    delete previous result file 
-DEL "%2\*.post.res" 
+REM    delete previous result file
+DEL "%2\*.post.res"
 DEL "%2\*.post.msh"
 DEL "%2\*.post.bin"
 REM COPY "%3\sed.exe" "%2"
@@ -9,7 +9,7 @@ REM COPY "%3\regex2.dll" "%2"
 REM COPY "%3\libintl3.dll" "%2"
 REM COPY "%3\libiconv2.dll" "%2"
 ECHO "Please install Python-2 and add to the path"
-PY -2 "%3\clean_mdpa.py" "%2\%1.dat" "%2\%1.bak"
+PYTHON "%3\clean_mdpa.py" "%2\%1.dat" "%2\%1.bak"
 DEL "%2\%1.dat"
 REN "%2\%1.bak" "%2\%1.dat"
 REM renaming Kratos input files
