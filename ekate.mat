@@ -1,6 +1,6 @@
 BOOK:Shells
 NUMBER: 1 MATERIAL: ShellProperties
-QUESTION: ConstitutiveLaw#CB#(LinearElasticMembranePlate,UserDefined)
+QUESTION: ConstitutiveLaw#CB#(LinearElasticMembranePlate)
 VALUE: LinearElasticMembranePlate
 QUESTION: Description
 VALUE: ShellProperties
@@ -18,10 +18,10 @@ HELP: Thickness
 END MATERIAL
 BOOK:Solids
 NUMBER: 2 MATERIAL: TrussProperties
-QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
+QUESTION: ConstitutiveLaw#CB#(TrussMaterial,BeamMaterial)
 VALUE: TrussMaterial
 QUESTION: Description
-VALUE: TrussProperties
+VALUE: 1DProperties
 QUESTION: Density#UNITS#
 VALUE: 1000.0kg/m^3
 QUESTION: Young_modulus#UNITS#
@@ -31,11 +31,11 @@ QUESTION: Poisson_ratio
 VALUE: 0.3
 HELP: poisson ratio (Querdehnzahl)
 END MATERIAL
-NUMBER: 3 MATERIAL: Isotropic3D
-QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
+NUMBER: 3 MATERIAL: LinearElastic
+QUESTION: ConstitutiveLaw#CB#(Isotropic3D,PlaneStress,PlaneStrain)
 VALUE: Isotropic3D
 QUESTION: Description
-VALUE: Isotropic3D
+VALUE: LinearElastic
 QUESTION: Density#UNITS#
 VALUE: 7620.0kg/m^3
 QUESTION: Young_modulus#UNITS#
@@ -47,11 +47,11 @@ HELP: poisson ratio (Querdehnzahl)
 QUESTION: Thickness#UNITS#
 VALUE: 1.0m
 END MATERIAL
-NUMBER: 4 MATERIAL: DruckerPrager
-QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
-VALUE: DruckerPrager
+NUMBER: 4 MATERIAL: Elastoplastic
+QUESTION: ConstitutiveLaw#CB#(DruckerPrager,MohrCoulomb)
+VALUE: MohrCoulomb
 QUESTION: Description
-VALUE: DruckerPrager
+VALUE: Elastoplastic
 QUESTION: Density#UNITS#
 VALUE: 2000.0kg/m^3
 QUESTION: Young_modulus#UNITS#
@@ -64,20 +64,16 @@ QUESTION: Cohesion#UNITS#
 VALUE: 10kN/m^2
 QUESTION: Friction_angle#UNITS#
 VALUE: 30deg
+QUESTION: Dilatancy_angle#UNITS#
+VALUE: 30deg
 QUESTION: Isotropic_hardening_modulus#UNITS#
 VALUE: 100N/mm^2
 END MATERIAL
-NUMBER: 5 MATERIAL: UserDefined
-QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
-VALUE: UserDefined
-QUESTION: Description
-VALUE: UserDefined
-END MATERIAL
-NUMBER: 6 MATERIAL: IsotropicDamage3D
-QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
+NUMBER: 5 MATERIAL: Damage
+QUESTION: ConstitutiveLaw#CB#(IsotropicDamage3D,TutorialDamageModel)
 VALUE: IsotropicDamage3D
 QUESTION: Description
-VALUE: IsotropicDamage3D
+VALUE: Damage
 QUESTION: Density#UNITS#
 VALUE: 2000.0kg/m^3
 QUESTION: Compressive_Young_modulus#UNITS#
@@ -108,9 +104,9 @@ VALUE: 0.0deg
 QUESTION: HardeningLaw#CB#(Linear,Exponential)
 VALUE: LinearHardening
 END MATERIAL
-NUMBER: 7 MATERIAL: GroutingMortar
-QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
-VALUE: Isotropic3D
+NUMBER: 6 MATERIAL: GroutingMortar
+QUESTION: ConstitutiveLaw#CB#(GroutingMortar)
+VALUE: GroutingMortar
 QUESTION: Description
 VALUE: GroutingMortar
 QUESTION: Density#UNITS#
@@ -131,22 +127,9 @@ QUESTION: E_ratio
 VALUE: 0.6
 HELP: ratio between E-modulus after 1d and 28d
 END MATERIAL
-NUMBER: 8 MATERIAL: TutorialDamageModel
-QUESTION: ConstitutiveLaw#CB#(Isotropic3D,DruckerPrager,IsotropicDamage3D,GroutingMortar,TutorialDamageModel,TrussMaterial,BeamMaterial,PlaneStress,PlaneStrain,Isotropic2D,UserDefined)
-VALUE: TutorialDamageModel
+NUMBER: 7 MATERIAL: UserDefined
+QUESTION: ConstitutiveLaw#CB#(UserDefined)
+VALUE: UserDefined
 QUESTION: Description
-VALUE: TutorialDamageModel
-QUESTION: Density#UNITS#
-VALUE: 2200.0kg/m^3
-QUESTION: Young_modulus#UNITS#
-VALUE: 20000N/mm^2
-HELP: elastic stiffness modulus
-QUESTION: Poisson_ratio
-VALUE: 0.3
-HELP: poisson ratio (Querdehnzahl)
-QUESTION: E0
-VALUE: 1.0e-4
-HELP: strain value of initial damage
-QUESTION: Ef
-VALUE: 2.0e-4
+VALUE: UserDefined
 END MATERIAL
