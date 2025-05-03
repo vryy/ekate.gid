@@ -5,6 +5,7 @@
 #####           for TUNCONSTRUCT                             #####
 #####  and (c) 2014-2022 by Hoang-Giang Bui (SFB837)         #####
 #####          2023-2024 by Hoang-Giang Bui (Hereon)         #####
+#####          2025-2026 by Hoang-Giang Bui (UoB)            #####
 ##### all rights reserved                                    #####
 ##################################################################
 ##################################################################
@@ -42,7 +43,6 @@ def main(logging=True, output=True):
         print("###################")
     print("Calculation done")
 *else
-    # user-defined script is used (will be appended automatically)
     # ============================================ #
     # |       USER CALCULATION SCRIPT            | #
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv #

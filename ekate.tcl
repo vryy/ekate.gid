@@ -680,6 +680,8 @@ proc WriteAbaqusInpElements {e_id e_type} {
 proc WriteAbaqusInpElements2 {e_id e_type e_mat e_conn} {
     set output ""
 
+    # global g_hex20tr
+    # global g_hex27tr
     global g_matdict
 
     # hack for Gid 16

@@ -280,6 +280,59 @@ class Model:
             os.mkdir(self.results_path+"vtk_results")
 *endif
 
+        # define the output variables
+        self.output_nodal_variables = []
+        self.output_intpt_variables = []
+
+*if(strcmp(GenData(Displacements),"1")==0)
+        self.output_nodal_variables.append(DISPLACEMENT)
+*endif
+*if(strcmp(GenData(Reactions),"1")==0)
+        self.output_nodal_variables.append(ROTATION)
+*endif
+*if(strcmp(GenData(Water_Pressure),"1")==0)
+        self.output_nodal_variables.append(WATER_PRESSURE)
+*endif
+*if(strcmp(GenData(Air_Pressure),"1")==0)
+        self.output_nodal_variables.append(AIR_PRESSURE)
+*endif
+*if(strcmp(GenData(Face_Load),"1")==0)
+        self.output_nodal_variables.append(FACE_LOAD)
+*endif
+
+*if(strcmp(GenData(PK2_Stresses),"1")==0)
+        self.output_intpt_variables.append(PK2_STRESS_TENSOR)
+*endif
+*if(strcmp(GenData(Green_Lagrange_Strains),"1")==0)
+        self.output_intpt_variables.append(GREEN_LAGRANGE_STRAIN_TENSOR)
+        self.output_intpt_variables.append(GREEN_LAGRANGE_PLASTIC_STRAIN_TENSOR)
+*endif
+*if(strcmp(GenData(Stresses),"1")==0)
+        self.output_intpt_variables.append(STRESSES)
+*endif
+*if(strcmp(GenData(Jack_Forces),"1")==0)
+        self.output_intpt_variables.append(JACK_FORCE)
+*endif
+*if(strcmp(GenData(Insitu_Stress),"1")==0)
+        self.output_intpt_variables.append(PRESTRESS)
+*endif
+*if(strcmp(GenData(Plastic_Strains),"1")==0)
+        self.output_intpt_variables.append(PLASTICITY_INDICATOR)
+        self.output_intpt_variables.append(PLASTIC_STRAIN_VECTOR)
+*endif
+*if(strcmp(GenData(Water_Pressure),"1")==0)
+        self.output_intpt_variables.append(EXCESS_PORE_WATER_PRESSURE)
+*endif
+*if(strcmp(GenData(Saturation),"1")==0)
+        self.output_intpt_variables.append(SATURATION)
+*endif
+*if(strcmp(GenData(Perform_Contact_Analysis),"1")==0)
+        self.output_intpt_variables.append(CONTACT_PENETRATION)
+        self.output_intpt_variables.append(NORMAL_CONTACT_STRESS)
+*endif
+*if(strcmp(GenData(Topology_Optimization),"1")==0)
+        self.output_intpt_variables.append(MATERIAL_DENSITY)
+*endif
         ##################################################################
         ## ADD DOFS ######################################################
         ##################################################################
@@ -580,52 +633,16 @@ class Model:
 *else
         self.gid_io.InitializeResults( 0.0, self.model_part.GetMesh() )
 *endif
-        #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 0)
-        #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 1)
-        #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 2)
-        #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 3)
-        #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 4)
-        #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 5)
-        #self.gid_io.PrintOnGaussPoints(MATERIAL_PARAMETERS, self.model_part, time, 6)
-*if(strcmp(GenData(Displacements),"1")==0)
+        for var in self.output_nodal_variables:
 *if(strcmp(GenData(Layer_Application),"1")==0)
-        self.gid_io.WriteNodalResults(DISPLACEMENT, time, 0)
+            self.gid_io.WriteNodalResults(var, time, 0)
 *else
-        self.gid_io.WriteNodalResults(DISPLACEMENT, self.model_part.Nodes, time, 0)
+            self.gid_io.WriteNodalResults(var, self.model_part.Nodes, time, 0)
 *endif
-        print("nodal DISPLACEMENT written")
-*endif
-*if(strcmp(GenData(Reactions),"1")==0)
-*if(strcmp(GenData(Layer_Application),"1")==0)
-        self.gid_io.WriteNodalResults(REACTION, time, 0)
-*else
-        self.gid_io.WriteNodalResults(REACTION, self.model_part.Nodes, time, 0)
-*endif
-        print("nodal REACTION written")
-*endif
-*if(strcmp(GenData(PK2_Stresses),"1")==0)
-        self.gid_io.PrintOnGaussPoints(PK2_STRESS_TENSOR, self.model_part, time)
-*endif
-*if(strcmp(GenData(Green_Lagrange_Strains),"1")==0)
-        self.gid_io.PrintOnGaussPoints(GREEN_LAGRANGE_STRAIN_TENSOR, self.model_part, time)
-        self.gid_io.PrintOnGaussPoints(GREEN_LAGRANGE_PLASTIC_STRAIN_TENSOR, self.model_part, time)
-*endif
-*if(strcmp(GenData(Stresses),"1")==0)
-        self.gid_io.PrintOnGaussPoints(STRESSES, self.model_part, time)
-        print("gauss point STRESSES written")
-*endif
-*if(strcmp(GenData(Jack_Forces),"1")==0)
-        self.gid_io.PrintOnGaussPoints(JACK_FORCE, self.model_part, time)
-*endif
-*if(strcmp(GenData(Insitu_Stress),"1")==0)
-        self.gid_io.PrintOnGaussPoints(PRESTRESS, self.model_part, time)
-        print("gauss point PRESTRESS written")
-*endif
-*if(strcmp(GenData(Plastic_Strains),"1")==0)
-        self.gid_io.PrintOnGaussPoints(PLASTIC_STRAIN_VECTOR, self.model_part, time)
-        self.gid_io.PrintOnGaussPoints(PLASTICITY_INDICATOR, self.model_part, time)
-        print("gauss point PLASTICITY_INDICATOR written")
-*endif
+            print(f"nodal {var} written")
+        for var in self.output_intpt_variables:
+            self.gid_io.PrintOnGaussPoints(var, self.model_part, time)
+            print(f"gauss point {var} written")
 *if(strcmp(GenData(Internal_Variables),"1")==0)
         self.gid_io.PrintOnGaussPoints(INTERNAL_VARIABLES, self.model_part, time, 0)
         self.gid_io.PrintOnGaussPoints(INTERNAL_VARIABLES, self.model_part, time, 1)
@@ -640,42 +657,6 @@ class Model:
         self.gid_io.PrintOnGaussPoints(INTERNAL_VARIABLES, self.model_part, time, 10)
         self.gid_io.PrintOnGaussPoints(INTERNAL_VARIABLES, self.model_part, time, 11)
         self.gid_io.PrintOnGaussPoints(INTERNAL_VARIABLES, self.model_part, time, 12)
-
-*endif
-*if(strcmp(GenData(Air_Pressure),"1")==0)
-        self.gid_io.PrintOnGaussPoints(AIR_PRESSURE, self.model_part, time)
-*endif
-*if(strcmp(GenData(Water_Pressure),"1")==0)
-        #self.gid_io.PrintOnGaussPoints(WATER_PRESSURE, self.model_part, time)
-        #print("gauss point WATER_PRESSURE written")
-*if(strcmp(GenData(Layer_Application),"1")==0)
-        self.gid_io.WriteNodalResults(WATER_PRESSURE, time, 0)
-*else
-        self.gid_io.WriteNodalResults(WATER_PRESSURE, self.model_part.Nodes, time, 0)
-*endif
-        print("nodal WATER_PRESSURE written")
-        self.gid_io.PrintOnGaussPoints(EXCESS_PORE_WATER_PRESSURE, self.model_part, time)
-        print("gauss point EXCESS_PORE_WATER_PRESSURE written")
-*endif
-*if(strcmp(GenData(Saturation),"1")==0)
-        self.gid_io.PrintOnGaussPoints(SATURATION, self.model_part, time)
-        print("gauss point SATURATION written")
-*endif
-*if(strcmp(GenData(Face_Load),"1")==0)
-*if(strcmp(GenData(Layer_Application),"1")==0)
-        self.gid_io.WriteNodalResults(FACE_LOAD, time, 0)
-*else
-        self.gid_io.WriteNodalResults(FACE_LOAD, self.model_part.Nodes, time, 0)
-*endif
-        print("nodal FACE_LOAD written")
-*endif
-*if(strcmp(GenData(Perform_Contact_Analysis),"1")==0)
-        self.gid_io.PrintOnGaussPoints(CONTACT_PENETRATION,self.model_part, time, 0)
-        self.gid_io.PrintOnGaussPoints(NORMAL_CONTACT_STRESS,self.model_part, time, 0)
-*endif
-*if(strcmp(GenData(Topology_Optimization),"1")==0)
-        self.gid_io.PrintOnGaussPoints(MATERIAL_DENSITY, self.model_part, time)
-        print("gauss point MATERIAL_DENSITY written")
 *endif
 *if(strcmp(GenData(New_mesh_for_each_step),"1")==0)
         self.gid_io.FinalizeResults()
@@ -688,22 +669,9 @@ class Model:
         print("write results to vtm")
 *endif
         self.vtk_io.Initialize(time, mesh)
-*if(strcmp(GenData(Displacements),"1")==0)
-        print("write nodal displacements to vtu")
-        self.vtk_io.RegisterNodalResults(DISPLACEMENT, 0)
-*endif
-*if(strcmp(GenData(Reactions),"1")==0)
-        print("write nodal reactions to vtu")
-        self.vtk_io.RegisterNodalResults(REACTION, 0)
-*endif
-*if(strcmp(GenData(Water_Pressure),"1")==0)
-        print("write nodal water pressure to vtu")
-        self.vtk_io.RegisterNodalResults(WATER_PRESSURE, 0)
-*endif
-*if(strcmp(GenData(Air_Pressure),"1")==0)
-        print("write nodal air pressure to vtu")
-        self.vtk_io.RegisterNodalResults(AIR_PRESSURE, 0)
-*endif
+        for var in self.output_nodal_variables:
+            self.vtk_io.RegisterNodalResults(var, 0)
+            print(f"write nodal {var} to vtu")
         self.vtk_io.Finalize()
 *endif
 
@@ -798,11 +766,12 @@ class Model:
         self.model_part.Properties[*MatNum].SetValue(STIFFNESS_RATIO, *MatProp(E_ratio,real) )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, GroutingMortar() )
         print("Grouting Mortar material selected for *MatProp(0), description: *MatProp(Description)")
-*elseif(strcmp(MatProp(ConstitutiveLaw),"DruckerPrager")==0)
+*elseif(strcmp(MatProp(ConstitutiveLaw),"DruckerPrager")==0||strcmp(MatProp(ConstitutiveLaw),"MohrCoulomb")==0)
         self.model_part.Properties[*MatNum].SetValue(YOUNG_MODULUS, *MatProp(Young_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(POISSON_RATIO, *MatProp(Poisson_ratio,real) )
         self.model_part.Properties[*MatNum].SetValue(COHESION, *MatProp(Cohesion,real) )
         self.model_part.Properties[*MatNum].SetValue(INTERNAL_FRICTION_ANGLE, *MatProp(Friction_angle,real) )
+        self.model_part.Properties[*MatNum].SetValue(DILATANCY_ANGLE, *MatProp(Dilatancy_angle,real) )
         self.model_part.Properties[*MatNum].SetValue(ISOTROPIC_HARDENING_MODULUS, *MatProp(Isotropic_hardening_modulus,real) )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, DruckerPrager() )
         print("Drucker Prager material selected for *MatProp(0), description: *MatProp(Description)")
