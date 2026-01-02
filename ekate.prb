@@ -76,6 +76,10 @@ VALUE: 1
 HELP: number of time steps
 QUESTION: analysis_type#CB#(static,quasi-static,dynamic)
 VALUE: static
+DEPENDENCIES:(static,HIDE,dissipation_radius,#CURRENT#)(quasi-static,RESTORE,dissipation_radius,#CURRENT#)(dynamic,RESTORE,dissipation_radius,#CURRENT#)
+QUESTION: dissipation_radius
+VALUE: 0.1
+HELP: Dissipation radius
 TITLE: Contact
 QUESTION: Enable_Mortar_Contact#CB#(0,1)
 VALUE: 0

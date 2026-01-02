@@ -97,6 +97,7 @@ class Model:
 *if(strcmp(GenData(analysis_type),"dynamic")==0)
 *set var analysistype(int)=2
 *endif
+*set var dissipationradius(real)=GenData(dissipation_radius,real)
 *if(strcmp(GenData(Perform_Contact_Analysis),"1")==0)
         perform_contact_analysis_flag = True
         # performing contact analysis: reading contact parameters
@@ -171,7 +172,7 @@ class Model:
         self.analysis_parameters['print_sparsity_info_flag'] = True
 *endif
         self.analysis_parameters['analysis_type'] = *analysistype
-        self.analysis_parameters['dissipation_radius'] = 0.1
+        self.analysis_parameters['dissipation_radius'] = *dissipationradius
         self.analysis_parameters['decouple_build_and_solve'] = True
         self.analysis_parameters['solving_scheme'] = 'monolithic'
 *if(strcmp(GenData(Stop_Newton_Raphson_If_Not_Converged),"1")==0)
