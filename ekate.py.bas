@@ -5,9 +5,9 @@
 #####           for TUNCONSTRUCT                             #####
 #####  and (c) 2014-2022 by Hoang-Giang Bui (SFB837)         #####
 #####          2023-2024 by Hoang-Giang Bui (Hereon)         #####
-#####          2025-2026 by Hoang-Giang Bui (UoB)            #####
+#####          2025 by Hoang-Giang Bui (UoB)                 #####
+#####          2026 by Hoang-Giang Bui (DU)                  #####
 ##### all rights reserved                                    #####
-##################################################################
 ##################################################################
 ## This file is generated on __DaTe__
 ##################################################################
@@ -16,10 +16,14 @@ import os
 import math
 import time as time_module
 ##################################################################
-##################################################################
 current_dir_ = os.path.dirname(os.path.realpath(__file__)) + "/"
 import rEpLaCeMeNtStRiNg_include as simulation_include
-from rEpLaCeMeNtStRiNg_include import **
+try:
+    from rEpLaCeMeNtStRiNg_include import **
+    all_modules_are_imported_successfully = True
+except Exception as e:
+    all_modules_are_imported_successfully = False
+##################################################################
 model_name_ = 'rEpLaCeMeNtStRiNg'
 ##################################################################
 ###  SIMULATION  #################################################
@@ -27,7 +31,7 @@ start_time = time_module.time()
 ##################################################################
 
 def main(logging=True, output=True):
-    model = simulation_include.Model(model_name_,current_dir_,current_dir_,logging)
+    model = simulation_include.Model(model_name_,current_dir_,current_dir_,logging=logging)
     model.InitializeModel()
 
 *if(strcmp(GenData(Simulation_Script),"standard")==0)
@@ -56,7 +60,10 @@ def test():
     main(logging=False, output=False)
 
 def tag():
-    return "unknown"
+    tags = "unknown"
+    if not all_modules_are_imported_successfully:
+        tags += ",untested"
+    return tags
 
 def print_tag():
     print("Tag(s): " + tag())
