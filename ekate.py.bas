@@ -16,7 +16,9 @@ import os
 import math
 import time as time_module
 ##################################################################
-current_dir_ = os.path.dirname(os.path.realpath(__file__)) + "/"
+current_dir_ = os.path.dirname(os.path.realpath(__file__))
+if current_dir_ not in sys.path:
+    sys.path.append(current_dir_)
 import rEpLaCeMeNtStRiNg_include as simulation_include
 try:
     from rEpLaCeMeNtStRiNg_include import **

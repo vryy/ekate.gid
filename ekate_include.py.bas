@@ -63,7 +63,7 @@ class Model:
         ## DEFINE MODELPART ##############################################
         ##################################################################
         self.model_part = ModelPart(problem_name)
-        self.path = path
+        self.path = path+os.sep
         self.results_path = results_path+os.sep
         self.problem_name = problem_name
         ##################################################################
