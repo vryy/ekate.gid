@@ -2133,6 +2133,126 @@ Begin Conditions DummyConditionLine3N
 *end elems
 End Conditions
 
+Begin Conditions DummyLineCondition2D2N
+*set cond Line_Dummy *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==2)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *cond(1)    *\
+*GlobalNodes(1) *GlobalNodes(2)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Line_Dummy *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions DummyLineCondition2D3N
+*set cond Line_Dummy *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==3)
+*set var i=0
+*set var j= ElemsNnodeFace
+*condID      *cond(1)    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Line_Dummy *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions DummySurfaceCondition3D3N
+*set cond Face_Dummy *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==3)
+*if(strcmp(GenData(Reverse_Node_Numbering_For_Surface),"1")==0)
+*condID      *cond(1)    *\
+*GlobalNodes(2) *GlobalNodes(1) *GlobalNodes(3)
+*else
+*condID      *cond(1)    *\
+*GlobalNodes(1) *GlobalNodes(2) *GlobalNodes(3)
+*endif
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Face_Dummy *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions DummySurfaceCondition3D6N
+*set cond Face_Dummy *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==6)
+*if(strcmp(GenData(Reverse_Node_Numbering_For_Surface),"1")==0)
+*condID      *cond(1)    *\
+*Globalnodes(2) *Globalnodes(1) *Globalnodes(3) *Globalnodes(4) *Globalnodes(6) *Globalnodes(5)
+*else
+*condID      *cond(1)    *\
+*Globalnodes(1) *Globalnodes(2) *Globalnodes(3) *Globalnodes(4) *Globalnodes(5) *Globalnodes(6)
+*endif
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Face_Dummy *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions DummySurfaceCondition3D4N
+*set cond Face_Dummy *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==4)
+*if(strcmp(GenData(Reverse_Node_Numbering_For_Surface),"1")==0)
+*condID      *cond(1)    *\
+*Globalnodes(4) *Globalnodes(3) *Globalnodes(2) *Globalnodes(1)
+*else
+*condID      *cond(1)    *\
+*Globalnodes(1) *Globalnodes(2) *Globalnodes(3) *Globalnodes(4)
+*endif
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Face_Dummy *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions DummySurfaceCondition3D8N
+*set cond Face_Dummy *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==8)
+*if(strcmp(GenData(Reverse_Node_Numbering_For_Surface),"1")==0)
+*condID      *cond(1)    *\
+*Globalnodes(4) *Globalnodes(3) *Globalnodes(2) *Globalnodes(1) *Globalnodes(7) *Globalnodes(6) *Globalnodes(5) *Globalnodes(8)
+*else
+*condID      *cond(1)    *\
+*Globalnodes(1) *Globalnodes(2) *Globalnodes(3) *Globalnodes(4) *Globalnodes(5) *Globalnodes(6) *Globalnodes(7) *Globalnodes(8)
+*endif
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Face_Dummy *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
+Begin Conditions DummySurfaceCondition3D9N
+*set cond Face_Dummy *elems *canRepeat
+*loop elems *onlyInCond
+*if(ElemsNnodeFace==9)
+*if(strcmp(GenData(Reverse_Node_Numbering_For_Surface),"1")==0)
+*condID      *cond(1)    *\
+*Globalnodes(4) *Globalnodes(3) *Globalnodes(2) *Globalnodes(1) *Globalnodes(7) *Globalnodes(6) *Globalnodes(5) *Globalnodes(8) *Globalnodes(9)
+*else
+*condID      *cond(1)    *\
+*Globalnodes(1) *Globalnodes(2) *Globalnodes(3) *Globalnodes(4) *Globalnodes(5) *Globalnodes(6) *Globalnodes(7) *Globalnodes(8) *Globalnodes(9)
+*endif
+//ElementAssignment *condID *ElemsNum
+*tcl(SaveCond Face_Dummy *condID *cond(2))
+*set var condID= condID+1
+*endif
+*end elems
+End Conditions
+
 Begin NodalData DISPLACEMENT_X
 *set cond Nodal_Displacement *nodes *or(1,int)
 *add cond Line_Displacement *nodes *or(1,int)

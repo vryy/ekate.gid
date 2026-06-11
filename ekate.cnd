@@ -766,6 +766,38 @@ HELP: Value of fixed reaction (neumann-condition)
 image: images/Pressure.gif
 END CONDITION
 
+BOOK: Marking
+
+CONDITION: Point_Dummy
+CONDTYPE: over points
+CONDMESHTYPE: over nodes
+QUESTION: Properties Id
+VALUE: 1
+QUESTION: Unused
+VALUE: 0
+HELP: Point marking condition
+END CONDITION
+
+CONDITION: Line_Dummy
+CONDTYPE: over lines
+CONDMESHTYPE: over face elements multiple
+QUESTION: Properties Id
+VALUE: 1
+QUESTION: Unused
+VALUE: 0
+HELP: Line marking condition
+END CONDITION
+
+CONDITION: Face_Dummy
+CONDTYPE: over surfaces
+CONDMESHTYPE: over face elements multiple
+QUESTION: Properties Id
+VALUE: 1
+QUESTION: Unused
+VALUE: 0
+HELP: Face marking condition
+END CONDITION
+
 BOOK: Activation
 CONDITION: Line_Activation_Level
 CONDTYPE: over lines
