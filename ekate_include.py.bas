@@ -58,7 +58,6 @@ class Model:
     def __init__( self, problem_name, path, results_path, logging=True ):
         #setting the domain size for the problem to be solved
 *set var domainsize(int)=GenData(Dimension,int)
-        self.domain_size = *domainsize
         ##################################################################
         ## DEFINE MODELPART ##############################################
         ##################################################################
@@ -71,22 +70,7 @@ class Model:
         ##################################################################
         # reading simulation parameters
 *set var ntimesteps(int)=GenData(time_steps,int)
-        number_of_time_steps = *ntimesteps
         self.analysis_parameters = {}
-        # content of analysis_parameters:
-        # perform_contact_analysis_flag
-        # penalty value for normal contact
-        # maximum number of uzawa iterations
-        # friction coefficient
-        # penalty value for frictional contact
-        # contact_double_check_flag
-        # contact_ramp_penalties_flag
-        # maximum penalty value for normal contact
-        # ramp criterion for normal contact
-        # ramp factor for normal contact
-        # maximum penalty value for frictional contact
-        # ramp criterion for frictional contact
-        # ramp factor for frictional contact
         # analysis type: static (0), quasi-static (1) or dynamic (2)
 *if(strcmp(GenData(analysis_type),"static")==0)
 *set var analysistype(int)=0
@@ -137,22 +121,19 @@ class Model:
         fricrampcriterion = 0.0
         fricrampfactor = 0.0
 *endif
-*else
-        perform_contact_analysis_flag = False
-        penalty = 0.0
-        maxuzawa = 0.0
-        friction = 0.0
-        frictionpenalty = 0.0
-        contact_double_check_flag = False
-        contact_ramp_penalties_flag = False
-        maxpenalty = 0.0
-        rampcriterion = 0.0
-        rampfactor = 0.0
-        fricmaxpenalty = 0.0
-        fricrampcriterion = 0.0
-        fricrampfactor = 0.0
-*endif
-        self.analysis_parameters['dimension'] = self.domain_size # *domainsize
+        # perform_contact_analysis_flag
+        # penalty value for normal contact
+        # maximum number of uzawa iterations
+        # friction coefficient
+        # penalty value for frictional contact
+        # contact_double_check_flag
+        # contact_ramp_penalties_flag
+        # maximum penalty value for normal contact
+        # ramp criterion for normal contact
+        # ramp factor for normal contact
+        # maximum penalty value for frictional contact
+        # ramp criterion for frictional contact
+        # ramp factor for frictional contact
         self.analysis_parameters['perform_contact_analysis_flag'] = perform_contact_analysis_flag
         self.analysis_parameters['penalty'] = penalty
         self.analysis_parameters['maxuzawa'] = maxuzawa
@@ -166,6 +147,7 @@ class Model:
         self.analysis_parameters['fricmaxpenalty'] = fricmaxpenalty
         self.analysis_parameters['fricrampcriterion'] = fricrampcriterion
         self.analysis_parameters['fricrampfactor'] = fricrampfactor
+*endif
 *if(strcmp(GenData(Plot_Matrix_Structure),"0")==0)
         self.analysis_parameters['print_sparsity_info_flag'] = False
 *else
@@ -206,9 +188,7 @@ class Model:
 *endif
 *else
         import structural_solver_advanced
-        self.solver = structural_solver_advanced.SolverAdvanced( self.model_part, self.domain_size, number_of_time_steps, self.analysis_parameters, self.abs_tol, self.rel_tol )
-        #import ekate_solver_parallel
-        #self.solver = ekate_solver_parallel.EkateSolver( self.model_part, self.domain_size, number_of_time_steps, self.analysis_parameters, self.abs_tol, self.rel_tol )
+        self.solver = structural_solver_advanced.SolverAdvanced( self.model_part, self.analysis_parameters, self.abs_tol, self.rel_tol )
 *endif
         self.AddVariables( self.model_part )
         ##################################################################
@@ -231,9 +211,15 @@ class Model:
         for line in self.cond_file:
             if "//ElementAssignment" in line:
                 val_set = line.split(' ')
-                self.model_part.Conditions[int(val_set[1])].SetValue( ACTIVATION_LEVEL, self.model_part.Elements[int(val_set[2])].GetValue(ACTIVATION_LEVEL) )
-                #print( "assigning ACTIVATION_LEVEL of element: " +str(int(val_set[2])) + " to Condition: " + str(int(val_set[1])) + " as " + str(self.model_part.Elements[int(val_set[2])].GetValue(ACTIVATION_LEVEL)) )
-                self.element_assignments[int(val_set[1])] = int(val_set[2])
+                cond_id = int(val_set[1])
+                elem_id = int(val_set[2])
+                if elem_id in self.model_part.Elements:
+                    elem = self.model_part.Elements[elem_id]
+                else:
+                    raise Exception(f"Element {elem_id} does not exist")
+                self.model_part.Conditions[cond_id].SetValue( ACTIVATION_LEVEL, elem.GetValue(ACTIVATION_LEVEL) )
+                #print( "assigning ACTIVATION_LEVEL of element: " +str(elem_id) + " to Condition: " + str(cond_id) + " as " + str(elem.GetValue(ACTIVATION_LEVEL)) )
+                self.element_assignments[cond_id] = elem_id
         print("input data read OK")
         #print("+++++++++++++++++++++++++++++++++++++++")
         #for node in self.model_part.Nodes:
@@ -472,7 +458,6 @@ class Model:
 
     def SetModelPart(self, model_part):
         self.model_part = model_part
-        number_of_time_steps = *ntimesteps
 
         ## generating solver
 *if(strcmp(GenData(Enable_Mortar_Contact),"1")==0)
@@ -484,7 +469,7 @@ class Model:
 *endif
 *else
         import structural_solver_advanced
-        self.solver = structural_solver_advanced.SolverAdvanced( self.model_part, self.domain_size, number_of_time_steps, self.analysis_parameters, self.abs_tol, self.rel_tol )
+        self.solver = structural_solver_advanced.SolverAdvanced( self.model_part, self.analysis_parameters, self.abs_tol, self.rel_tol )
 *endif
 *if(strcmp(GenData(Calculate_Reactions),"1")==0)
         (self.solver).CalculateReactionFlag = True
@@ -815,6 +800,7 @@ class Model:
 *endif
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, IsotropicDamage3D( FlowRule_*MatNum , HardeningLaw_*MatNum , self.model_part.Properties[*MatNum] ) )
 *elseif(strcmp(MatProp(ConstitutiveLaw),"UserDefined")==0)
+        self.model_part.Properties[*MatNum].SetValue(THICKNESS, 1.0 )
         self.model_part.Properties[*MatNum].SetValue(CONSTITUTIVE_LAW, DummyConstitutiveLaw() )
         print("User-defined material selected for *MatProp(0), description: *MatProp(Description)")
 *elseif(strcmp(MatProp(ConstitutiveLaw),"TrussMaterial")==0)
@@ -911,7 +897,8 @@ class Model:
     # solve without deactivation
     def SolveModel(self, time):
         self.model_part.CloneTimeStep(time)
-        self.solver.Solve()
+        success = self.solver.Solve()
+        return success
 
     # solve nothing without deactivation
     def DrySolveModel(self, time):
