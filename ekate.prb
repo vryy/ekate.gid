@@ -176,6 +176,9 @@ IMAGE: images/Data.gif
 QUESTION: Export_Abaqus#CB#(0,1)
 VALUE: 0
 HELP: Export Abaqus input file
+QUESTION: Export_Python#CB#(0,1)
+VALUE: 0
+HELP: Export mesh to Python layer file
 QUESTION: VTK_Output#CB#(0,1)
 VALUE: 0
 HELP: Write results to VTK

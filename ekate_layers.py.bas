@@ -162,3 +162,60 @@ def ReadNodeGroups():
 *end nodes
     return node_groups
 
+*if(strcmp(GenData(Export_Python),"1")==0)
+""" Returns the nodal coordinates.
+    The return dict has the format:
+    coords[node_number] = [X, Y, Z]
+"""
+def ReadNodalCoordinates():
+    coords = {}
+*loop nodes
+    coords[*nodesnum] = [*NodesCoord(1), *NodesCoord(2), *NodesCoord(3)]
+*end nodes
+    return coords
+
+""" Returns the connectivities of the mesh, the dim parameter is used
+    to indicate the space dimension in which the elements are to be extracted.
+    The return dict has the format:
+    conn[element_number] = [elem_prod, [node_1, node_2, ...]]
+"""
+def ReadConnectivities(dim = *GenData(Dimension,int)):
+    conn = {}
+    if dim == 1:
+*set cond LineElementType *elems
+*loop elems *onlyInCond
+*set var i=0
+*set var j= ElemsNnode
+        conn[*ElemsNum] = [*ElemsMat, [*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i),*\
+*end
+        ]]
+*end elems
+        pass
+    elif dim == 2:
+*set cond FaceElementType *elems
+*loop elems *onlyInCond
+*set var i=0
+*set var j= ElemsNnode
+        conn[*ElemsNum] = [*ElemsMat, [*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i),*\
+*end
+        ]]
+*end elems
+        pass
+    elif dim == 3:
+*set cond VolumeElementType *elems
+*loop elems *onlyInCond
+*set var i=0
+*set var j= ElemsNnode
+        conn[*ElemsNum] = [*ElemsMat, [*\
+*for(i=1;i<=j;i=i+1)*\
+ *ElemsConec(*i),*\
+*end
+        ]]
+*end elems
+        pass
+    return conn
+*endif
